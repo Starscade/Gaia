@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"google.golang.org/genai"
 	"log"
@@ -11,7 +12,17 @@ import (
 
 func main() {
 
-	args := os.Args[1:]
+	flag_execute := flag.Bool("x", false, "Execute the prompt.")
+	flag_verbose := flag.Bool("v", false, "Speak casually.")
+
+	flag.Parse()
+
+	if *flag_execute && *flag_verbose {
+		fmt.Print("Please disable the -v flag when trying to execute.")
+		os.Exit(0)
+	}
+
+	args := flag.Args()
 	user_prompt := strings.Join(args, " ")
 
 	if user_prompt == "" {
