@@ -23,7 +23,7 @@ func main() {
 	flag.Parse()
 
 	if *flag_execute && *flag_verbose {
-		log.Fatal("Please disable the -v flag when using -x.")
+		*flag_verbose = false
 	}
 
 	args := flag.Args()
