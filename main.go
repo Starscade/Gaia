@@ -7,6 +7,7 @@ import (
 	"google.golang.org/genai"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -66,6 +67,28 @@ func main() {
 
 	config := &genai.GenerateContentConfig{
 		SystemInstruction: genai.NewContentFromText(agent_profile, genai.RoleUser),
+	}
+
+	if *flag_execute {
+		answer, _ := client.Models.GenerateContent(
+			ctx,
+			gemini_model,
+			genai.Text(user_prompt),
+			config,
+		)
+
+		raw_code := answer.Text()
+		cmd := exec.Command("sh", "-c", raw_code)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+
+		err := cmd.Run()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		os.Exit(0)
 	}
 
 	stream := client.Models.GenerateContentStream(
