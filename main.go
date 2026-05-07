@@ -13,6 +13,8 @@ import (
 
 func main() {
 
+	// No key? Why continue?
+
 	if os.Getenv("GEMINI_API_KEY") == "" {
 		log.Fatal("No GEMINI_API_KEY!")
 	}
@@ -21,6 +23,8 @@ func main() {
 	flag_verbose := flag.Bool("v", false, "Speak casually.")
 
 	flag.Parse()
+
+	// If executing the prompt response as code, make sure it's actual code.
 
 	if *flag_execute && *flag_verbose {
 		*flag_verbose = false
@@ -79,9 +83,9 @@ func main() {
 
 		raw_code := answer.Text()
 		cmd := exec.Command("sh", "-c", raw_code)
-		cmd.Env = os.Environ()
+		cmd.Env = os.Environ() // Inherit the user's environment.
 		cmd.Stderr = os.Stderr
-		cmd.Stdin = os.Stdin
+		cmd.Stdin = os.Stdin // Enable Ctrl-C in the subshell.
 		cmd.Stdout = os.Stdout
 
 		err := cmd.Run()
@@ -90,7 +94,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		os.Exit(0)
+		os.Exit(0) // Quit before running a regular query.
 	}
 
 	stream := client.Models.GenerateContentStream(
@@ -99,6 +103,8 @@ func main() {
 		genai.Text(user_prompt),
 		config,
 	)
+
+	// Print response as it comes ...
 
 	for chunk, _ := range stream {
 		part := chunk.Candidates[0].Content.Parts[0]
