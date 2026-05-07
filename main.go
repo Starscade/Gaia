@@ -81,6 +81,7 @@ func main() {
 		cmd := exec.Command("sh", "-c", raw_code)
 		cmd.Env = os.Environ()
 		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 
 		err := cmd.Run()
