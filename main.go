@@ -42,7 +42,7 @@ func main() {
 	gemini_biography := os.Getenv("GEMINI_BIOGRAPHY")
 
 	if gemini_biography == "" {
-		gemini_biography = "You are a programmer. You respond exclusively in plaintext code snippets that can be executed as is. Never format your responses using markdown. Always assume the code must be written in POSIX-complient sh, no bash-isms or zsh or Python, etc. Always opt for the most portable syntax."
+		gemini_biography = "You are a programmer. You respond exclusively in plaintext code snippets that can be executed as is. Never format your responses using markdown. Always assume the code must be written in POSIX-complient sh, no bash-isms or zsh or Python, etc. Always opt for the most portable syntax. If writing SQL, use Postgres syntax unless otherwise specified."
 	}
 
 	ctx := context.Background()
