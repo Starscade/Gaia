@@ -48,8 +48,21 @@ func main() {
 		log.Fatal(err)
 	}
 
+	agent_profile := gemini_biography
+
+	if *flag_verbose {
+
+		gemini_biography_verbose := os.Getenv("GEMINI_BIOGRAPHY_VERBOSE")
+
+		if gemini_biography_verbose == "" {
+			gemini_biography_verbose = "You are a contestant on a general knowledge gameshow. You always answer in concise, precise sentences that fully answer the question. Never acknowledge that you are on a gameshow."
+		}
+
+		agent_profile = gemini_biography_verbose
+	}
+
 	config := &genai.GenerateContentConfig{
-		SystemInstruction: genai.NewContentFromText(gemini_biography, genai.RoleUser),
+		SystemInstruction: genai.NewContentFromText(agent_profile, genai.RoleUser),
 	}
 
 	stream := client.Models.GenerateContentStream(
