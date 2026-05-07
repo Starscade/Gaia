@@ -12,6 +12,10 @@ import (
 
 func main() {
 
+	if os.Getenv("GEMINI_API_KEY") == "" {
+		log.Fatal("No GEMINI_API_KEY!")
+	}
+
 	flag_execute := flag.Bool("x", false, "Execute the prompt as code.")
 	flag_verbose := flag.Bool("v", false, "Speak casually.")
 
