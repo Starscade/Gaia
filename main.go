@@ -12,14 +12,14 @@ import (
 
 func main() {
 
-	flag_execute := flag.Bool("x", false, "Execute the prompt.")
+	flag_execute := flag.Bool("x", false, "Execute the prompt as code.")
 	flag_verbose := flag.Bool("v", false, "Speak casually.")
 
 	flag.Parse()
 
 	if *flag_execute && *flag_verbose {
-		fmt.Print("Please disable the -v flag when trying to execute.")
-		os.Exit(0)
+		log.Fatal("Please disable the -v flag when using -x.")
+		os.Exit(1)
 	}
 
 	args := flag.Args()
