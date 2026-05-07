@@ -19,14 +19,13 @@ func main() {
 
 	if *flag_execute && *flag_verbose {
 		log.Fatal("Please disable the -v flag when using -x.")
-		os.Exit(1)
 	}
 
 	args := flag.Args()
 	user_prompt := strings.Join(args, " ")
 
 	if user_prompt == "" {
-		os.Exit(1)
+		log.Fatal("No prompt provided!")
 	}
 
 	gemini_model := os.Getenv("GEMINI_MODEL")
