@@ -79,8 +79,9 @@ func main() {
 
 		raw_code := answer.Text()
 		cmd := exec.Command("sh", "-c", raw_code)
-		cmd.Stdout = os.Stdout
+		cmd.Env = os.Environ()
 		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
 
 		err := cmd.Run()
 
