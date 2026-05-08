@@ -13,6 +13,9 @@ import (
 
 func main() {
 
+
+	// FLAGS & ENVIRONMENT
+
 	if os.Getenv(ENV_APIKEY) == "" {
 		log.Fatal(ERR_NO_APIKEY) // No key? Why continue?
 	}
@@ -39,11 +42,27 @@ func main() {
 		agent_model = DEFAULT_AGENT_MODEL
 	}
 
+
+	// SET PERSONA
+
 	agent_persona := os.Getenv(ENV_AGENT_PERSONA)
 
 	if agent_persona == "" {
-		agent_persona = DEFAULT_AGENT_PERSONA
+
+		agent_persona = DEFAULT_AGENT_PERSONA_CODE
+
+		if *flag_execute {
+			agent_persona = DEFAULT_AGENT_PERSONA_CODE_EXECUTION
+		}
+
+		if *flag_verbose {
+			agent_persona = DEFAULT_AGENT_PERSONA_VERBOSE
+		}
+
 	}
+
+
+	// CONFIG
 
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, nil)
@@ -52,20 +71,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if *flag_verbose {
-
-		agent_persona_verbose := os.Getenv(ENV_AGENT_PERSONA_VERBOSE)
-
-		if agent_persona_verbose == "" {
-			agent_persona_verbose = DEFAULT_AGENT_PERSONA_VERBOSE
-		}
-
-		agent_persona = agent_persona_verbose
-	}
-
 	config := &genai.GenerateContentConfig{
 		SystemInstruction: genai.NewContentFromText(agent_persona, genai.RoleUser),
 	}
+
+
+	// ASK AI
 
 	if *flag_execute {
 		answer, _ := client.Models.GenerateContent(
