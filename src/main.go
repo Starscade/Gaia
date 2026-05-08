@@ -37,16 +37,16 @@ func main() {
 		log.Fatal("No prompt provided!")
 	}
 
-	gemini_model := os.Getenv("GEMINI_MODEL")
+	gemini_model := os.Getenv("GAIA_MODEL")
 
 	if gemini_model == "" {
-		gemini_model = "gemini-flash-lite-latest"
+		gemini_model = DEFAULT_GAIA_MODEL
 	}
 
 	gemini_biography := os.Getenv("GEMINI_BIOGRAPHY")
 
 	if gemini_biography == "" {
-		gemini_biography = "You are a programmer. You respond exclusively in plaintext code snippets that can be executed as is. Never format your responses using markdown. Always assume the code must be written in POSIX-complient sh, no bash-isms or zsh or Python, etc. Always opt for the most portable syntax. If writing SQL, use Postgres syntax unless otherwise specified."
+		gemini_biography = DEFAULT_GAIA_PERSONA
 	}
 
 	ctx := context.Background()
@@ -63,7 +63,7 @@ func main() {
 		gemini_biography_verbose := os.Getenv("GEMINI_BIOGRAPHY_VERBOSE")
 
 		if gemini_biography_verbose == "" {
-			gemini_biography_verbose = "You are a contestant on a general knowledge gameshow. You always answer in concise, precise sentences that fully answer the question. Never acknowledge that you are on a gameshow."
+			gemini_biography_verbose = DEFAULT_GAIA_PERSONA_VERBOSE
 		}
 
 		agent_profile = gemini_biography_verbose
