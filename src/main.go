@@ -15,12 +15,12 @@ func main() {
 
 	// No key? Why continue?
 
-	if os.Getenv("GEMINI_API_KEY") == "" {
-		log.Fatal("No GEMINI_API_KEY!")
+	if os.Getenv(ENV_APIKEY) == "" {
+		log.Fatal(ERR_NO_APIKEY)
 	}
 
-	flag_execute := flag.Bool("x", false, "Execute the prompt as code.")
-	flag_verbose := flag.Bool("v", false, "Speak casually.")
+	flag_execute := flag.Bool(FLAG_EXECUTE_FLAG, false, FLAG_EXECUTE_HELP)
+	flag_verbose := flag.Bool(FLAG_VERBOSE_FLAG, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
 
@@ -34,19 +34,19 @@ func main() {
 	user_prompt := strings.Join(args, " ")
 
 	if user_prompt == "" {
-		log.Fatal("No prompt provided!")
+		log.Fatal(ERR_NO_PROMPT)
 	}
 
-	gemini_model := os.Getenv("GAIA_MODEL")
+	agent_model := os.Getenv(ENV_AGENT_MODEL)
 
-	if gemini_model == "" {
-		gemini_model = DEFAULT_GAIA_MODEL
+	if agent_model == "" {
+		agent_model = DEFAULT_AGENT_MODEL
 	}
 
-	gemini_biography := os.Getenv("GEMINI_BIOGRAPHY")
+	agent_persona := os.Getenv(ENV_AGENT_PERSONA)
 
-	if gemini_biography == "" {
-		gemini_biography = DEFAULT_GAIA_PERSONA
+	if agent_persona == "" {
+		agent_persona = DEFAULT_AGENT_PERSONA
 	}
 
 	ctx := context.Background()
@@ -56,27 +56,25 @@ func main() {
 		log.Fatal(err)
 	}
 
-	agent_profile := gemini_biography
-
 	if *flag_verbose {
 
-		gemini_biography_verbose := os.Getenv("GEMINI_BIOGRAPHY_VERBOSE")
+		agent_persona_verbose := os.Getenv(ENV_AGENT_PERSONA_VERBOSE)
 
-		if gemini_biography_verbose == "" {
-			gemini_biography_verbose = DEFAULT_GAIA_PERSONA_VERBOSE
+		if agent_persona_verbose == "" {
+			agent_persona_verbose = DEFAULT_AGENT_PERSONA_VERBOSE
 		}
 
-		agent_profile = gemini_biography_verbose
+		agent_persona = agent_persona_verbose
 	}
 
 	config := &genai.GenerateContentConfig{
-		SystemInstruction: genai.NewContentFromText(agent_profile, genai.RoleUser),
+		SystemInstruction: genai.NewContentFromText(agent_persona, genai.RoleUser),
 	}
 
 	if *flag_execute {
 		answer, _ := client.Models.GenerateContent(
 			ctx,
-			gemini_model,
+			agent_model,
 			genai.Text(user_prompt),
 			config,
 		)
@@ -99,7 +97,7 @@ func main() {
 
 	stream := client.Models.GenerateContentStream(
 		ctx,
-		gemini_model,
+		agent_model,
 		genai.Text(user_prompt),
 		config,
 	)
