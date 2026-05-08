@@ -13,10 +13,8 @@ import (
 
 func main() {
 
-	// No key? Why continue?
-
 	if os.Getenv(ENV_APIKEY) == "" {
-		log.Fatal(ERR_NO_APIKEY)
+		log.Fatal(ERR_NO_APIKEY) // No key? Why continue?
 	}
 
 	flag_execute := flag.Bool(FLAG_EXECUTE_OPTION_SHORT, false, FLAG_EXECUTE_HELP)
@@ -24,10 +22,8 @@ func main() {
 
 	flag.Parse()
 
-	// Don't execute poetry.
-
 	if *flag_execute && *flag_verbose {
-		*flag_verbose = false
+		*flag_verbose = false // Don't execute poetry.
 	}
 
 	args := flag.Args()
