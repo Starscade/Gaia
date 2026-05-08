@@ -65,7 +65,7 @@ func main() {
 			agent_persona = DEFAULT_AGENT_PERSONA_VERBOSE
 		}
 
-		agent_persona = agent_persona + "Your name is " + agent_name + "."
+		agent_persona = "Your name is " + agent_name + ". " + agent_persona
 
 	}
 
