@@ -56,10 +56,17 @@ func main() {
 		}
 
 		if *flag_verbose {
-			agent_persona = DEFAULT_AGENT_PERSONA_VERBOSE
+			agent_name := os.Getenv(ENV_AGENT_NAME)
+
+			if agent_name == "" {
+				agent_name = DEFAULT_AGENT_NAME
+			}
+
+			agent_persona = DEFAULT_AGENT_PERSONA_VERBOSE + "Your name is " + agent_name + "."
 		}
 
 	}
+
 
 
 	// CONFIG
