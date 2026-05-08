@@ -36,6 +36,15 @@ func main() {
 		log.Fatal(ERR_NO_PROMPT)
 	}
 
+	/*
+	stdin_data, err := io.ReadAll(os.Stdin)
+	for err != nil {
+		log.Fatal(ERR_NO_PROMPT)
+	}
+
+	user_prompt := string(stdin_data)
+	*/
+
 	agent_model := os.Getenv(ENV_AGENT_MODEL)
 
 	if agent_model == "" {
@@ -68,7 +77,6 @@ func main() {
 		agent_persona = "Your name is " + agent_name + ". " + agent_persona
 
 	}
-
 
 
 	// CONFIG
