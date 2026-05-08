@@ -24,7 +24,7 @@ func main() {
 
 	flag.Parse()
 
-	// If executing the prompt response as code, make sure it's actual code.
+	// Don't execute poetry.
 
 	if *flag_execute && *flag_verbose {
 		*flag_verbose = false
