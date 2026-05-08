@@ -19,8 +19,8 @@ func main() {
 		log.Fatal(ERR_NO_APIKEY)
 	}
 
-	flag_execute := flag.Bool(FLAG_EXECUTE_FLAG, false, FLAG_EXECUTE_HELP)
-	flag_verbose := flag.Bool(FLAG_VERBOSE_FLAG, false, FLAG_VERBOSE_HELP)
+	flag_execute := flag.Bool(FLAG_EXECUTE_OPTION_SHORT, false, FLAG_EXECUTE_HELP)
+	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
 
