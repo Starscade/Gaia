@@ -6,30 +6,24 @@ Gaia is a lightweight Go CLI tool that interfaces with the Gemini API to provide
 
 1. Clone the repository.
 2. Ensure your `GOPATH` and `PATH` are configured to include `~/.local/bin`.
-3. Build the project using the provided Makefile:
-
-make
+3. Build the project using the provided Makefile: `make`.
 
 ## Configuration
 
-Gaia requires a Gemini API key:
-
-export GEMINI_API_KEY="your-api-key-here"
+Gaia requires a Gemini API key: `export GEMINI_API_KEY="your-api-key-here"`.
 
 ## Usage
 
 ### Direct Prompting
-gaia "How do I list files in the current directory?"
+`gaia "How do I list files in the current directory?"`
 
 ### Execution Mode
-Gaia can generate and execute code directly. Use with caution:
-
-gaia -x "echo Hello World"
+Gaia can generate and execute code directly: `gaia -x "echo Hello World"`.
+> [!CAUTION]
+> Be very careful when writing prompts for this!
 
 ### Pipeline Support
-Pipe data into Gaia for analysis or transformation:
-
-cat file.txt | gaia -i "Summarize this file"
+Pipe data into Gaia for analysis or transformation: `cat file.txt | gaia -i "Summarize this file"`.
 
 ### Flags
 - `-x`: Execute the AI response as a shell script.
@@ -44,4 +38,4 @@ cat file.txt | gaia -i "Summarize this file"
 
 ---
 
-> P.S. This README was written for Gaia by Gaia!
+> P.S. This README was written for Gaia by Gaia! (Edited by Angus.)
