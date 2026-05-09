@@ -13,7 +13,6 @@ import (
 	"google.golang.org/genai"
 )
 
-
 func main() {
 
 	// FLAGS & ENVIRONMENT
@@ -56,7 +55,6 @@ func main() {
 		agent_model = DEFAULT_AGENT_MODEL
 	}
 
-
 	// SET PERSONA
 
 	agent_name := os.Getenv(ENV_AGENT_NAME)
@@ -83,13 +81,12 @@ func main() {
 
 	}
 
-
 	// CONFIG
 
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, &genai.ClientConfig{
 		Backend: genai.BackendGeminiAPI,
-		APIKey: api_key,
+		APIKey:  api_key,
 	})
 
 	if err != nil {
@@ -108,7 +105,6 @@ func main() {
 			ThinkingLevel: DEFAULT_AGENT_INTELLECT,
 		},
 	}
-
 
 	// ASK AI
 
