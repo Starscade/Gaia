@@ -145,7 +145,12 @@ func main() {
 
 	// Print response as it comes ...
 
-	for chunk, _ := range stream {
+	for chunk, err := range stream {
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		part := chunk.Candidates[0].Content.Parts[0]
 		fmt.Print(part.Text)
 	}
