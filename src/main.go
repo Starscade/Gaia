@@ -24,6 +24,7 @@ func main() {
 	}
 
 	flag_execute := flag.Bool(FLAG_EXECUTE_OPTION_SHORT, false, FLAG_EXECUTE_HELP)
+	flag_nsfw := flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
 	flag_stdin := flag.Bool(FLAG_STDIN_OPTION_SHORT, false, FLAG_STDIN_HELP)
 	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
@@ -104,6 +105,27 @@ func main() {
 		ThinkingConfig: &genai.ThinkingConfig{
 			ThinkingLevel: DEFAULT_AGENT_INTELLECT,
 		},
+	}
+
+	if *flag_nsfw {
+		config.SafetySettings = []*genai.SafetySetting{
+			{
+				Category:  genai.HarmCategorySexuallyExplicit,
+				Threshold: genai.HarmBlockThresholdBlockNone,
+			},
+			{
+				Category:  genai.HarmCategoryHateSpeech,
+				Threshold: genai.HarmBlockThresholdBlockNone,
+			},
+			{
+				Category:  genai.HarmCategoryHarassment,
+				Threshold: genai.HarmBlockThresholdBlockNone,
+			},
+			{
+				Category:  genai.HarmCategoryDangerousContent,
+				Threshold: genai.HarmBlockThresholdBlockNone,
+			},
+		}
 	}
 
 	// ASK AI
