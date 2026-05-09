@@ -32,7 +32,7 @@ Pipe data into Gaia for analysis or transformation: `cat file.txt | gaia -i "Sum
 
 ## Environment Variables
 - `GEMINI_API_KEY`: Required. Your Google Gemini API key.
-- `GAIA_AGENT_MODEL`: Override the default model (gemini-flash-lite-latest).
+- `GAIA_AGENT_MODEL`: Override the default model (`gemini-flash-lite-latest`).
 - `GAIA_AGENT_NAME`: Customize the AI's persona name.
 - `GAIA_AGENT_PERSONA`: Override the default system prompt.
 
