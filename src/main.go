@@ -87,14 +87,26 @@ func main() {
 	// CONFIG
 
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, nil)
+	client, err := genai.NewClient(ctx, &genai.ClientConfig{
+		Backend: genai.BackendGeminiAPI,
+		APIKey: api_key,
+	})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	config := &genai.GenerateContentConfig{
-		SystemInstruction: genai.NewContentFromText(agent_persona, genai.RoleUser),
+		SystemInstruction: &genai.Content{
+			Parts: []*genai.Part{
+				&genai.Part{
+					Text: agent_persona,
+				},
+			},
+		},
+		ThinkingConfig: &genai.ThinkingConfig{
+			ThinkingLevel: DEFAULT_AGENT_INTELLECT,
+		},
 	}
 
 

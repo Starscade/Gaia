@@ -2,6 +2,7 @@ package main
 
 
 const (
+	DEFAULT_AGENT_INTELLECT = "MINIMAL"
 	DEFAULT_AGENT_MODEL = "gemini-flash-lite-latest"
 	DEFAULT_AGENT_NAME = "Gaia"
 	DEFAULT_AGENT_PERSONA = "Unless a language is specified, assume that code must be written in POSIX-complient sh (or PostgreSQL if dealing with SQL). Always opt for the most portable syntax."
