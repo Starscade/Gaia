@@ -1,4 +1,4 @@
-# Gaia AI CLI
+# Gaia AI Agent
 
 Gaia is a lightweight Go CLI tool that interfaces with the Gemini API to provide code generation, execution, and assistance directly in your terminal.
 
