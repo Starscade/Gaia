@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"google.golang.org/genai"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -32,18 +33,16 @@ func main() {
 	args := flag.Args()
 	user_prompt := strings.Join(args, " ")
 
-	if user_prompt == "" {
-		log.Fatal(ERR_NO_PROMPT)
-	}
-
-	/*
 	stdin_data, err := io.ReadAll(os.Stdin)
 	for err != nil {
 		log.Fatal(ERR_NO_PROMPT)
 	}
 
-	user_prompt := string(stdin_data)
-	*/
+	user_prompt = user_prompt + string(stdin_data)
+
+	if user_prompt == "" {
+		log.Fatal(ERR_NO_PROMPT)
+	}
 
 	agent_model := os.Getenv(ENV_AGENT_MODEL)
 
