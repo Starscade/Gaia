@@ -38,4 +38,4 @@ Pipe data into Gaia for analysis or transformation: `cat file.txt | gaia -i "Sum
 
 ---
 
-> P.S. This README was written for Gaia by Gaia! (Edited by Angus.)
+> P.S. This README was written by Gaia! (Edited by Angus.)
