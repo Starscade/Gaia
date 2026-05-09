@@ -22,6 +22,7 @@ func main() {
 	}
 
 	flag_execute := flag.Bool(FLAG_EXECUTE_OPTION_SHORT, false, FLAG_EXECUTE_HELP)
+	flag_stdin := flag.Bool(FLAG_STDIN_OPTION_SHORT, false, FLAG_STDIN_HELP)
 	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
@@ -33,12 +34,14 @@ func main() {
 	args := flag.Args()
 	user_prompt := strings.Join(args, " ")
 
-	stdin_data, err := io.ReadAll(os.Stdin)
-	for err != nil {
-		log.Fatal(ERR_NO_PROMPT)
-	}
+	if *flag_stdin {
+		stdin_data, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			log.Fatal(ERR_NO_PROMPT)
+		}
 
-	user_prompt = user_prompt + string(stdin_data)
+		user_prompt = user_prompt + string(stdin_data)
+	}
 
 	if user_prompt == "" {
 		log.Fatal(ERR_NO_PROMPT)
