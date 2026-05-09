@@ -18,7 +18,9 @@ func main() {
 
 	// FLAGS & ENVIRONMENT
 
-	if os.Getenv(ENV_APIKEY) == "" {
+	api_key := os.Getenv(ENV_APIKEY)
+
+	if api_key == "" {
 		log.Fatal(ERR_NO_APIKEY) // No key? Why continue?
 	}
 
