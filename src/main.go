@@ -110,11 +110,7 @@ func main() {
 	if *flag_nsfw {
 		config.SafetySettings = []*genai.SafetySetting{
 			{
-				Category:  genai.HarmCategorySexuallyExplicit,
-				Threshold: genai.HarmBlockThresholdBlockNone,
-			},
-			{
-				Category:  genai.HarmCategoryHateSpeech,
+				Category:  genai.HarmCategoryDangerousContent,
 				Threshold: genai.HarmBlockThresholdBlockNone,
 			},
 			{
@@ -122,7 +118,11 @@ func main() {
 				Threshold: genai.HarmBlockThresholdBlockNone,
 			},
 			{
-				Category:  genai.HarmCategoryDangerousContent,
+				Category:  genai.HarmCategoryHateSpeech,
+				Threshold: genai.HarmBlockThresholdBlockNone,
+			},
+			{
+				Category:  genai.HarmCategorySexuallyExplicit,
 				Threshold: genai.HarmBlockThresholdBlockNone,
 			},
 		}
