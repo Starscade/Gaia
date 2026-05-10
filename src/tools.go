@@ -15,25 +15,8 @@ func exitOnErr(err error) {
 	}
 }
 
-func getHistory() {
-	jsonStr := os.Getenv(ENV_CHAT_HISTORY)
-	if jsonStr == "" {
-		jsonStr = "[]"
-	}
-
-	var data []map[string]interface{}
-	if err := json.Unmarshal([]byte(jsonStr), &data); err != nil {
-		printErr(err.Error())
-	}
-
-	newData := map[string]interface{}{"id": 1, "status": "active"}
-	data = append(data, newData)
-
-	updatedJson, err := json.Marshal(data)
-	exitOnErr(err)
-
-	os.Setenv(ENV_CHAT_HISTORY, string(updatedJson))
-	fmt.Println(os.Getenv(ENV_CHAT_HISTORY))
+func getHistory() string {
+	return os.Getenv(ENV_CHAT_HISTORY)
 }
 
 func getStdin() string {
@@ -53,4 +36,11 @@ func printHelp() {
 	fmt.Println(PRINT_GAIA)
 	flag.PrintDefaults()
 	fmt.Println(PRINT_HELP_USAGE)
+}
+
+func setHistory(body string) {
+	history := getHistory()
+	revised_history := history + "\n\n\n" + body
+	os.Setenv(ENV_CHAT_HISTORY, revised_history)
+	insertMessage(body, true)
 }

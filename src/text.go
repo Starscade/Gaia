@@ -8,12 +8,14 @@ const (
 	DEFAULT_AGENT_PERSONA_CODE           = "You are a programmer. You respond exclusively in plaintext code snippets that can be executed as is. Never format your responses using markdown. " + DEFAULT_AGENT_PERSONA
 	DEFAULT_AGENT_PERSONA_CODE_EXECUTION = DEFAULT_AGENT_PERSONA_CODE + "Never comment. Provide only the raw execution code itself. "
 	DEFAULT_AGENT_PERSONA_VERBOSE        = "You are a technical writer. You always respond in concise, precise paragraphs that describe the topic and provide a concrete code example. If no language is specified, omit the code example. Don't introduce yourself. " + DEFAULT_AGENT_PERSONA
+	DEFAULT_DB_FILENAME                  = "gaia.sqlite3"
 
 	ENV_AGENT_MODEL   = "GAIA_AGENT_MODEL"
 	ENV_AGENT_NAME    = "GAIA_AGENT_NAME"
 	ENV_AGENT_PERSONA = "GAIA_AGENT_PERSONA"
 	ENV_APIKEY        = "GEMINI_API_KEY" // Ensures compatibility with other Gemini API tools.
 	ENV_CHAT_HISTORY  = "GAIA_HISTORY"
+	ENV_DB_DIR        = "GAIA_DB_DIR"
 
 	ERR_NO_APIKEY = "No " + ENV_APIKEY + "!"
 	ERR_NO_PROMPT = "No prompt provided!"
@@ -30,4 +32,7 @@ const (
 
 	PRINT_GAIA       = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n"
 	PRINT_HELP_USAGE = "\n \033[1mUsage\033[0m: gaia -x \"What's my IP address?\"\n\n"
+
+	SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS conversation (ts TEXT, is_agent INT, body TEXT)"
+	SQL_INSERT_ROW   = "INSERT INTO conversation (ts, is_agent, body) VALUES (?, ?, ?)"
 )

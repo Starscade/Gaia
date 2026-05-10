@@ -14,6 +14,8 @@ import (
 
 func main() {
 
+	initDb()
+
 	// FLAGS & ENVIRONMENT
 
 	api_key := os.Getenv(ENV_APIKEY)
@@ -48,6 +50,8 @@ func main() {
 		printHelp()
 		printErr(ERR_NO_PROMPT)
 	}
+
+	setHistory(user_prompt)
 
 	agent_model := os.Getenv(ENV_AGENT_MODEL)
 
@@ -136,6 +140,9 @@ func main() {
 		)
 
 		raw_code := answer.Text()
+
+		setHistory(raw_code)
+
 		cmd := exec.Command("sh", "-c", raw_code)
 		cmd.Env = os.Environ() // Inherit the user's environment.
 		cmd.Stderr = os.Stderr
@@ -158,15 +165,20 @@ func main() {
 
 	// Print response as it comes ...
 
+	response_body := ""
+
 	for chunk, err := range stream {
 
 		exitOnErr(err)
 
 		if chunk != nil && len(chunk.Candidates) > 0 && len(chunk.Candidates[0].Content.Parts) > 0 {
 			part := chunk.Candidates[0].Content.Parts[0]
+			response_body = response_body + part.Text
 			fmt.Print(part.Text)
 		}
 	}
+
+	setHistory(response_body)
 
 	fmt.Println() // Ensures terminal starts on a new line.
 
