@@ -29,6 +29,6 @@ const (
 	FLAG_VERBOSE_HELP         = "Speak casually."
 	FLAG_VERBOSE_OPTION_SHORT = "v"
 
-	PRINT_GAIA = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n"
+	PRINT_GAIA       = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n"
 	PRINT_HELP_USAGE = "\n \033[1mUsage\033[0m: gaia -x \"What's my IP address?\"\n\n"
 )
