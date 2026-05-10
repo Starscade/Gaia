@@ -12,7 +12,7 @@ const (
 	ENV_AGENT_MODEL   = "GAIA_AGENT_MODEL"
 	ENV_AGENT_NAME    = "GAIA_AGENT_NAME"
 	ENV_AGENT_PERSONA = "GAIA_AGENT_PERSONA"
-	ENV_APIKEY        = "GEMINI_API_KEY"
+	ENV_APIKEY        = "GEMINI_API_KEY" // Ensures compatibility with other Gemini API tools.
 
 	ERR_NO_APIKEY = "No " + ENV_APIKEY + "!"
 	ERR_NO_PROMPT = "No prompt provided!"
