@@ -25,8 +25,6 @@ const (
 	FLAG_HELP_OPTION_SHORT    = "h"
 	FLAG_NSFW_HELP            = "Free speech mode."
 	FLAG_NSFW_OPTION_LONG     = "nsfw"
-	FLAG_STDIN_HELP           = "Accept prompt from stdin."
-	FLAG_STDIN_OPTION_SHORT   = "i"
 	FLAG_VERBOSE_HELP         = "Speak casually."
 	FLAG_VERBOSE_OPTION_SHORT = "v"
 

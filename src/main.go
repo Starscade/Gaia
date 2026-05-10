@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -27,7 +26,6 @@ func main() {
 	flag_help_long := flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
 	flag_help_short := flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_nsfw := flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
-	flag_stdin := flag.Bool(FLAG_STDIN_OPTION_SHORT, false, FLAG_STDIN_HELP)
 	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
@@ -44,17 +42,7 @@ func main() {
 	}
 
 	args := flag.Args()
-	user_prompt := strings.Join(args, " ")
-
-	if *flag_stdin {
-		stdin_data, err := io.ReadAll(os.Stdin)
-		if err != nil {
-			printHelp()
-			printErr(ERR_NO_PROMPT)
-		}
-
-		user_prompt = user_prompt + string(stdin_data)
-	}
+	user_prompt := strings.Join(args, " ") + getStdin()
 
 	if user_prompt == "" {
 		printHelp()

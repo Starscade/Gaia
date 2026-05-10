@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 )
@@ -29,6 +30,15 @@ func getHistory() {
 
 	os.Setenv(ENV_CHAT_HISTORY, string(updatedJson))
 	fmt.Println(os.Getenv(ENV_CHAT_HISTORY))
+}
+
+func getStdin() string {
+	stat, _ := os.Stdin.Stat()
+	var input []byte
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		input, _ = io.ReadAll(os.Stdin)
+	}
+	return string(input)
 }
 
 func printErr(err string) {

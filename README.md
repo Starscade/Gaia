@@ -23,11 +23,10 @@ Gaia can generate and execute code directly: `gaia -x "echo Hello World"`.
 > Be very careful when writing prompts for this!
 
 ### Pipeline Support
-Pipe data into Gaia for analysis or transformation: `cat file.txt | gaia -i "Summarize this file"`.
+Pipe data into Gaia for analysis or transformation: `cat file.txt | gaia "Summarize this file"`.
 
 ### Flags
 - `-x`: Execute the AI response as a shell script.
-- `-i`: Accept input via stdin.
 - `-v`: Verbose mode (switches persona to technical writer).
 
 ## Environment Variables
