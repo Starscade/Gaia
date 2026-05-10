@@ -9,6 +9,12 @@ import (
 	"os"
 )
 
+func exitOnErr(err error) {
+	if err != nil {
+		printErr(err.Error())
+	}
+}
+
 func getHistory() {
 	jsonStr := os.Getenv(ENV_CHAT_HISTORY)
 	if jsonStr == "" {
@@ -24,9 +30,7 @@ func getHistory() {
 	data = append(data, newData)
 
 	updatedJson, err := json.Marshal(data)
-	if err != nil {
-		printErr(err.Error())
-	}
+	exitOnErr(err)
 
 	os.Setenv(ENV_CHAT_HISTORY, string(updatedJson))
 	fmt.Println(os.Getenv(ENV_CHAT_HISTORY))

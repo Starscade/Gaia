@@ -89,9 +89,7 @@ func main() {
 		APIKey:  api_key,
 	})
 
-	if err != nil {
-		printErr(err.Error())
-	}
+	exitOnErr(err)
 
 	config := &genai.GenerateContentConfig{
 		SystemInstruction: &genai.Content{
@@ -146,9 +144,7 @@ func main() {
 
 		err := cmd.Run()
 
-		if err != nil {
-			printErr(err.Error())
-		}
+		exitOnErr(err)
 
 		os.Exit(0) // Quit before running a regular query.
 	}
@@ -164,9 +160,7 @@ func main() {
 
 	for chunk, err := range stream {
 
-		if err != nil {
-			printErr(err.Error())
-		}
+		exitOnErr(err)
 
 		if chunk != nil && len(chunk.Candidates) > 0 && len(chunk.Candidates[0].Content.Parts) > 0 {
 			part := chunk.Candidates[0].Content.Parts[0]
