@@ -181,7 +181,7 @@ func main() {
 		}
 
 		part := chunk.Candidates[0].Content.Parts[0]
-		fmt.Print(part.Text)
+		fmt.Println(part.Text)
 	}
 
 }
