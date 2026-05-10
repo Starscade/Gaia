@@ -6,7 +6,8 @@ export PATH := $(HOME)/.local/bin:$(PATH)
 all:
 
 	@\
-		make fmt \
+		go mod tidy \
+		&& make fmt \
 		&& CGO_ENABLED=0 \
 		go build -ldflags="-s -w" -v -x \
 		-o ~/.local/bin/gaia ./src \
