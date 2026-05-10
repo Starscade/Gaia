@@ -23,14 +23,14 @@ func main() {
 	}
 
 	flag_execute := flag.Bool(FLAG_EXECUTE_OPTION_SHORT, false, FLAG_EXECUTE_HELP)
+	flag_help := flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_help_long := flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
-	flag_help_short := flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_nsfw := flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
 	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
 
-	if *flag_help_long || *flag_help_short {
+	if *flag_help_long || *flag_help {
 		printHelp()
 		os.Exit(0)
 	}
