@@ -102,7 +102,7 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		printErr(err.Error())
 	}
 
 	config := &genai.GenerateContentConfig{
@@ -159,7 +159,7 @@ func main() {
 		err := cmd.Run()
 
 		if err != nil {
-			log.Fatal(err)
+			printErr(err.Error())
 		}
 
 		os.Exit(0) // Quit before running a regular query.
@@ -177,7 +177,7 @@ func main() {
 	for chunk, err := range stream {
 
 		if err != nil {
-			log.Fatal(err)
+			printErr(err.Error())
 		}
 
 		part := chunk.Candidates[0].Content.Parts[0]
