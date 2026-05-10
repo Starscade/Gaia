@@ -37,8 +37,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	if *flag_execute && *flag_verbose {
-		*flag_verbose = false // Don't execute poetry.
+	if *flag_execute {
+		// Don't build a rootkit or execute poetry.
+		*flag_nsfw = false
+		*flag_verbose = false
 	}
 
 	args := flag.Args()
