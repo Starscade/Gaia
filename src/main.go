@@ -47,14 +47,16 @@ func main() {
 	if *flag_stdin {
 		stdin_data, err := io.ReadAll(os.Stdin)
 		if err != nil {
-			log.Fatal(ERR_NO_PROMPT)
+			printHelp()
+			printErr(ERR_NO_PROMPT)
 		}
 
 		user_prompt = user_prompt + string(stdin_data)
 	}
 
 	if user_prompt == "" {
-		log.Fatal(ERR_NO_PROMPT)
+		printHelp()
+		printErr(ERR_NO_PROMPT)
 	}
 
 	agent_model := os.Getenv(ENV_AGENT_MODEL)
