@@ -181,7 +181,9 @@ func main() {
 		}
 
 		part := chunk.Candidates[0].Content.Parts[0]
-		fmt.Println(part.Text)
+		fmt.Print(part.Text)
 	}
+
+	fmt.Println() // Ensures terminal starts on a new line.
 
 }
