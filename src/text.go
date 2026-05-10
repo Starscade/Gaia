@@ -19,10 +19,16 @@ const (
 
 	FLAG_EXECUTE_HELP         = "Execute the prompt as code."
 	FLAG_EXECUTE_OPTION_SHORT = "x"
+	FLAG_HELP_HELP            = "Show this message."
+	FLAG_HELP_OPTION_LONG     = "help"
+	FLAG_HELP_OPTION_SHORT    = "h"
 	FLAG_NSFW_HELP            = "Free speech mode."
 	FLAG_NSFW_OPTION_LONG     = "nsfw"
 	FLAG_STDIN_HELP           = "Accept prompt from stdin."
 	FLAG_STDIN_OPTION_SHORT   = "i"
 	FLAG_VERBOSE_HELP         = "Speak casually."
 	FLAG_VERBOSE_OPTION_SHORT = "v"
+
+	PRINT_GAIA = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n"
+	PRINT_HELP_USAGE = "\n \033[1mUsage\033[0m: gaia -x \"What's my IP address?\"\n\n"
 )
