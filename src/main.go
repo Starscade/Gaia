@@ -180,8 +180,10 @@ func main() {
 			printErr(err.Error())
 		}
 
-		part := chunk.Candidates[0].Content.Parts[0]
-		fmt.Print(part.Text)
+		if chunk != nil && len(chunk.Candidates) > 0 && len(chunk.Candidates[0].Content.Parts) > 0 {
+			part := chunk.Candidates[0].Content.Parts[0]
+			fmt.Print(part.Text)
+		}
 	}
 
 	fmt.Println() // Ensures terminal starts on a new line.
