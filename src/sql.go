@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"time"
 
+	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
 )
 
@@ -17,7 +19,11 @@ func initDb() {
 func insertMessage(body string, is_agent bool) {
 	db, err := sql.Open("sqlite", DEFAULT_DB_FILENAME)
 	exitOnErr(err)
+
 	defer db.Close()
-	today := "1970-01-01 00:00:00"
-	_, err = db.Exec(SQL_INSERT_ROW, today, is_agent, body)
+
+	ts_now := time.Now().Format(time.RFC3339)
+	new_uuid := uuid.New()
+
+	_, err = db.Exec(SQL_INSERT_ROW, new_uuid, ts_now, is_agent, body)
 }
