@@ -33,7 +33,7 @@ func selectMessage(conversation_id string) string {
 	defer db.Close()
 
 	var rows *sql.Rows
-	rows, err = db.Query(SQL_SELECT_CONVERSATION)
+	rows, err = db.Query(SQL_GET_CONVERSATIONS)
 	exitOnErr(err)
 	defer rows.Close()
 
