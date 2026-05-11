@@ -180,7 +180,7 @@ func main() {
 
 		exitOnErr(err)
 
-		if chunk != nil && len(chunk.Candidates) > 0 && len(chunk.Candidates[0].Content.Parts) > 0 {
+		if len(chunk.Candidates) > 0 {
 			part := chunk.Candidates[0].Content.Parts[0]
 			response_body = response_body + part.Text
 			fmt.Print(part.Text)
