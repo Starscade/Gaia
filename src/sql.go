@@ -16,24 +16,33 @@ func initDb() {
 	exitOnErr(err)
 }
 
-func insertMessage(body string, is_agent bool) {
+func insertMessage(body string, is_agent bool, is_topic bool) {
 	db, err := sql.Open("sqlite", DEFAULT_DB_FILENAME)
 	exitOnErr(err)
 	defer db.Close()
 
-	ts_now := time.Now().Format(time.RFC3339)
-	new_uuid := uuid.New()
+	ts_now := time.Now().Format(time.RFC3339Nano)
+	conversation_id := uuid.New()
 
-	_, err = db.Exec(SQL_INSERT_ROW, new_uuid, ts_now, is_agent, body)
+	if is_topic {
+		err = db.QueryRow(SQL_GET_CURRENT_ID).Scan(&conversation_id)
+		exitOnErr(err)
+	}
+
+	_, err = db.Exec(SQL_INSERT_ROW, conversation_id, ts_now, is_agent, body)
 }
 
-func selectMessage(conversation_id string) string {
+func selectMessage() string {
 	db, err := sql.Open("sqlite", DEFAULT_DB_FILENAME)
 	exitOnErr(err)
 	defer db.Close()
 
+	var conversation_id string
+	err = db.QueryRow(SQL_GET_CURRENT_ID).Scan(&conversation_id)
+	exitOnErr(err)
+
 	var rows *sql.Rows
-	rows, err = db.Query(SQL_GET_CONVERSATIONS)
+	rows, err = db.Query(SQL_GET_CONVERSATION, conversation_id)
 	exitOnErr(err)
 	defer rows.Close()
 
@@ -43,7 +52,7 @@ func selectMessage(conversation_id string) string {
 		var body string
 		err := rows.Scan(&body)
 		exitOnErr(err)
-		chat_history = chat_history + body
+		chat_history = chat_history + "\n\n" + body
 	}
 
 	return chat_history

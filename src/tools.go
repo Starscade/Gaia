@@ -14,8 +14,8 @@ func exitOnErr(err error) {
 	}
 }
 
-func getHistory(conversation_id string) string {
-	return selectMessage(conversation_id)
+func getHistory() string {
+	return selectMessage()
 }
 
 func getStdin() string {
@@ -37,6 +37,6 @@ func printHelp() {
 	fmt.Println(PRINT_HELP_USAGE)
 }
 
-func setHistory(body string) {
-	insertMessage(body, true)
+func setHistory(body string, is_agent bool, is_topic bool) {
+	insertMessage(body, is_agent, is_topic)
 }

@@ -26,6 +26,8 @@ func main() {
 	flag_help := flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_help_long := flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
 	flag_nsfw := flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
+	flag_topic := flag.Bool(FLAG_TOPIC_OPTION_SHORT, false, FLAG_TOPIC_HELP)
+	flag_topic_long := flag.Bool(FLAG_TOPIC_OPTION_LONG, false, FLAG_TOPIC_HELP)
 	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
@@ -51,7 +53,14 @@ func main() {
 
 	initDb()
 
-	setHistory(user_prompt)
+	is_topic := false
+	if *flag_topic || *flag_topic_long {
+		is_topic = true
+		topic := getHistory()
+		user_prompt = topic + "\n\n" + user_prompt
+	}
+
+	setHistory(user_prompt, false, is_topic)
 
 	agent_model := os.Getenv(ENV_AGENT_MODEL)
 
@@ -141,7 +150,7 @@ func main() {
 
 		raw_code := answer.Text()
 
-		setHistory(raw_code)
+		setHistory(raw_code, true, true)
 
 		cmd := exec.Command("sh", "-c", raw_code)
 		cmd.Env = os.Environ() // Inherit the user's environment.
@@ -178,7 +187,7 @@ func main() {
 		}
 	}
 
-	setHistory(response_body)
+	setHistory(response_body, true, true)
 
 	fmt.Println() // Ensures terminal starts on a new line.
 
