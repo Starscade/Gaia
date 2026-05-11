@@ -14,8 +14,6 @@ import (
 
 func main() {
 
-	initDb()
-
 	// FLAGS & ENVIRONMENT
 
 	api_key := os.Getenv(ENV_APIKEY)
@@ -50,6 +48,8 @@ func main() {
 		printHelp()
 		printErr(ERR_NO_PROMPT)
 	}
+
+	initDb()
 
 	setHistory(user_prompt)
 
