@@ -14,8 +14,8 @@ func exitOnErr(err error) {
 	}
 }
 
-func getHistory() string {
-	return os.Getenv(ENV_CHAT_HISTORY)
+func getHistory(conversation_id string) string {
+	return selectMessage(conversation_id)
 }
 
 func getStdin() string {
@@ -38,8 +38,5 @@ func printHelp() {
 }
 
 func setHistory(body string) {
-	history := getHistory()
-	revised_history := history + "\n\n\n" + body
-	os.Setenv(ENV_CHAT_HISTORY, revised_history)
 	insertMessage(body, true)
 }

@@ -15,7 +15,6 @@ const (
 	ENV_AGENT_NAME    = "GAIA_AGENT_NAME"
 	ENV_AGENT_PERSONA = "GAIA_AGENT_PERSONA"
 	ENV_APIKEY        = "GEMINI_API_KEY" // Ensures compatibility with other Gemini API tools.
-	ENV_CHAT_HISTORY  = "GAIA_HISTORY"
 	ENV_DB_DIR        = "GAIA_DB_DIR"
 
 	ERR_NO_APIKEY = "No " + ENV_APIKEY + "!"
@@ -34,6 +33,7 @@ const (
 	PRINT_GAIA       = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n"
 	PRINT_HELP_USAGE = "\n \033[1mUsage\033[0m: gaia -x \"What's my IP address?\"\n\n"
 
-	SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS conversations (id TEXT, ts TEXT, is_agent INT, body TEXT)"
-	SQL_INSERT_ROW   = "INSERT INTO conversations (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
+	SQL_CREATE_TABLE        = "CREATE TABLE IF NOT EXISTS conversations (id TEXT, ts TEXT, is_agent INT, body TEXT)"
+	SQL_INSERT_ROW          = "INSERT INTO conversations (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
+	SQL_SELECT_CONVERSATION = "SELECT body FROM conversations"
 )
