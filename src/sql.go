@@ -19,7 +19,6 @@ func initDb() {
 func insertMessage(body string, is_agent bool) {
 	db, err := sql.Open("sqlite", DEFAULT_DB_FILENAME)
 	exitOnErr(err)
-
 	defer db.Close()
 
 	ts_now := time.Now().Format(time.RFC3339)
