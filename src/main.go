@@ -28,6 +28,7 @@ func main() {
 	flag_help := flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_help_long := flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
 	flag_nsfw := flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
+	flag_recall := flag.Bool(FLAG_RECALL_OPTION_LONG, false, FLAG_RECALL_HELP)
 	flag_topic := flag.Bool(FLAG_TOPIC_OPTION_SHORT, false, FLAG_TOPIC_HELP)
 	flag_topic_long := flag.Bool(FLAG_TOPIC_OPTION_LONG, false, FLAG_TOPIC_HELP)
 	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
@@ -36,6 +37,17 @@ func main() {
 
 	if *flag_help_long || *flag_help {
 		printHelp()
+		os.Exit(0)
+	}
+
+	if DB_FILE == "" {
+		DB_FILE = DEFAULT_DB_PATH
+	}
+
+	initDb()
+
+	if *flag_recall {
+		fmt.Println(getLastBody())
 		os.Exit(0)
 	}
 
@@ -57,12 +69,6 @@ func main() {
 	if agent_intellect == "" {
 		agent_intellect = DEFAULT_AGENT_INTELLECT
 	}
-
-	if DB_FILE == "" {
-		DB_FILE = DEFAULT_DB_PATH
-	}
-
-	initDb()
 
 	var prompt_history []*genai.Content
 

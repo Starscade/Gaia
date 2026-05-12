@@ -9,6 +9,17 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+func getLastBody() string {
+	db, err := sql.Open("sqlite", DB_FILE)
+	exitOnErr(err)
+	defer db.Close()
+
+	var body string
+	err = db.QueryRow(SQL_GET_LAST_BODY).Scan(&body)
+	exitOnErr(err)
+	return body
+}
+
 func initDb() {
 	db, err := sql.Open("sqlite", DB_FILE)
 	exitOnErr(err)

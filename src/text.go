@@ -27,6 +27,8 @@ const (
 	FLAG_HELP_OPTION_SHORT    = "h"
 	FLAG_NSFW_HELP            = "Free speech mode."
 	FLAG_NSFW_OPTION_LONG     = "nsfw"
+	FLAG_RECALL_HELP          = "Print last response."
+	FLAG_RECALL_OPTION_LONG   = "recall"
 	FLAG_TOPIC_HELP           = "Preserve topic context from previous query."
 	FLAG_TOPIC_OPTION_LONG    = "topic"
 	FLAG_TOPIC_OPTION_SHORT   = "t"
@@ -40,4 +42,5 @@ const (
 	SQL_INSERT_ROW       = "INSERT INTO conversations (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
 	SQL_GET_CONVERSATION = "SELECT is_agent, body FROM conversations WHERE id = ?"
 	SQL_GET_CURRENT_ID   = "SELECT id FROM conversations ORDER BY ts DESC LIMIT 1"
+	SQL_GET_LAST_BODY    = "SELECT body FROM conversations ORDER BY ts DESC LIMIT 1"
 )
