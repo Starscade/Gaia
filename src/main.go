@@ -12,6 +12,8 @@ import (
 	"google.golang.org/genai"
 )
 
+var DB_FILE = os.Getenv(ENV_DB_PATH)
+
 func main() {
 
 	// FLAGS & ENVIRONMENT
@@ -49,6 +51,15 @@ func main() {
 	if user_prompt == "" {
 		printHelp()
 		printErr(ERR_NO_PROMPT)
+	}
+
+	agent_intellect := os.Getenv(ENV_AGENT_INTELLECT)
+	if agent_intellect == "" {
+		agent_intellect = DEFAULT_AGENT_INTELLECT
+	}
+
+	if DB_FILE == "" {
+		DB_FILE = DEFAULT_DB_PATH
 	}
 
 	initDb()
@@ -116,7 +127,7 @@ func main() {
 			},
 		},
 		ThinkingConfig: &genai.ThinkingConfig{
-			ThinkingLevel: DEFAULT_AGENT_INTELLECT,
+			ThinkingLevel: genai.ThinkingLevel(agent_intellect),
 		},
 		Tools: []*genai.Tool{
 			{
