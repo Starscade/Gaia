@@ -9,7 +9,7 @@ const (
 	DEFAULT_AGENT_PERSONA_CODE_EXECUTION = DEFAULT_AGENT_PERSONA_CODE + "Never comment. Provide only the raw execution code itself. "
 	DEFAULT_AGENT_PERSONA_VERBOSE        = "You are a technical writer. You always respond in concise, precise paragraphs that describe the topic and provide a concrete code example. If no language is specified, omit the code example. Don't introduce yourself. " + DEFAULT_AGENT_PERSONA
 	DEFAULT_DB_PATH                      = "/tmp/gaia.sqlite3"
-	DEFAULT_ENV_PATH                     = "./.env"
+	DEFAULT_ENV_FILE                     = ".env"
 
 	ENV_AGENT_INTELLECT = "GAIA_AGENT_INTELLECT"
 	ENV_AGENT_MODEL     = "GAIA_AGENT_MODEL"
@@ -17,11 +17,13 @@ const (
 	ENV_AGENT_PERSONA   = "GAIA_AGENT_PERSONA"
 	ENV_APIKEY          = "GEMINI_API_KEY" // Ensures compatibility with other Gemini API tools.
 	ENV_DB_PATH         = "GAIA_DB_PATH"
-	ENV_DOTENV_PATH     = "GAIA_ENV_PATH"
+	ENV_DOTENV_PATH     = "GAIA_ENV_FILE"
 
 	ERR_NO_APIKEY = "No " + ENV_APIKEY + "!"
 	ERR_NO_PROMPT = "No prompt provided!"
 
+	FLAG_ENV_HELP             = "Override environment with file."
+	FLAG_ENV_OPTION_LONG      = "env"
 	FLAG_EXECUTE_HELP         = "Execute the prompt as code."
 	FLAG_EXECUTE_OPTION_SHORT = "x"
 	FLAG_HELP_HELP            = "Show this message."

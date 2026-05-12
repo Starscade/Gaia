@@ -19,20 +19,7 @@ func main() {
 
 	// FLAGS & ENVIRONMENT
 
-	env_file := os.Getenv(ENV_DOTENV_PATH)
-
-	if env_file == "" {
-		env_file = DEFAULT_ENV_PATH
-	}
-
-	godotenv.Load(env_file)
-
-	api_key := os.Getenv(ENV_APIKEY)
-
-	if api_key == "" {
-		log.Fatal(ERR_NO_APIKEY) // No key? Why continue?
-	}
-
+	flag_env := flag.String(FLAG_ENV_OPTION_LONG, "", FLAG_ENV_HELP)
 	flag_execute := flag.Bool(FLAG_EXECUTE_OPTION_SHORT, false, FLAG_EXECUTE_HELP)
 	flag_help := flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_help_long := flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
@@ -43,6 +30,28 @@ func main() {
 	flag_verbose := flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
+
+	env_file := os.Getenv(ENV_DOTENV_PATH)
+	if env_file == "" {
+		env_file = DEFAULT_ENV_FILE
+	}
+
+	_, err := os.Stat(env_file)
+	if err == nil {
+		err := godotenv.Overload(env_file)
+		exitOnErr(err)
+	}
+
+	if *flag_env != "" {
+		err := godotenv.Overload(*flag_env)
+		exitOnErr(err)
+	}
+
+	api_key := os.Getenv(ENV_APIKEY)
+
+	if api_key == "" {
+		log.Fatal(ERR_NO_APIKEY) // No key? Why continue?
+	}
 
 	if *flag_help_long || *flag_help {
 		printHelp()
