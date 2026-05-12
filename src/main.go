@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/joho/godotenv"
 	"google.golang.org/genai"
 )
 
@@ -17,6 +18,14 @@ var DB_FILE = os.Getenv(ENV_DB_PATH)
 func main() {
 
 	// FLAGS & ENVIRONMENT
+
+	env_file := os.Getenv(ENV_DOTENV_PATH)
+
+	if env_file == "" {
+		env_file = DEFAULT_ENV_PATH
+	}
+
+	godotenv.Load(env_file)
 
 	api_key := os.Getenv(ENV_APIKEY)
 
