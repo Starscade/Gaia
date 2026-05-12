@@ -115,6 +115,11 @@ func main() {
 		ThinkingConfig: &genai.ThinkingConfig{
 			ThinkingLevel: DEFAULT_AGENT_INTELLECT,
 		},
+		Tools: []*genai.Tool{
+			{
+				GoogleSearch: &genai.GoogleSearch{},
+			},
+		},
 	}
 
 	if *flag_nsfw {
