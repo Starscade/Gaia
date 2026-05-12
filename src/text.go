@@ -38,6 +38,6 @@ const (
 
 	SQL_CREATE_TABLE     = "CREATE TABLE IF NOT EXISTS conversations (id TEXT, ts TEXT, is_agent INT, body TEXT)"
 	SQL_INSERT_ROW       = "INSERT INTO conversations (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
-	SQL_GET_CONVERSATION = "SELECT body FROM conversations WHERE id = ? AND is_agent = 0 ORDER BY ts DESC LIMIT 1"
+	SQL_GET_CONVERSATION = "SELECT is_agent, body FROM conversations WHERE id = ?"
 	SQL_GET_CURRENT_ID   = "SELECT id FROM conversations ORDER BY ts DESC LIMIT 1"
 )

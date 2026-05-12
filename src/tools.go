@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"os"
+
+	"google.golang.org/genai"
 )
 
 func exitOnErr(err error) {
@@ -14,8 +16,8 @@ func exitOnErr(err error) {
 	}
 }
 
-func getHistory() string {
-	return selectMessage()
+func getHistory(chat_history *[]*genai.Content) {
+	selectMessage(chat_history)
 }
 
 func getStdin() string {

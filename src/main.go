@@ -53,12 +53,15 @@ func main() {
 
 	initDb()
 
+	var prompt_history []*genai.Content
+
 	is_topic := false
 	if *flag_topic || *flag_topic_long {
 		is_topic = true
-		topic := getHistory()
-		user_prompt = topic + "\n\n" + user_prompt
+		getHistory(&prompt_history)
 	}
+
+	prompt_history = append(prompt_history, genai.NewContentFromText(user_prompt, genai.RoleUser))
 
 	setHistory(user_prompt, false, is_topic)
 
@@ -149,7 +152,7 @@ func main() {
 		answer, _ := client.Models.GenerateContent(
 			ctx,
 			agent_model,
-			genai.Text(user_prompt),
+			prompt_history,
 			config,
 		)
 
@@ -173,13 +176,13 @@ func main() {
 	stream := client.Models.GenerateContentStream(
 		ctx,
 		agent_model,
-		genai.Text(user_prompt),
+		prompt_history,
 		config,
 	)
 
 	// Print response as it comes ...
 
-	response_body := ""
+	complete_response := ""
 
 	for chunk, err := range stream {
 
@@ -187,12 +190,12 @@ func main() {
 
 		if len(chunk.Candidates) > 0 {
 			part := chunk.Candidates[0].Content.Parts[0]
-			response_body = response_body + part.Text
+			complete_response = complete_response + part.Text
 			fmt.Print(part.Text)
 		}
 	}
 
-	setHistory(response_body, true, true)
+	setHistory(complete_response, true, true)
 
 	fmt.Println() // Ensures terminal starts on a new line.
 
