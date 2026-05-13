@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"google.golang.org/genai"
 )
@@ -44,12 +45,10 @@ func askAi() {
 
 	// Print response as it comes ...
 
-	var builder strings.Builder
+	var response_buffer strings.Builder
 
-	for {
-		chunk, err := stream.Next()
+	for chunk, err := range stream {
 		if err != nil {
-			// Check if stream is done
 			break
 		}
 
@@ -57,13 +56,13 @@ func askAi() {
 			candidate := chunk.Candidates[0]
 			if candidate.Content != nil && len(candidate.Content.Parts) > 0 {
 				text := candidate.Content.Parts[0].Text
-				builder.WriteString(text)
-				print(text)
+				response_buffer.WriteString(text)
+				fmt.Print(text)
 			}
 		}
 	}
 
-	setHistory(builder.String(), true, true)
+	setHistory(response_buffer.String(), true, true)
 
 	fmt.Println() // Ensures terminal starts on a new line.
 }
