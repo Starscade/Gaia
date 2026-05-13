@@ -62,10 +62,10 @@ func initEnv() {
 		exitOnErr(err)
 	}
 
-	api_key = os.Getenv(ENV_APIKEY)
+	api_key = os.Getenv(ENV_API_KEY)
 
 	if api_key == "" {
-		log.Fatal(ERR_NO_APIKEY) // No key? Why continue?
+		log.Fatal(ERR_NO_API_KEY) // No key? Why continue?
 	}
 
 	if *flag_help_long || *flag_help {

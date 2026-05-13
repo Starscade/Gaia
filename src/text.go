@@ -16,13 +16,13 @@ const (
 	ENV_AGENT_MODEL     = "GAIA_AGENT_MODEL"
 	ENV_AGENT_NAME      = "GAIA_AGENT_NAME"
 	ENV_AGENT_PERSONA   = "GAIA_AGENT_PERSONA"
-	ENV_APIKEY          = "GEMINI_API_KEY" // Ensures compatibility with other Gemini API tools.
-	ENV_CENSOR_RATING   = "GAIA_CENSOR_RATING"
+	ENV_API_KEY         = "GAIA_AGENT_KEY" // Ensures compatibility with other Gemini API tools.
+	ENV_CENSOR_RATING   = "GAIA_AGENT_CENSOR_RATING"
 	ENV_DB_PATH         = "GAIA_DB_PATH"
 	ENV_DOTENV_PATH     = "GAIA_ENV_FILE"
 
-	ERR_NO_APIKEY = "No " + ENV_APIKEY + "!"
-	ERR_NO_PROMPT = "No prompt provided!"
+	ERR_NO_API_KEY = "No " + ENV_API_KEY + "!"
+	ERR_NO_PROMPT  = "No prompt provided!"
 
 	FLAG_ENV_HELP             = "Override environment with file."
 	FLAG_ENV_OPTION_LONG      = "env"
