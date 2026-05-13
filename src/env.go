@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -17,6 +18,9 @@ var agent_model string
 var agent_name string
 var agent_persona string
 var censor_rating string
+var client *genai.Client
+var config *genai.GenerateContentConfig
+var ctx context.Context
 var db_file string
 var env_file string
 var flag_env *string
