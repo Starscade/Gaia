@@ -44,20 +44,26 @@ func askAi() {
 
 	// Print response as it comes ...
 
-	complete_response := ""
+	var builder strings.Builder
 
-	for chunk, err := range stream {
+	for {
+		chunk, err := stream.Next()
+		if err != nil {
+			// Check if stream is done
+			break
+		}
 
-		exitOnErr(err)
-
-		if len(chunk.Candidates) > 0 {
-			part := chunk.Candidates[0].Content.Parts[0]
-			complete_response = complete_response + part.Text
-			fmt.Print(part.Text)
+		if chunk != nil && len(chunk.Candidates) > 0 {
+			candidate := chunk.Candidates[0]
+			if candidate.Content != nil && len(candidate.Content.Parts) > 0 {
+				text := candidate.Content.Parts[0].Text
+				builder.WriteString(text)
+				print(text)
+			}
 		}
 	}
 
-	setHistory(complete_response, true, true)
+	setHistory(builder.String(), true, true)
 
 	fmt.Println() // Ensures terminal starts on a new line.
 }
