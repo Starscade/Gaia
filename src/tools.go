@@ -16,6 +16,16 @@ func exitOnErr(err error) {
 	}
 }
 
+func getEnv(env_var_name string, default_value string) string {
+	env_var := os.Getenv(env_var_name)
+
+	if env_var == "" {
+		env_var = default_value
+	}
+
+	return env_var
+}
+
 func getHistory(chat_history *[]*genai.Content) {
 	selectMessage(chat_history)
 }

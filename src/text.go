@@ -8,14 +8,16 @@ const (
 	DEFAULT_AGENT_PERSONA_CODE           = "You are a programmer. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. " + DEFAULT_AGENT_PERSONA
 	DEFAULT_AGENT_PERSONA_CODE_EXECUTION = DEFAULT_AGENT_PERSONA_CODE + "Never comment. Provide only the raw execution code itself. "
 	DEFAULT_AGENT_PERSONA_VERBOSE        = "You are a technical writer. You always respond in concise, precise paragraphs that describe the topic and provide a concrete code example. If no language is specified, omit the code example. Don't introduce yourself. " + DEFAULT_AGENT_PERSONA
+	DEFAULT_CENSOR_RATING                = "BLOCK_HIGH_AND_ABOVE"
 	DEFAULT_DB_PATH                      = "/tmp/gaia.sqlite3"
-	DEFAULT_ENV_FILE                     = ".env"
+	DEFAULT_ENV_PATH                     = ".env"
 
 	ENV_AGENT_INTELLECT = "GAIA_AGENT_INTELLECT"
 	ENV_AGENT_MODEL     = "GAIA_AGENT_MODEL"
 	ENV_AGENT_NAME      = "GAIA_AGENT_NAME"
 	ENV_AGENT_PERSONA   = "GAIA_AGENT_PERSONA"
 	ENV_APIKEY          = "GEMINI_API_KEY" // Ensures compatibility with other Gemini API tools.
+	ENV_CENSOR_RATING   = "GAIA_CENSOR_RATING"
 	ENV_DB_PATH         = "GAIA_DB_PATH"
 	ENV_DOTENV_PATH     = "GAIA_ENV_FILE"
 

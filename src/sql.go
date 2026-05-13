@@ -10,7 +10,7 @@ import (
 )
 
 func getLastBody() string {
-	db, err := sql.Open("sqlite", DB_FILE)
+	db, err := sql.Open("sqlite", db_file)
 	exitOnErr(err)
 	defer db.Close()
 
@@ -21,7 +21,7 @@ func getLastBody() string {
 }
 
 func initDb() {
-	db, err := sql.Open("sqlite", DB_FILE)
+	db, err := sql.Open("sqlite", db_file)
 	exitOnErr(err)
 	defer db.Close()
 	_, err = db.Exec(SQL_CREATE_TABLE)
@@ -29,7 +29,7 @@ func initDb() {
 }
 
 func insertMessage(body string, is_agent bool, is_topic bool) {
-	db, err := sql.Open("sqlite", DB_FILE)
+	db, err := sql.Open("sqlite", db_file)
 	exitOnErr(err)
 	defer db.Close()
 
@@ -45,7 +45,7 @@ func insertMessage(body string, is_agent bool, is_topic bool) {
 }
 
 func selectMessage(chat_history *[]*genai.Content) {
-	db, err := sql.Open("sqlite", DB_FILE)
+	db, err := sql.Open("sqlite", db_file)
 	exitOnErr(err)
 	defer db.Close()
 
