@@ -74,6 +74,9 @@ func initEnv() {
 	}
 
 	censor_rating = getEnv(ENV_CENSOR_RATING, DEFAULT_CENSOR_RATING)
+	if *flag_nsfw {
+		censor_rating = string(genai.HarmBlockThresholdBlockNone)
+	}
 
 	db_file = getEnv(ENV_DB_PATH, DEFAULT_DB_PATH)
 

@@ -8,7 +8,7 @@ const (
 	DEFAULT_AGENT_PERSONA_CODE           = "You are a programmer. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. " + DEFAULT_AGENT_PERSONA
 	DEFAULT_AGENT_PERSONA_CODE_EXECUTION = DEFAULT_AGENT_PERSONA_CODE + "Never comment. Provide only the raw execution code itself. "
 	DEFAULT_AGENT_PERSONA_VERBOSE        = "You are a technical writer. You always respond in concise, precise paragraphs that describe the topic and provide a concrete code example. If no language is specified, omit the code example. Don't introduce yourself. " + DEFAULT_AGENT_PERSONA
-	DEFAULT_CENSOR_RATING                = "BLOCK_HIGH_AND_ABOVE"
+	DEFAULT_CENSOR_RATING                = "BLOCK_MEDIUM_AND_ABOVE"
 	DEFAULT_DB_PATH                      = "/tmp/gaia.sqlite3"
 	DEFAULT_ENV_PATH                     = ".env"
 

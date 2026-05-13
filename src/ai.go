@@ -73,6 +73,24 @@ func initAi() {
 	exitOnErr(err)
 
 	config = &genai.GenerateContentConfig{
+		SafetySettings: []*genai.SafetySetting{
+			{
+				Category:  genai.HarmCategoryDangerousContent,
+				Threshold: genai.HarmBlockThreshold(censor_rating),
+			},
+			{
+				Category:  genai.HarmCategoryHarassment,
+				Threshold: genai.HarmBlockThreshold(censor_rating),
+			},
+			{
+				Category:  genai.HarmCategoryHateSpeech,
+				Threshold: genai.HarmBlockThreshold(censor_rating),
+			},
+			{
+				Category:  genai.HarmCategorySexuallyExplicit,
+				Threshold: genai.HarmBlockThreshold(censor_rating),
+			},
+		},
 		SystemInstruction: &genai.Content{
 			Parts: []*genai.Part{
 				&genai.Part{
@@ -88,26 +106,5 @@ func initAi() {
 				GoogleSearch: &genai.GoogleSearch{},
 			},
 		},
-	}
-
-	if *flag_nsfw {
-		config.SafetySettings = []*genai.SafetySetting{
-			{
-				Category:  genai.HarmCategoryDangerousContent,
-				Threshold: genai.HarmBlockThresholdBlockNone,
-			},
-			{
-				Category:  genai.HarmCategoryHarassment,
-				Threshold: genai.HarmBlockThresholdBlockNone,
-			},
-			{
-				Category:  genai.HarmCategoryHateSpeech,
-				Threshold: genai.HarmBlockThresholdBlockNone,
-			},
-			{
-				Category:  genai.HarmCategorySexuallyExplicit,
-				Threshold: genai.HarmBlockThresholdBlockNone,
-			},
-		}
 	}
 }
