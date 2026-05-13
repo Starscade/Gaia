@@ -32,8 +32,8 @@ var flag_recall *bool
 var flag_topic *bool
 var flag_topic_long *bool
 var flag_verbose *bool
-var user_prompt string
 var prompt_history []*genai.Content
+var user_prompt string
 
 func initEnv() {
 
