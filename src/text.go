@@ -19,7 +19,7 @@ const (
 	ERR_NO_API_KEY = "No " + ENV_API_KEY + "!"
 	ERR_NO_PROMPT  = "No prompt provided!"
 
-	FLAG_ENV_HELP                        = "Override the environment with a file."
+	FLAG_ENV_HELP                        = "Path to dotenv file."
 	FLAG_ENV_OPTION_LONG                 = "env"
 	FLAG_HELP_HELP                       = "Show this message."
 	FLAG_HELP_OPTION_LONG                = "help"
