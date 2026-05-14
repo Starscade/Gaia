@@ -24,23 +24,29 @@ func askAi() {
 		exitOnErr(err)
 
 		if chunk != nil && len(chunk.Candidates) > 0 {
-			candidate := chunk.Candidates[0]
+			for _, candidate := range chunk.Candidates {
 
-			if candidate.FinishReason == genai.FinishReasonSafety {
-				fmt.Print(" \033[1;31;40m CENSORED \033[0m")
-			}
+				if candidate.FinishReason == genai.FinishReasonSafety {
+					fmt.Print(PRINT_CENSORED)
+				}
 
-			if candidate.Content != nil && len(candidate.Content.Parts) > 0 {
-				text := candidate.Content.Parts[0].Text
-				response_buffer.WriteString(text)
-				fmt.Print(text)
+				if candidate.Content != nil && len(candidate.Content.Parts) > 0 {
+					for _, part := range candidate.Content.Parts {
+
+						text := part.Text
+						response_buffer.WriteString(text)
+						fmt.Print(text)
+
+					}
+				}
+
 			}
 		}
 	}
 
 	setHistory(response_buffer.String(), true, true)
 
-	fmt.Println() // Ensures terminal starts on a new line.
+	fmt.Println() // Ensure terminal returns on a new line.
 }
 
 func initAi() {
