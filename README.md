@@ -1,40 +1,27 @@
 # Gaia AI Agent
 
-Gaia is a lightweight Go CLI tool that interfaces with the Gemini API to provide code generation, execution, and assistance directly in your terminal.
+Gaia is a lightweight CLI interface for Google Gemini with an emphasis on code generation and execution directly in the terminal.
 
 ## Installation
 
-1. Clone the repository.
-2. Ensure your `GOPATH` and `PATH` are configured to include `~/.local/bin`.
-3. Build the project using the provided Makefile: `make`.
+1. `git clone https://github.com/Starscade/Gaia.git`.
+2. `cd ./Gaia`.
+3. `make`.
+> [!INFO]
+> Gaia installs to `~/.local/bin` by default. You may change this in the `Makefile`.
 
 ## Configuration
 
-Gaia requires a Gemini API key: `export GEMINI_API_KEY="your-api-key-here"`.
+`export GAIA_AGENT_KEY="your-gemini-key"`
 
 ## Usage
 
-### Direct Prompting
-`gaia "How do I list files in the current directory?"`
+### Direct Execution
 
-### Execution Mode
-Gaia can generate and execute code directly: `gaia -x "echo Hello World"`.
+`gaia -x "What's my IP address?"`
 > [!CAUTION]
-> Be very careful when writing prompts for this!
+> Use with extreme discretion!
 
-### Pipeline Support
-Pipe data into Gaia for analysis or transformation: `cat file.txt | gaia "Summarize this file"`.
+### UNIX Pipe Support
 
-### Flags
-- `-x`: Execute the AI response as a shell script.
-- `-v`: Verbose mode (switches persona to technical writer).
-
-## Environment Variables
-- `GEMINI_API_KEY`: Required. Your Google Gemini API key.
-- `GAIA_AGENT_MODEL`: Override the default model (`gemini-flash-lite-latest`).
-- `GAIA_AGENT_NAME`: Customize the AI's persona name.
-- `GAIA_AGENT_PERSONA`: Override the default system prompt.
-
----
-
-> P.S. This README was written by Gaia! (Edited by Angus.)
+`cat foo.js | gaia "Rewrite this in Go." > foo.go`
