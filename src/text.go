@@ -37,8 +37,8 @@ const (
 	PRINT_GAIA       = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n"
 	PRINT_HELP_USAGE = "\n \033[1mUsage\033[0m: `gaia \"What's my IP address?\" | sh`\n\n"
 
-	SQL_CREATE_TABLE     = "CREATE TABLE IF NOT EXISTS conversations (id TEXT, ts TEXT, is_agent INT, body TEXT)"
-	SQL_INSERT_ROW       = "INSERT INTO conversations (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
+	SQL_CREATE_TABLE      = "CREATE TABLE IF NOT EXISTS conversations (id TEXT, ts TEXT, is_agent INT, body TEXT)"
+	SQL_INSERT_ROW        = "INSERT INTO conversations (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
 	SQL_GET_CONVERSATION  = "SELECT is_agent, body FROM conversations WHERE id = ?"
 	SQL_GET_CURRENT_ID    = "SELECT id FROM conversations ORDER BY ts DESC LIMIT 1"
 	SQL_GET_LAST_RESPONSE = "SELECT body FROM conversations WHERE is_agent = true ORDER BY ts DESC LIMIT 1"
