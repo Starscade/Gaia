@@ -21,12 +21,15 @@ func askAi() {
 	var response_buffer strings.Builder
 
 	for chunk, err := range stream {
-		if err != nil {
-			break
-		}
+		exitOnErr(err)
 
 		if chunk != nil && len(chunk.Candidates) > 0 {
 			candidate := chunk.Candidates[0]
+
+			if candidate.FinishReason == genai.FinishReasonSafety {
+				fmt.Print(" \033[1;31;40m CENSORED \033[0m")
+			}
+
 			if candidate.Content != nil && len(candidate.Content.Parts) > 0 {
 				text := candidate.Content.Parts[0].Text
 				response_buffer.WriteString(text)
