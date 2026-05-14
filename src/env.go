@@ -31,6 +31,7 @@ var flag_nsfw *bool
 var flag_recall *bool
 var flag_topic *bool
 var flag_topic_long *bool
+var flag_vars *bool
 var flag_verbose *bool
 var prompt_history []*genai.Content
 var user_prompt string
@@ -45,6 +46,7 @@ func initEnv() {
 	flag_recall = flag.Bool(FLAG_RECALL_OPTION_LONG, false, FLAG_RECALL_HELP)
 	flag_topic = flag.Bool(FLAG_TOPIC_OPTION_SHORT, false, FLAG_TOPIC_HELP)
 	flag_topic_long = flag.Bool(FLAG_TOPIC_OPTION_LONG, false, FLAG_TOPIC_HELP)
+	flag_vars = flag.Bool(FLAG_VARS_OPTION_LONG, false, FLAG_VARS_HELP)
 	flag_verbose = flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
@@ -93,25 +95,7 @@ func initEnv() {
 		*flag_verbose = false
 	}
 
-	args := flag.Args()
-	user_prompt = strings.Join(args, " ") + getStdin()
-
-	if user_prompt == "" {
-		printHelp()
-		printErr(ERR_NO_PROMPT)
-	}
-
 	agent_intellect = getEnv(ENV_AGENT_INTELLECT, DEFAULT_AGENT_INTELLECT)
-
-	is_topic := false
-	if *flag_topic || *flag_topic_long {
-		is_topic = true
-		getHistory(&prompt_history)
-	}
-
-	prompt_history = append(prompt_history, genai.NewContentFromText(user_prompt, genai.RoleUser))
-
-	setHistory(user_prompt, false, is_topic)
 
 	agent_model = getEnv(ENV_AGENT_MODEL, DEFAULT_AGENT_MODEL)
 
@@ -135,6 +119,35 @@ func initEnv() {
 
 		agent_persona = "Your name is " + agent_name + ". " + agent_persona
 
+		os.Setenv(ENV_AGENT_PERSONA, agent_persona)
+
 	}
+
+	if *flag_vars {
+		for _, env := range os.Environ() {
+			if strings.HasPrefix(env, "GAIA_") {
+				fmt.Println(env)
+			}
+		}
+		os.Exit(0)
+	}
+
+	args := flag.Args()
+	user_prompt = strings.Join(args, " ") + getStdin()
+
+	if user_prompt == "" {
+		printHelp()
+		printErr(ERR_NO_PROMPT)
+	}
+
+	is_topic := false
+	if *flag_topic || *flag_topic_long {
+		is_topic = true
+		getHistory(&prompt_history)
+	}
+
+	prompt_history = append(prompt_history, genai.NewContentFromText(user_prompt, genai.RoleUser))
+
+	setHistory(user_prompt, false, is_topic)
 
 }

@@ -38,6 +38,8 @@ const (
 	FLAG_TOPIC_HELP           = "Preserve topic context from previous query."
 	FLAG_TOPIC_OPTION_LONG    = "topic"
 	FLAG_TOPIC_OPTION_SHORT   = "t"
+	FLAG_VARS_HELP            = "Print current environment."
+	FLAG_VARS_OPTION_LONG     = "vars"
 	FLAG_VERBOSE_HELP         = "Speak casually."
 	FLAG_VERBOSE_OPTION_SHORT = "v"
 

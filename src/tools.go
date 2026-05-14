@@ -23,6 +23,8 @@ func getEnv(env_var_name string, default_value string) string {
 		env_var = default_value
 	}
 
+	os.Setenv(env_var_name, env_var)
+
 	return env_var
 }
 
