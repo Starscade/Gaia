@@ -1,6 +1,6 @@
 # Gaia AI Agent
 
-Gaia is a lightweight CLI tool for Google Gemini with an emphasis on code generation and execution.
+Gaia is a lightweight CLI tool for Google Gemini tailored for raw code generation and execution.
 
 ## Installation
 
@@ -18,16 +18,16 @@ Set your environment one variable at a time (e.g. `export GAIA_AGENT_KEY="your-g
 
 ## Usage
 
-Within a pipe: `cat foo.js bar.js baz.js | gaia "Rewrite these in Go." > main.go && go run .`.
+Gaia within a pipe: `cat foo.js bar.js baz.js | gaia "Rewrite these in Go." > main.go && go run .`.
 
-Directly: `gaia "What's my IP address?" | sh`.
+Gaia direct: `gaia "What's my IP address?" | sh`.
 > [!CAUTION]
-> A safer way to execute responses is to verify their output before piping (e.g. `gaia "What's my IP address?"`), then use `gaia --recall | sh` to execute the most recent response verbatim.
+> A safer way to execute responses is to verify their output before piping (e.g. `gaia "What's my IP address?"`), then use `gaia --replay | sh` to execute the most recent response verbatim.
 
 > [!IMPORTANT]
-> By default, Gaia does *not* preserve context between requests. To continue a conversation, use the `--topic` flag:
+> By default, Gaia does *not* preserve context between requests. To continue a conversation, use the `--feed` flag:
 
 ```
 gaia "My favorite flavor is vanilla."
-gaia --topic "What's my favorite flavor?"
+gaia --feed "What's my favorite flavor?"
 ```
