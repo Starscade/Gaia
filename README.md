@@ -18,12 +18,16 @@ Set your environment one variable at a time (e.g. `export GAIA_AGENT_KEY="your-g
 
 ## Usage
 
-###### DIRECT EXECUTION
+Within a pipe: `cat foo.js bar.js baz.js | gaia "Rewrite these in Go." > main.go && go run .`.
 
-`gaia "What's my IP address?" | sh`
+Directly: `gaia "What's my IP address?" | sh`.
 > [!CAUTION]
-> Use with extreme discretion! A safer way to run responses as code is to verify the output of `gaia "What's my IP address?"` without piping, then use `gaia --recall | sh` to execute it verbatim.
+> A safer way to execute responses is to verify their output before piping (e.g. `gaia "What's my IP address?"`), then use `gaia --recall | sh` to execute the most recent response verbatim.
 
-###### WITHIN A PIPE
+> [!IMPORTANT]
+> By default, Gaia does *not* preserve context between requests. To continue a conversation, use the `--topic` flag:
 
-`cat foo.js | gaia "Rewrite this in Go." > main.go && go run .`
+```
+gaia "My favorite flavor is vanilla."
+gaia --topic "What's my favorite flavor?"
+```
