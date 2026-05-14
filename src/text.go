@@ -3,15 +3,13 @@ package main
 const (
 	DEFAULT_AGENT_INTELLECT = "MINIMAL"
 	DEFAULT_AGENT_MODEL     = "gemini-flash-lite-latest"
-	DEFAULT_AGENT_NAME      = "Gaia"
-	DEFAULT_AGENT_PERSONA   = "You are a programmer. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-complient sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Prefer tab indentation to spaces."
+	DEFAULT_AGENT_PERSONA   = "Your name is Gaia. You are a programmer. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-complient sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Prefer tab indentation to spaces."
 	DEFAULT_CENSOR_RATING   = "BLOCK_MEDIUM_AND_ABOVE"
 	DEFAULT_DB_PATH         = "/tmp/gaia.sqlite3"
 	DEFAULT_ENV_PATH        = ".env"
 
 	ENV_AGENT_INTELLECT = "GAIA_AGENT_INTELLECT"
 	ENV_AGENT_MODEL     = "GAIA_AGENT_MODEL"
-	ENV_AGENT_NAME      = "GAIA_AGENT_NAME"
 	ENV_AGENT_PERSONA   = "GAIA_AGENT_PERSONA"
 	ENV_API_KEY         = "GAIA_AGENT_KEY"
 	ENV_CENSOR_RATING   = "GAIA_AGENT_CENSOR_RATING"

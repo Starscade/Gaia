@@ -15,7 +15,6 @@ import (
 var api_key string
 var agent_intellect string
 var agent_model string
-var agent_name string
 var agent_persona string
 var censor_rating string
 var client *genai.Client
@@ -91,9 +90,7 @@ func initEnv() {
 
 	// SET PERSONA
 
-	agent_name = getEnv(ENV_AGENT_NAME, DEFAULT_AGENT_NAME)
-
-	agent_persona = "Your name is " + agent_name + ". " + getEnv(ENV_AGENT_PERSONA, DEFAULT_AGENT_PERSONA)
+	agent_persona = getEnv(ENV_AGENT_PERSONA, DEFAULT_AGENT_PERSONA)
 
 	if *flag_print_env {
 		for _, env := range os.Environ() {
