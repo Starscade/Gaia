@@ -1,13 +1,13 @@
 # Gaia AI Agent
 
-Gaia is a lightweight CLI interface for Google Gemini with an emphasis on code generation and execution directly in the terminal.
+Gaia is a lightweight CLI tool for Google Gemini with an emphasis on code generation and execution.
 
 ## Installation
 
-1. `git clone https://github.com/Starscade/Gaia.git`.
-2. `cd ./Gaia`.
-3. `make`.
-> [!INFO]
+1. `git clone https://github.com/Starscade/Gaia.git`
+2. `cd ./Gaia`
+3. `make`
+> [!NOTE]
 > Gaia installs to `~/.local/bin` by default. You may change this in the `Makefile`.
 
 ## Configuration
