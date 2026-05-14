@@ -3,39 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/exec"
 	"strings"
 
 	"google.golang.org/genai"
 )
 
 func askAi() {
-	if *flag_execute {
-		answer, _ := client.Models.GenerateContent(
-			ctx,
-			agent_model,
-			prompt_history,
-			config,
-		)
-
-		raw_code := answer.Text()
-
-		setHistory(raw_code, true, true)
-
-		cmd := exec.Command("sh", "-c", raw_code)
-		cmd.Env = os.Environ() // Inherit the user's environment.
-		cmd.Stderr = os.Stderr
-		cmd.Stdin = os.Stdin // Enable Ctrl-C in the subshell.
-		cmd.Stdout = os.Stdout
-
-		err := cmd.Run()
-
-		exitOnErr(err)
-
-		os.Exit(0) // Quit before running a regular query.
-	}
-
 	stream := client.Models.GenerateContentStream(
 		ctx,
 		agent_model,

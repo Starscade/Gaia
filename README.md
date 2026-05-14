@@ -18,12 +18,12 @@ Set your environment one variable at a time (e.g. `export GAIA_AGENT_KEY="your-g
 
 ## Usage
 
-### Direct Execution
+###### DIRECT EXECUTION
 
-`gaia -x "What's my IP address?"`
+`gaia "What's my IP address?" | sh`
 > [!CAUTION]
-> Use with extreme discretion!
+> Execute with extreme discretion! A safer way to run responses as code is to verify the output of `gaia "What's my IP address?"` without piping, then use `gaia --recall | sh` to execute it verbatim.
 
-### UNIX Pipe Support
+###### WITHIN A PIPE
 
-`cat foo.js | gaia "Rewrite this in Go." > foo.go`
+`cat foo.js | gaia "Rewrite this in Go." > main.go && go run .`

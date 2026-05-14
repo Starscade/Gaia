@@ -24,7 +24,6 @@ var ctx context.Context
 var db_file string
 var env_file string
 var flag_env *string
-var flag_execute *bool
 var flag_help *bool
 var flag_help_long *bool
 var flag_nsfw *bool
@@ -32,14 +31,12 @@ var flag_recall *bool
 var flag_topic *bool
 var flag_topic_long *bool
 var flag_vars *bool
-var flag_verbose *bool
 var prompt_history []*genai.Content
 var user_prompt string
 
 func initEnv() {
 
 	flag_env = flag.String(FLAG_ENV_OPTION_LONG, "", FLAG_ENV_HELP)
-	flag_execute = flag.Bool(FLAG_EXECUTE_OPTION_SHORT, false, FLAG_EXECUTE_HELP)
 	flag_help = flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_help_long = flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
 	flag_nsfw = flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
@@ -47,7 +44,6 @@ func initEnv() {
 	flag_topic = flag.Bool(FLAG_TOPIC_OPTION_SHORT, false, FLAG_TOPIC_HELP)
 	flag_topic_long = flag.Bool(FLAG_TOPIC_OPTION_LONG, false, FLAG_TOPIC_HELP)
 	flag_vars = flag.Bool(FLAG_VARS_OPTION_LONG, false, FLAG_VARS_HELP)
-	flag_verbose = flag.Bool(FLAG_VERBOSE_OPTION_SHORT, false, FLAG_VERBOSE_HELP)
 
 	flag.Parse()
 
@@ -89,12 +85,6 @@ func initEnv() {
 		os.Exit(0)
 	}
 
-	if *flag_execute {
-		// Don't build a rootkit or execute poetry.
-		*flag_nsfw = false
-		*flag_verbose = false
-	}
-
 	agent_intellect = getEnv(ENV_AGENT_INTELLECT, DEFAULT_AGENT_INTELLECT)
 
 	agent_model = getEnv(ENV_AGENT_MODEL, DEFAULT_AGENT_MODEL)
@@ -103,25 +93,7 @@ func initEnv() {
 
 	agent_name = getEnv(ENV_AGENT_NAME, DEFAULT_AGENT_NAME)
 
-	agent_persona = os.Getenv(ENV_AGENT_PERSONA)
-
-	if agent_persona == "" {
-
-		agent_persona = DEFAULT_AGENT_PERSONA_CODE
-
-		if *flag_execute {
-			agent_persona = DEFAULT_AGENT_PERSONA_CODE_EXECUTION
-		}
-
-		if *flag_verbose {
-			agent_persona = DEFAULT_AGENT_PERSONA_VERBOSE
-		}
-
-		agent_persona = "Your name is " + agent_name + ". " + agent_persona
-
-		os.Setenv(ENV_AGENT_PERSONA, agent_persona)
-
-	}
+	agent_persona = "Your name is " + agent_name + ". " + getEnv(ENV_AGENT_PERSONA, DEFAULT_AGENT_PERSONA)
 
 	if *flag_vars {
 		for _, env := range os.Environ() {
