@@ -27,10 +27,10 @@ var flag_env *string
 var flag_help *bool
 var flag_help_long *bool
 var flag_nsfw *bool
-var flag_recall *bool
-var flag_topic *bool
-var flag_topic_long *bool
-var flag_vars *bool
+var flag_preserve_context *bool
+var flag_preserve_context_long *bool
+var flag_print_env *bool
+var flag_print_last_response *bool
 var prompt_history []*genai.Content
 var user_prompt string
 
@@ -40,10 +40,10 @@ func initEnv() {
 	flag_help = flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_help_long = flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
 	flag_nsfw = flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
-	flag_recall = flag.Bool(FLAG_RECALL_OPTION_LONG, false, FLAG_RECALL_HELP)
-	flag_topic = flag.Bool(FLAG_TOPIC_OPTION_SHORT, false, FLAG_TOPIC_HELP)
-	flag_topic_long = flag.Bool(FLAG_TOPIC_OPTION_LONG, false, FLAG_TOPIC_HELP)
-	flag_vars = flag.Bool(FLAG_VARS_OPTION_LONG, false, FLAG_VARS_HELP)
+	flag_print_last_response = flag.Bool(FLAG_PRINT_LAST_RESPONSE_OPTION_LONG, false, FLAG_PRINT_LAST_RESPONSE_HELP)
+	flag_preserve_context = flag.Bool(FLAG_PRESERVE_CONTEXT_OPTION_SHORT, false, FLAG_PRESERVE_CONTEXT_HELP)
+	flag_preserve_context_long = flag.Bool(FLAG_PRESERVE_CONTEXT_OPTION_LONG, false, FLAG_PRESERVE_CONTEXT_HELP)
+	flag_print_env = flag.Bool(FLAG_PRINT_ENV_OPTION_LONG, false, FLAG_PRINT_ENV_HELP)
 
 	flag.Parse()
 
@@ -80,7 +80,7 @@ func initEnv() {
 
 	initDb()
 
-	if *flag_recall {
+	if *flag_print_last_response {
 		fmt.Println(getLastBody())
 		os.Exit(0)
 	}
@@ -95,7 +95,7 @@ func initEnv() {
 
 	agent_persona = "Your name is " + agent_name + ". " + getEnv(ENV_AGENT_PERSONA, DEFAULT_AGENT_PERSONA)
 
-	if *flag_vars {
+	if *flag_print_env {
 		for _, env := range os.Environ() {
 			if strings.HasPrefix(env, "GAIA_") {
 				fmt.Println(env)
@@ -113,7 +113,7 @@ func initEnv() {
 	}
 
 	is_topic := false
-	if *flag_topic || *flag_topic_long {
+	if *flag_preserve_context || *flag_preserve_context_long {
 		is_topic = true
 		getHistory(&prompt_history)
 	}
