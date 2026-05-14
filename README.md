@@ -22,7 +22,7 @@ Set your environment one variable at a time (e.g. `export GAIA_AGENT_KEY="your-g
 
 `gaia "What's my IP address?" | sh`
 > [!CAUTION]
-> Execute with extreme discretion! A safer way to run responses as code is to verify the output of `gaia "What's my IP address?"` without piping, then use `gaia --recall | sh` to execute it verbatim.
+> Use with extreme discretion! A safer way to run responses as code is to verify the output of `gaia "What's my IP address?"` without piping, then use `gaia --recall | sh` to execute it verbatim.
 
 ###### WITHIN A PIPE
 
