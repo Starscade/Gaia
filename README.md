@@ -14,7 +14,7 @@ Gaia is a lightweight CLI tool for Google Gemini with an emphasis on code genera
 
 Set your environment one variable at a time (e.g. `export GAIA_AGENT_KEY="your-gemini-key"`) or use a `.env`.
 > [!TIP]
-> You can create a template of your current settings with: `gaia --print-env > .env`. (This will only print environment variables beginning with "GAIA_".)
+> You can create a template of your current settings with: `gaia --print-env > .env`. (This will only print variables that beginn with `GAIA_`.)
 
 ## Usage
 
