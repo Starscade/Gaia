@@ -15,7 +15,7 @@ func getLastBody() string {
 	defer db.Close()
 
 	var body string
-	err = db.QueryRow(SQL_GET_LAST_BODY).Scan(&body)
+	err = db.QueryRow(SQL_GET_LAST_RESPONSE).Scan(&body)
 	exitOnErr(err)
 	return body
 }
