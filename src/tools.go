@@ -42,7 +42,7 @@ func getStdin() string {
 }
 
 func printErr(err string) {
-	log.Fatal(" \033[1;31mERR:\033[0m ", err)
+	log.Fatal(PRINT_ERR, err)
 }
 
 func printHelp() {

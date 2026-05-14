@@ -34,8 +34,10 @@ const (
 	FLAG_PRINT_LAST_RESPONSE_HELP        = "Print the last response verbatim."
 	FLAG_PRINT_LAST_RESPONSE_OPTION_LONG = "replay"
 
+	PRINT_ERR        = " \033[1;31mERR:\033[0m "
 	PRINT_GAIA       = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n"
 	PRINT_HELP_USAGE = "\n \033[1mUsage\033[0m: `gaia \"What's my IP address?\" | sh`\n\n"
+	PRINT_CENSORED   = " \033[1;31;40m CENSORED \033[0m"
 
 	SQL_CREATE_TABLE      = "CREATE TABLE IF NOT EXISTS conversations (id TEXT, ts TEXT, is_agent INT, body TEXT)"
 	SQL_INSERT_ROW        = "INSERT INTO conversations (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
