@@ -26,8 +26,17 @@ func askAi() {
 		if chunk != nil && len(chunk.Candidates) > 0 {
 			for _, candidate := range chunk.Candidates {
 
-				if candidate.FinishReason == genai.FinishReasonSafety {
-					fmt.Print(PRINT_CENSORED)
+				if candidate.FinishReason != "" && candidate.FinishReason != genai.FinishReasonStop {
+					switch candidate.FinishReason {
+					case genai.FinishReasonMaxTokens:
+						fmt.Print(PRINT_TOKENS_EXHAUSTED)
+					case genai.FinishReasonRecitation:
+						fmt.Print(PRINT_COPYRIGHTED)
+					case genai.FinishReasonSafety:
+						fmt.Print(PRINT_CENSORED)
+					default:
+						fmt.Print(PRINT_ERR)
+					}
 				}
 
 				if candidate.Content != nil && len(candidate.Content.Parts) > 0 {
