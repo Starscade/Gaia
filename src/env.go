@@ -55,7 +55,7 @@ func initEnv() {
 	}
 
 	if *flag_env != "" {
-		err := godotenv.Load(*flag_env)
+		err := godotenv.Overload(*flag_env)
 		exitOnErr(err)
 	}
 
