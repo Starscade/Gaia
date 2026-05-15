@@ -24,7 +24,7 @@ const (
 	FLAG_HELP_HELP                       = "Show this message."
 	FLAG_HELP_OPTION_LONG                = "help"
 	FLAG_HELP_OPTION_SHORT               = "h"
-	FLAG_NSFW_HELP                       = "Disable safeguards."
+	FLAG_NSFW_HELP                       = "Disable safeguards regardless of ENV settings."
 	FLAG_NSFW_OPTION_LONG                = "nsfw"
 	FLAG_PRESERVE_CONTEXT_HELP           = "Preserve conversation context."
 	FLAG_PRESERVE_CONTEXT_OPTION_LONG    = "related"
