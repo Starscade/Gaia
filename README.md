@@ -25,9 +25,9 @@ Gaia direct: `gaia "What's my IP address?" | sh`.
 > A safer way to execute responses is to verify their output before piping (e.g. `gaia "What's my IP address?"`), then use `gaia --replay | sh` to execute the most recent response verbatim.
 
 > [!IMPORTANT]
-> By default, Gaia does *not* preserve context between requests. To continue a conversation, use the `--feed` flag:
+> By default, Gaia does *not* preserve context between requests. To continue a conversation, use the `--related` flag:
 
 ```
 gaia "My favorite flavor is vanilla."
-gaia --feed "What's my favorite flavor?"
+gaia --related "What's my favorite flavor?"
 ```
