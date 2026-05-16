@@ -9,15 +9,14 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func getLastBody() string {
+func getLastBody() (string, error) {
 	db, err := sql.Open("sqlite", db_file)
 	exitOnErr(err)
 	defer db.Close()
 
 	var body string
 	err = db.QueryRow(SQL_GET_LAST_RESPONSE).Scan(&body)
-	exitOnErr(err)
-	return body
+	return body, err
 }
 
 func initDb() {
@@ -38,10 +37,10 @@ func insertMessage(body string, is_agent bool, is_topic bool) {
 
 	if is_topic {
 		err = db.QueryRow(SQL_GET_CURRENT_ID).Scan(&topic_id)
-		exitOnErr(err)
 	}
 
 	_, err = db.Exec(SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
+	exitOnErr(err)
 }
 
 func selectMessage(chat_history *[]*genai.Content) {
@@ -51,11 +50,15 @@ func selectMessage(chat_history *[]*genai.Content) {
 
 	var topic_id string
 	err = db.QueryRow(SQL_GET_CURRENT_ID).Scan(&topic_id)
-	exitOnErr(err)
+	if err != nil {
+		return
+	}
 
 	var rows *sql.Rows
 	rows, err = db.Query(SQL_GET_CONVERSATION, topic_id)
-	exitOnErr(err)
+	if err != nil {
+		return
+	}
 	defer rows.Close()
 
 	var role genai.Role
@@ -64,7 +67,9 @@ func selectMessage(chat_history *[]*genai.Content) {
 		var body string
 		var is_agent bool
 		err := rows.Scan(&is_agent, &body)
-		exitOnErr(err)
+		if err != nil {
+			return
+		}
 		role = genai.RoleUser
 		if is_agent {
 			role = genai.RoleModel

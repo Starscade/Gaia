@@ -80,7 +80,10 @@ func initEnv() {
 	initDb()
 
 	if *flag_print_last_response {
-		fmt.Println(getLastBody())
+		last_response, err := getLastBody()
+		if err == nil {
+			fmt.Println(last_response)
+		}
 		os.Exit(0)
 	}
 
