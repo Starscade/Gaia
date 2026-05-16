@@ -46,9 +46,9 @@ func printErr(err string) {
 }
 
 func printHelp() {
-	fmt.Println(PRINT_GAIA)
+	fmt.Print(PRINT_GAIA)
 	flag.PrintDefaults()
-	fmt.Println(PRINT_HELP_USAGE)
+	fmt.Print(PRINT_HELP_USAGE)
 }
 
 func setHistory(body string, is_agent bool, is_topic bool) {
