@@ -108,7 +108,6 @@ func initEnv() {
 	user_prompt = strings.Join(args, " ") + getStdin()
 
 	if user_prompt == "" {
-		printHelp()
 		os.Exit(1)
 	}
 
