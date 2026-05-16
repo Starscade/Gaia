@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestFoo (t *testing.T) {
+func TestFoo(t *testing.T) {
 	want := "foo"
 	if want != "foo" {
 		t.Error("Ahoy")
