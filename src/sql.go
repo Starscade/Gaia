@@ -78,3 +78,11 @@ func selectMessage(chat_history *[]*genai.Content) {
 	}
 
 }
+
+func truncateTranscript() {
+	db, err := sql.Open("sqlite", db_file)
+	exitOnErr(err)
+	defer db.Close()
+	_, err2 := db.Exec(SQL_TRUNCATE_TRANSCRIPT)
+	exitOnErr(err2)
+}

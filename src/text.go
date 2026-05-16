@@ -21,6 +21,8 @@ const (
 
 	FLAG_ENV_HELP                        = "Path to dotenv file."
 	FLAG_ENV_OPTION_LONG                 = "env"
+	FLAG_FORGET_HELP                     = "Wipe conversation history."
+	FLAG_FORGET_OPTION_LONG              = "forget"
 	FLAG_HELP_HELP                       = "Show this message."
 	FLAG_HELP_OPTION_LONG                = "help"
 	FLAG_HELP_OPTION_SHORT               = "h"
@@ -41,9 +43,10 @@ const (
 	PRINT_HELP_USAGE       = "\n \033[1mUsage\033[0m: `gaia \"What's my IP address?\" | sh`\n\n\n"
 	PRINT_TOKENS_EXHAUSTED = " \033[1;31;40m TOKENS EXHAUSTED \033[0m "
 
-	SQL_CREATE_TABLE      = "CREATE TABLE IF NOT EXISTS transcript (id TEXT, ts TEXT, is_agent INT, body TEXT)"
-	SQL_INSERT_ROW        = "INSERT INTO transcript (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
-	SQL_GET_CONVERSATION  = "SELECT is_agent, body FROM transcript WHERE id = ?"
-	SQL_GET_CURRENT_ID    = "SELECT id FROM transcript ORDER BY ts DESC LIMIT 1"
-	SQL_GET_LAST_RESPONSE = "SELECT body FROM transcript WHERE is_agent = true ORDER BY ts DESC LIMIT 1"
+	SQL_CREATE_TABLE        = "CREATE TABLE IF NOT EXISTS transcript (id TEXT, ts TEXT, is_agent INT, body TEXT)"
+	SQL_INSERT_ROW          = "INSERT INTO transcript (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
+	SQL_GET_CONVERSATION    = "SELECT is_agent, body FROM transcript WHERE id = ?"
+	SQL_GET_CURRENT_ID      = "SELECT id FROM transcript ORDER BY ts DESC LIMIT 1"
+	SQL_GET_LAST_RESPONSE   = "SELECT body FROM transcript WHERE is_agent = true ORDER BY ts DESC LIMIT 1"
+	SQL_TRUNCATE_TRANSCRIPT = "DELETE FROM transcript ; VACUUM"
 )

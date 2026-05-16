@@ -23,6 +23,7 @@ var ctx context.Context
 var db_file string
 var env_file string
 var flag_env *string
+var flag_forget *bool
 var flag_help *bool
 var flag_help_long *bool
 var flag_nsfw *bool
@@ -36,6 +37,7 @@ var user_prompt string
 func initEnv() {
 
 	flag_env = flag.String(FLAG_ENV_OPTION_LONG, "", FLAG_ENV_HELP)
+	flag_forget = flag.Bool(FLAG_FORGET_OPTION_LONG, false, FLAG_FORGET_HELP)
 	flag_help = flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
 	flag_help_long = flag.Bool(FLAG_HELP_OPTION_LONG, false, FLAG_HELP_HELP)
 	flag_nsfw = flag.Bool(FLAG_NSFW_OPTION_LONG, false, FLAG_NSFW_HELP)
@@ -59,25 +61,30 @@ func initEnv() {
 		exitOnErr(err)
 	}
 
+	if *flag_help_long || *flag_help {
+		printHelp()
+		os.Exit(0)
+	}
+
+	db_file = getEnv(ENV_DB_PATH, DEFAULT_DB_PATH)
+
+	initDb()
+
+	if *flag_forget {
+		truncateTranscript()
+		os.Exit(0)
+	}
+
 	api_key = os.Getenv(ENV_API_KEY)
 
 	if api_key == "" {
 		log.Fatal(ERR_NO_API_KEY) // No key? Why continue?
 	}
 
-	if *flag_help_long || *flag_help {
-		printHelp()
-		os.Exit(0)
-	}
-
 	censor_rating = getEnv(ENV_CENSOR_RATING, DEFAULT_CENSOR_RATING)
 	if *flag_nsfw {
 		censor_rating = string(genai.HarmBlockThresholdBlockNone)
 	}
-
-	db_file = getEnv(ENV_DB_PATH, DEFAULT_DB_PATH)
-
-	initDb()
 
 	if *flag_print_last_response {
 		last_response, err := getLastBody()
