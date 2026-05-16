@@ -32,7 +32,7 @@ const (
 	FLAG_PRINT_ENV_HELP                  = "Print Gaia's current settings."
 	FLAG_PRINT_ENV_OPTION_LONG           = "print-env"
 	FLAG_PRINT_LAST_RESPONSE_HELP        = "Print the last response verbatim."
-	FLAG_PRINT_LAST_RESPONSE_OPTION_LONG = "replay"
+	FLAG_PRINT_LAST_RESPONSE_OPTION_LONG = "echo"
 
 	PRINT_CENSORED         = " \033[1;31;40m CENSORED \033[0m "
 	PRINT_COPYRIGHTED      = " \033[1;31;40m COPYRIGHT \033[0m "
