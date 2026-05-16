@@ -21,7 +21,10 @@ func askAi() {
 	var response_buffer strings.Builder
 
 	for chunk, err := range stream {
-		exitOnErr(err)
+		if err != nil {
+			setHistory(response_buffer.String(), true, true)
+			break
+		}
 
 		if chunk != nil && len(chunk.Candidates) > 0 {
 			for _, candidate := range chunk.Candidates {
