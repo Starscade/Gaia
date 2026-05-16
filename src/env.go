@@ -109,7 +109,7 @@ func initEnv() {
 
 	if user_prompt == "" {
 		printHelp()
-		printErr(ERR_NO_PROMPT)
+		os.Exit(1)
 	}
 
 	is_topic := false
