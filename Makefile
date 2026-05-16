@@ -1,4 +1,4 @@
-.PHONY: all fmt
+.PHONY: all fmt test
 
 export PATH := $(HOME)/.local/bin:$(PATH)
 
@@ -20,3 +20,6 @@ fmt:
 	@go fmt src/*.go
 
 
+test:
+
+	@go test -v -x ./src
