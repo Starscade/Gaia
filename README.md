@@ -18,11 +18,12 @@ Set `export GAIA_AGENT_KEY="your-gemini-key"` or use a `.env`.
 
 ## Usage
 
-- `cat foo.js bar.js baz.js | gaia "Rewrite these in Go." > main.go && go run .`
 - `gaia "What's my IP address?" | sh`
+- `gaia --read README.md "Summarize this..."`
+- `cat foo.js bar.js baz.js | gaia "Rewrite these in Go." > main.go && go run .`
 
 > [!CAUTION]
-> A safer way to execute responses is to verify their output before piping (e.g. `gaia "What's my IP address?"`), then use `gaia --echo | sh` to execute the most recent response verbatim.
+> A safer way to execute responses directly is to verify their output before piping (e.g. `gaia "What's my IP address?"`), then use `gaia --echo | sh` to execute the most recent response verbatim.
 
 > [!IMPORTANT]
 > Gaia does *not* preserve context between query/response pairs. To continue a conversation, use the `--related` flag:
