@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"google.golang.org/genai"
 )
@@ -28,12 +30,18 @@ func getEnv(env_var_name string, default_value string) string {
 	return env_var
 }
 
-func getFile(file_path string) string {
-	file, err := os.ReadFile(file_path)
+func getFile(glob_path string) string {
+	files, err := filepath.Glob(glob_path)
 	exitOnErr(err)
-	eof_start := "EOF " + file_path + "\n\n"
-	eof_end := "\n\nEOF " + file_path
-	return eof_start + string(file) + eof_end
+	var bodies strings.Builder
+	for _, file_path := range files {
+		file, err := os.ReadFile(file_path)
+		exitOnErr(err)
+		eof_start := "EOF " + file_path + "\n\n"
+		eof_end := "\n\nEOF " + file_path
+		bodies.WriteString(eof_start + string(file) + eof_end)
+	}
+	return bodies.String()
 }
 
 func getHistory(chat_history *[]*genai.Content) {
