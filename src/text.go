@@ -19,6 +19,8 @@ const (
 	ERR_NO_API_KEY = "No " + ENV_API_KEY + "!"
 	ERR_NO_PROMPT  = "No prompt provided!"
 
+	FLAG_ATTACHMENT_HELP                 = "Attach a file."
+	FLAG_ATTACHMENT_OPTION_LONG          = "read"
 	FLAG_ENV_HELP                        = "Path to dotenv file."
 	FLAG_ENV_OPTION_LONG                 = "env"
 	FLAG_FORGET_HELP                     = "Wipe conversation history."

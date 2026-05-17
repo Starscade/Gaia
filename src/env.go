@@ -22,6 +22,7 @@ var config *genai.GenerateContentConfig
 var ctx context.Context
 var db_file string
 var env_file string
+var flag_attach *string
 var flag_env *string
 var flag_forget *bool
 var flag_help *bool
@@ -36,6 +37,7 @@ var user_prompt string
 
 func initEnv() {
 
+	flag_attach = flag.String(FLAG_ATTACHMENT_OPTION_LONG, "", FLAG_ATTACHMENT_HELP)
 	flag_env = flag.String(FLAG_ENV_OPTION_LONG, "", FLAG_ENV_HELP)
 	flag_forget = flag.Bool(FLAG_FORGET_OPTION_LONG, false, FLAG_FORGET_HELP)
 	flag_help = flag.Bool(FLAG_HELP_OPTION_SHORT, false, FLAG_HELP_HELP)
@@ -113,6 +115,10 @@ func initEnv() {
 
 	args := flag.Args()
 	user_prompt = strings.Join(args, " ") + getStdin()
+
+	if *flag_attach != "" {
+		user_prompt = user_prompt + getFile(*flag_attach)
+	}
 
 	if user_prompt == "" {
 		os.Exit(1)
