@@ -1,6 +1,6 @@
 # Gaia AI Agent
 
-Gaia is a lightweight tool for bringing Google Gemini to the command line.
+Gaia is a lightweight tool that brings Google Gemini to the command line.
 
 ## Installation
 
