@@ -1,7 +1,6 @@
 package env
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -12,7 +11,7 @@ import (
 
 	"github.com/Starscade/Gaia/internal/sql"
 	"github.com/Starscade/Gaia/internal/text"
-	"github.com/Starscade/Gaia/internal/tools"
+	"github.com/Starscade/Gaia/internal/utils"
 )
 
 type Environment struct {
@@ -23,7 +22,6 @@ type Environment struct {
 	CensorRating   string
 	Client         *genai.Client
 	Config         *genai.GenerateContentConfig
-	Ctx            context.Context
 	DbFile         string
 	EnvFile        string
 	PromptHistory  []*genai.Content
@@ -44,25 +42,25 @@ func Init() Environment {
 
 	flag.Parse()
 
-	env_file := tools.GetEnv(text.ENV_DOTENV_PATH, text.DEFAULT_ENV_PATH)
+	env_file := utils.GetEnv(text.ENV_DOTENV_PATH, text.DEFAULT_ENV_PATH)
 
 	_, err := os.Stat(env_file)
 	if err == nil {
 		err := godotenv.Load(env_file)
-		tools.ExitOnErr(err)
+		utils.ExitOnErr(err)
 	}
 
 	if *flag_env != "" {
 		err := godotenv.Overload(*flag_env)
-		tools.ExitOnErr(err)
+		utils.ExitOnErr(err)
 	}
 
 	if *flag_help_long || *flag_help {
-		tools.PrintHelp()
+		utils.PrintHelp()
 		os.Exit(0)
 	}
 
-	db_file := tools.GetEnv(text.ENV_DB_PATH, text.DEFAULT_DB_PATH)
+	db_file := utils.GetEnv(text.ENV_DB_PATH, text.DEFAULT_DB_PATH)
 
 	sql.Init(db_file)
 
@@ -71,7 +69,7 @@ func Init() Environment {
 		os.Exit(0)
 	}
 
-	censor_rating := tools.GetEnv(text.ENV_CENSOR_RATING, text.DEFAULT_CENSOR_RATING)
+	censor_rating := utils.GetEnv(text.ENV_CENSOR_RATING, text.DEFAULT_CENSOR_RATING)
 	if *flag_nsfw {
 		censor_rating = string(genai.HarmBlockThresholdBlockNone)
 	}
@@ -84,13 +82,13 @@ func Init() Environment {
 		os.Exit(0)
 	}
 
-	agent_intellect := tools.GetEnv(text.ENV_AGENT_INTELLECT, text.DEFAULT_AGENT_INTELLECT)
+	agent_intellect := utils.GetEnv(text.ENV_AGENT_INTELLECT, text.DEFAULT_AGENT_INTELLECT)
 
-	agent_model := tools.GetEnv(text.ENV_AGENT_MODEL, text.DEFAULT_AGENT_MODEL)
+	agent_model := utils.GetEnv(text.ENV_AGENT_MODEL, text.DEFAULT_AGENT_MODEL)
 
 	// SET PERSONA
 
-	agent_persona := tools.GetEnv(text.ENV_AGENT_PERSONA, text.DEFAULT_AGENT_PERSONA)
+	agent_persona := utils.GetEnv(text.ENV_AGENT_PERSONA, text.DEFAULT_AGENT_PERSONA)
 
 	if *flag_print_env {
 		for _, env := range os.Environ() {
@@ -102,10 +100,10 @@ func Init() Environment {
 	}
 
 	args := flag.Args()
-	user_prompt := strings.Join(args, " ") + tools.GetStdin()
+	user_prompt := strings.Join(args, " ") + utils.GetStdin()
 
 	if *flag_attach != "" {
-		user_prompt = user_prompt + tools.GetFile(*flag_attach)
+		user_prompt = user_prompt + utils.GetFile(*flag_attach)
 	}
 
 	if user_prompt == "" {

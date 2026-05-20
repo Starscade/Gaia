@@ -10,18 +10,17 @@ import (
 	"github.com/Starscade/Gaia/internal/env"
 	"github.com/Starscade/Gaia/internal/sql"
 	"github.com/Starscade/Gaia/internal/text"
-	"github.com/Starscade/Gaia/internal/tools"
+	"github.com/Starscade/Gaia/internal/utils"
 )
 
 type Agent struct {
-	Client  *genai.Client
-	Config  *genai.GenerateContentConfig
-	Context context.Context
+	Client *genai.Client
+	Config *genai.GenerateContentConfig
 }
 
-func Ask(environment env.Environment, agent Agent) {
+func Ask(ctx context.Context, environment env.Environment, agent Agent) {
 	stream := agent.Client.Models.GenerateContentStream(
-		agent.Context,
+		ctx,
 		environment.AgentModel,
 		environment.PromptHistory,
 		agent.Config,
@@ -79,7 +78,7 @@ func Init(environment env.Environment) Agent {
 		APIKey:  environment.ApiKey,
 	})
 
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 
 	config := &genai.GenerateContentConfig{
 		SafetySettings: []*genai.SafetySetting{
@@ -118,9 +117,8 @@ func Init(environment env.Environment) Agent {
 	}
 
 	return Agent{
-		Client:  client,
-		Config:  config,
-		Context: ctx,
+		Client: client,
+		Config: config,
 	}
 
 }

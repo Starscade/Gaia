@@ -9,12 +9,12 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/Starscade/Gaia/internal/text"
-	"github.com/Starscade/Gaia/internal/tools"
+	"github.com/Starscade/Gaia/internal/utils"
 )
 
 func GetLastBody(db_file string) (string, error) {
 	db, err := sql.Open("sqlite", db_file)
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 	defer db.Close()
 
 	var body string
@@ -24,15 +24,15 @@ func GetLastBody(db_file string) (string, error) {
 
 func Init(db_file string) {
 	db, err := sql.Open("sqlite", db_file)
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 	defer db.Close()
 	_, err = db.Exec(text.SQL_CREATE_TABLE)
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 }
 
 func InsertMessage(db_file, body string, is_agent, is_topic bool) {
 	db, err := sql.Open("sqlite", db_file)
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 	defer db.Close()
 
 	ts_now := time.Now().Format(time.RFC3339Nano)
@@ -43,12 +43,12 @@ func InsertMessage(db_file, body string, is_agent, is_topic bool) {
 	}
 
 	_, err = db.Exec(text.SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 }
 
 func SelectMessage(db_file string, chat_history *[]*genai.Content) {
 	db, err := sql.Open("sqlite", db_file)
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 	defer db.Close()
 
 	var topic_id string
@@ -84,8 +84,8 @@ func SelectMessage(db_file string, chat_history *[]*genai.Content) {
 
 func TruncateTranscript(db_file string) {
 	db, err := sql.Open("sqlite", db_file)
-	tools.ExitOnErr(err)
+	utils.ExitOnErr(err)
 	defer db.Close()
 	_, err2 := db.Exec(text.SQL_TRUNCATE_TRANSCRIPT)
-	tools.ExitOnErr(err2)
+	utils.ExitOnErr(err2)
 }
