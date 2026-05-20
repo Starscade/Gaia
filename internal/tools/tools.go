@@ -1,4 +1,4 @@
-package main
+package tools
 
 import (
 	"flag"
@@ -9,16 +9,16 @@ import (
 	"path/filepath"
 	"strings"
 
-	"google.golang.org/genai"
+	"github.com/Starscade/Gaia/internal/text"
 )
 
-func exitOnErr(err error) {
+func ExitOnErr(err error) {
 	if err != nil {
-		printErr(err.Error())
+		PrintErr(err.Error())
 	}
 }
 
-func getEnv(env_var_name string, default_value string) string {
+func GetEnv(env_var_name string, default_value string) string {
 	env_var := os.Getenv(env_var_name)
 
 	if env_var == "" {
@@ -30,13 +30,13 @@ func getEnv(env_var_name string, default_value string) string {
 	return env_var
 }
 
-func getFile(glob_path string) string {
+func GetFile(glob_path string) string {
 	files, err := filepath.Glob(glob_path)
-	exitOnErr(err)
+	ExitOnErr(err)
 	var bodies strings.Builder
 	for _, file_path := range files {
 		file, err := os.ReadFile(file_path)
-		exitOnErr(err)
+		ExitOnErr(err)
 		eof_start := "EOF " + file_path + "\n\n"
 		eof_end := "\n\nEOF " + file_path
 		bodies.WriteString(eof_start + string(file) + eof_end)
@@ -44,11 +44,7 @@ func getFile(glob_path string) string {
 	return bodies.String()
 }
 
-func getHistory(chat_history *[]*genai.Content) {
-	selectMessage(chat_history)
-}
-
-func getStdin() string {
+func GetStdin() string {
 	stat, _ := os.Stdin.Stat()
 	var input []byte
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
@@ -57,16 +53,12 @@ func getStdin() string {
 	return string(input)
 }
 
-func printErr(err string) {
-	log.Fatal(PRINT_ERR, err)
+func PrintErr(err string) {
+	log.Fatal(text.PRINT_ERR, err)
 }
 
-func printHelp() {
-	fmt.Print(PRINT_GAIA)
+func PrintHelp() {
+	fmt.Print(text.PRINT_GAIA)
 	flag.PrintDefaults()
-	fmt.Print(PRINT_HELP_USAGE)
-}
-
-func setHistory(body string, is_agent bool, is_topic bool) {
-	insertMessage(body, is_agent, is_topic)
+	fmt.Print(text.PRINT_HELP_USAGE)
 }

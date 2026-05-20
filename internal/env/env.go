@@ -1,0 +1,155 @@
+package env
+
+import (
+	"context"
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"strings"
+
+	"github.com/joho/godotenv"
+	"google.golang.org/genai"
+
+	"github.com/Starscade/Gaia/internal/sql"
+	"github.com/Starscade/Gaia/internal/text"
+	"github.com/Starscade/Gaia/internal/tools"
+)
+
+type Environment struct {
+	ApiKey                  string
+	AgentIntellect          string
+	AgentModel              string
+	AgentPersona            string
+	CensorRating            string
+	Client                  *genai.Client
+	Config                  *genai.GenerateContentConfig
+	Ctx                     context.Context
+	DbFile                  string
+	EnvFile                 string
+	FlagAttach              *string
+	FlagEnv                 *string
+	FlagForget              *bool
+	FlagHelp                *bool
+	FlagHelpLong            *bool
+	FlagNsfw                *bool
+	FlagPreserveContext     *bool
+	FlagPreserveContextLong *bool
+	FlagPrintEnv            *bool
+	FlagPrintLastResponse   *bool
+	PromptHistory           []*genai.Content
+	UserPrompt              string
+}
+
+func Init() Environment {
+
+	flag_attach := flag.String(text.FLAG_ATTACHMENT_OPTION_LONG, "", text.FLAG_ATTACHMENT_HELP)
+	flag_env := flag.String(text.FLAG_ENV_OPTION_LONG, "", text.FLAG_ENV_HELP)
+	flag_forget := flag.Bool(text.FLAG_FORGET_OPTION_LONG, false, text.FLAG_FORGET_HELP)
+	flag_help := flag.Bool(text.FLAG_HELP_OPTION_SHORT, false, text.FLAG_HELP_HELP)
+	flag_help_long := flag.Bool(text.FLAG_HELP_OPTION_LONG, false, text.FLAG_HELP_HELP)
+	flag_nsfw := flag.Bool(text.FLAG_NSFW_OPTION_LONG, false, text.FLAG_NSFW_HELP)
+	flag_print_last_response := flag.Bool(text.FLAG_PRINT_LAST_RESPONSE_OPTION_LONG, false, text.FLAG_PRINT_LAST_RESPONSE_HELP)
+	flag_preserve_context := flag.Bool(text.FLAG_PRESERVE_CONTEXT_OPTION_SHORT, false, text.FLAG_PRESERVE_CONTEXT_HELP)
+	flag_preserve_context_long := flag.Bool(text.FLAG_PRESERVE_CONTEXT_OPTION_LONG, false, text.FLAG_PRESERVE_CONTEXT_HELP)
+	flag_print_env := flag.Bool(text.FLAG_PRINT_ENV_OPTION_LONG, false, text.FLAG_PRINT_ENV_HELP)
+
+	flag.Parse()
+
+	env_file := tools.GetEnv(text.ENV_DOTENV_PATH, text.DEFAULT_ENV_PATH)
+
+	_, err := os.Stat(env_file)
+	if err == nil {
+		err := godotenv.Load(env_file)
+		tools.ExitOnErr(err)
+	}
+
+	if *flag_env != "" {
+		err := godotenv.Overload(*flag_env)
+		tools.ExitOnErr(err)
+	}
+
+	if *flag_help_long || *flag_help {
+		tools.PrintHelp()
+		os.Exit(0)
+	}
+
+	db_file := tools.GetEnv(text.ENV_DB_PATH, text.DEFAULT_DB_PATH)
+
+	sql.Init(db_file)
+
+	if *flag_forget {
+		sql.TruncateTranscript(db_file)
+		os.Exit(0)
+	}
+
+	api_key := os.Getenv(text.ENV_API_KEY)
+
+	if api_key == "" {
+		log.Fatal(text.ERR_NO_API_KEY) // No key? Why continue?
+	}
+
+	censor_rating := tools.GetEnv(text.ENV_CENSOR_RATING, text.DEFAULT_CENSOR_RATING)
+	if *flag_nsfw {
+		censor_rating = string(genai.HarmBlockThresholdBlockNone)
+	}
+
+	if *flag_print_last_response {
+		last_response, err := sql.GetLastBody(db_file)
+		if err == nil {
+			fmt.Println(last_response)
+		}
+		os.Exit(0)
+	}
+
+	agent_intellect := tools.GetEnv(text.ENV_AGENT_INTELLECT, text.DEFAULT_AGENT_INTELLECT)
+
+	agent_model := tools.GetEnv(text.ENV_AGENT_MODEL, text.DEFAULT_AGENT_MODEL)
+
+	// SET PERSONA
+
+	agent_persona := tools.GetEnv(text.ENV_AGENT_PERSONA, text.DEFAULT_AGENT_PERSONA)
+
+	if *flag_print_env {
+		for _, env := range os.Environ() {
+			if strings.HasPrefix(env, text.ENV_PREFIX) {
+				fmt.Println(env)
+			}
+		}
+		os.Exit(0)
+	}
+
+	args := flag.Args()
+	user_prompt := strings.Join(args, " ") + tools.GetStdin()
+
+	if *flag_attach != "" {
+		user_prompt = user_prompt + tools.GetFile(*flag_attach)
+	}
+
+	if user_prompt == "" {
+		os.Exit(1)
+	}
+
+	var prompt_history []*genai.Content
+
+	is_topic := false
+	if *flag_preserve_context || *flag_preserve_context_long {
+		is_topic = true
+		sql.SelectMessage(db_file, &prompt_history)
+	}
+
+	prompt_history = append(prompt_history, genai.NewContentFromText(user_prompt, genai.RoleUser))
+
+	sql.InsertMessage(db_file, user_prompt, false, is_topic)
+
+	return Environment{
+		ApiKey:         api_key,
+		AgentIntellect: agent_intellect,
+		AgentModel:     agent_model,
+		AgentPersona:   agent_persona,
+		CensorRating:   censor_rating,
+		DbFile:         db_file,
+		PromptHistory:  prompt_history,
+	}
+
+}

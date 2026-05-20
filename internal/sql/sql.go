@@ -1,4 +1,4 @@
-package main
+package sql
 
 import (
 	"database/sql"
@@ -7,55 +7,58 @@ import (
 	"github.com/google/uuid"
 	"google.golang.org/genai"
 	_ "modernc.org/sqlite"
+
+	"github.com/Starscade/Gaia/internal/text"
+	"github.com/Starscade/Gaia/internal/tools"
 )
 
-func getLastBody() (string, error) {
+func GetLastBody(db_file string) (string, error) {
 	db, err := sql.Open("sqlite", db_file)
-	exitOnErr(err)
+	tools.ExitOnErr(err)
 	defer db.Close()
 
 	var body string
-	err = db.QueryRow(SQL_GET_LAST_RESPONSE).Scan(&body)
+	err = db.QueryRow(text.SQL_GET_LAST_RESPONSE).Scan(&body)
 	return body, err
 }
 
-func initDb() {
+func Init(db_file string) {
 	db, err := sql.Open("sqlite", db_file)
-	exitOnErr(err)
+	tools.ExitOnErr(err)
 	defer db.Close()
-	_, err = db.Exec(SQL_CREATE_TABLE)
-	exitOnErr(err)
+	_, err = db.Exec(text.SQL_CREATE_TABLE)
+	tools.ExitOnErr(err)
 }
 
-func insertMessage(body string, is_agent bool, is_topic bool) {
+func InsertMessage(db_file, body string, is_agent, is_topic bool) {
 	db, err := sql.Open("sqlite", db_file)
-	exitOnErr(err)
+	tools.ExitOnErr(err)
 	defer db.Close()
 
 	ts_now := time.Now().Format(time.RFC3339Nano)
 	topic_id := uuid.New()
 
 	if is_topic {
-		err = db.QueryRow(SQL_GET_CURRENT_ID).Scan(&topic_id)
+		err = db.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
 	}
 
-	_, err = db.Exec(SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
-	exitOnErr(err)
+	_, err = db.Exec(text.SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
+	tools.ExitOnErr(err)
 }
 
-func selectMessage(chat_history *[]*genai.Content) {
+func SelectMessage(db_file string, chat_history *[]*genai.Content) {
 	db, err := sql.Open("sqlite", db_file)
-	exitOnErr(err)
+	tools.ExitOnErr(err)
 	defer db.Close()
 
 	var topic_id string
-	err = db.QueryRow(SQL_GET_CURRENT_ID).Scan(&topic_id)
+	err = db.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
 	if err != nil {
 		return
 	}
 
 	var rows *sql.Rows
-	rows, err = db.Query(SQL_GET_CONVERSATION, topic_id)
+	rows, err = db.Query(text.SQL_GET_CONVERSATION, topic_id)
 	if err != nil {
 		return
 	}
@@ -79,10 +82,10 @@ func selectMessage(chat_history *[]*genai.Content) {
 
 }
 
-func truncateTranscript() {
+func TruncateTranscript(db_file string) {
 	db, err := sql.Open("sqlite", db_file)
-	exitOnErr(err)
+	tools.ExitOnErr(err)
 	defer db.Close()
-	_, err2 := db.Exec(SQL_TRUNCATE_TRANSCRIPT)
-	exitOnErr(err2)
+	_, err2 := db.Exec(text.SQL_TRUNCATE_TRANSCRIPT)
+	tools.ExitOnErr(err2)
 }
