@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -17,28 +16,17 @@ import (
 )
 
 type Environment struct {
-	ApiKey                  string
-	AgentIntellect          string
-	AgentModel              string
-	AgentPersona            string
-	CensorRating            string
-	Client                  *genai.Client
-	Config                  *genai.GenerateContentConfig
-	Ctx                     context.Context
-	DbFile                  string
-	EnvFile                 string
-	FlagAttach              *string
-	FlagEnv                 *string
-	FlagForget              *bool
-	FlagHelp                *bool
-	FlagHelpLong            *bool
-	FlagNsfw                *bool
-	FlagPreserveContext     *bool
-	FlagPreserveContextLong *bool
-	FlagPrintEnv            *bool
-	FlagPrintLastResponse   *bool
-	PromptHistory           []*genai.Content
-	UserPrompt              string
+	ApiKey         string
+	AgentIntellect string
+	AgentModel     string
+	AgentPersona   string
+	CensorRating   string
+	Client         *genai.Client
+	Config         *genai.GenerateContentConfig
+	Ctx            context.Context
+	DbFile         string
+	EnvFile        string
+	PromptHistory  []*genai.Content
 }
 
 func Init() Environment {
@@ -81,12 +69,6 @@ func Init() Environment {
 	if *flag_forget {
 		sql.TruncateTranscript(db_file)
 		os.Exit(0)
-	}
-
-	api_key := os.Getenv(text.ENV_API_KEY)
-
-	if api_key == "" {
-		log.Fatal(text.ERR_NO_API_KEY) // No key? Why continue?
 	}
 
 	censor_rating := tools.GetEnv(text.ENV_CENSOR_RATING, text.DEFAULT_CENSOR_RATING)
@@ -141,6 +123,8 @@ func Init() Environment {
 	prompt_history = append(prompt_history, genai.NewContentFromText(user_prompt, genai.RoleUser))
 
 	sql.InsertMessage(db_file, user_prompt, false, is_topic)
+
+	api_key := os.Getenv(text.ENV_API_KEY)
 
 	return Environment{
 		ApiKey:         api_key,
