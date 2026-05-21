@@ -12,12 +12,6 @@ import (
 	"github.com/Starscade/Gaia/internal/text"
 )
 
-func ExitOnErr(err error) {
-	if err != nil {
-		PrintErr(err.Error())
-	}
-}
-
 func GetEnv(env_var_name string, default_value string) string {
 	env_var := os.Getenv(env_var_name)
 
@@ -30,18 +24,22 @@ func GetEnv(env_var_name string, default_value string) string {
 	return env_var
 }
 
-func GetFile(glob_path string) string {
+func GetFile(glob_path string) (string, error) {
 	files, err := filepath.Glob(glob_path)
-	ExitOnErr(err)
+	if err != nil {
+		return "", err
+	}
 	var bodies strings.Builder
 	for _, file_path := range files {
 		file, err := os.ReadFile(file_path)
-		ExitOnErr(err)
+		if err != nil {
+			return "", err
+		}
 		eof_start := "EOF " + file_path + "\n\n"
 		eof_end := "\n\nEOF " + file_path
 		bodies.WriteString(eof_start + string(file) + eof_end)
 	}
-	return bodies.String()
+	return bodies.String(), nil
 }
 
 func GetStdin() string {

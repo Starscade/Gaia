@@ -16,12 +16,16 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	environment := env.Init()
+	environment, _ := env.Init()
 
 	if environment.ApiKey == "" {
 		log.Fatal(text.ERR_NO_API_KEY) // No key? Why continue?
 	}
 
-	agent := ai.Init(environment)
-	ai.Ask(ctx, environment, agent)
+	if environment.Prompt == "" {
+		os.Exit(1)
+	}
+
+	agent, _ := ai.Init(*environment)
+	ai.Ask(ctx, *environment, *agent)
 }

@@ -9,12 +9,13 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/Starscade/Gaia/internal/text"
-	"github.com/Starscade/Gaia/internal/utils"
 )
 
 func GetLastBody(db_file string) (string, error) {
 	db, err := sql.Open("sqlite", db_file)
-	utils.ExitOnErr(err)
+	if err != nil {
+		return "", err
+	}
 	defer db.Close()
 
 	var body string
@@ -22,17 +23,24 @@ func GetLastBody(db_file string) (string, error) {
 	return body, err
 }
 
-func Init(db_file string) {
+func Init(db_file string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite", db_file)
-	utils.ExitOnErr(err)
+	if err != nil {
+		return nil, err
+	}
 	defer db.Close()
 	_, err = db.Exec(text.SQL_CREATE_TABLE)
-	utils.ExitOnErr(err)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
 
-func InsertMessage(db_file, body string, is_agent, is_topic bool) {
+func InsertMessage(db_file, body string, is_agent, is_topic bool) error {
 	db, err := sql.Open("sqlite", db_file)
-	utils.ExitOnErr(err)
+	if err != nil {
+		return err
+	}
 	defer db.Close()
 
 	ts_now := time.Now().Format(time.RFC3339Nano)
@@ -43,24 +51,29 @@ func InsertMessage(db_file, body string, is_agent, is_topic bool) {
 	}
 
 	_, err = db.Exec(text.SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
-	utils.ExitOnErr(err)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func SelectMessage(db_file string, chat_history *[]*genai.Content) {
+func SelectMessage(db_file string, chat_history *[]*genai.Content) ([]*genai.Content, error) {
 	db, err := sql.Open("sqlite", db_file)
-	utils.ExitOnErr(err)
+	if err != nil {
+		return nil, err
+	}
 	defer db.Close()
 
 	var topic_id string
 	err = db.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	var rows *sql.Rows
 	rows, err = db.Query(text.SQL_GET_CONVERSATION, topic_id)
 	if err != nil {
-		return
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -71,7 +84,7 @@ func SelectMessage(db_file string, chat_history *[]*genai.Content) {
 		var is_agent bool
 		err := rows.Scan(&is_agent, &body)
 		if err != nil {
-			return
+			return nil, err
 		}
 		role = genai.RoleUser
 		if is_agent {
@@ -80,12 +93,18 @@ func SelectMessage(db_file string, chat_history *[]*genai.Content) {
 		*chat_history = append(*chat_history, genai.NewContentFromText(body, role))
 	}
 
+	return *chat_history, nil
 }
 
-func TruncateTranscript(db_file string) {
+func TruncateTranscript(db_file string) error {
 	db, err := sql.Open("sqlite", db_file)
-	utils.ExitOnErr(err)
+	if err != nil {
+		return err
+	}
 	defer db.Close()
 	_, err2 := db.Exec(text.SQL_TRUNCATE_TRANSCRIPT)
-	utils.ExitOnErr(err2)
+	if err2 != nil {
+		return err2
+	}
+	return nil
 }

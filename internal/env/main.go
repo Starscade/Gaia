@@ -24,10 +24,11 @@ type Environment struct {
 	Config         *genai.GenerateContentConfig
 	DbFile         string
 	EnvFile        string
+	Prompt         string
 	PromptHistory  []*genai.Content
 }
 
-func Init() Environment {
+func Init() (*Environment, error) {
 
 	flag_attach := flag.String(text.FLAG_ATTACHMENT_OPTION_LONG, "", text.FLAG_ATTACHMENT_HELP)
 	flag_env := flag.String(text.FLAG_ENV_OPTION_LONG, "", text.FLAG_ENV_HELP)
@@ -47,12 +48,16 @@ func Init() Environment {
 	_, err := os.Stat(env_file)
 	if err == nil {
 		err := godotenv.Load(env_file)
-		utils.ExitOnErr(err)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if *flag_env != "" {
 		err := godotenv.Overload(*flag_env)
-		utils.ExitOnErr(err)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if *flag_help_long || *flag_help {
@@ -103,11 +108,11 @@ func Init() Environment {
 	user_prompt := strings.Join(args, " ") + utils.GetStdin()
 
 	if *flag_attach != "" {
-		user_prompt = user_prompt + utils.GetFile(*flag_attach)
-	}
-
-	if user_prompt == "" {
-		os.Exit(1)
+		attached_text, err := utils.GetFile(*flag_attach)
+		if err != nil {
+			return nil, err
+		}
+		user_prompt = user_prompt + attached_text
 	}
 
 	var prompt_history []*genai.Content
@@ -124,14 +129,17 @@ func Init() Environment {
 
 	api_key := os.Getenv(text.ENV_API_KEY)
 
-	return Environment{
+	e := Environment{
 		ApiKey:         api_key,
 		AgentIntellect: agent_intellect,
 		AgentModel:     agent_model,
 		AgentPersona:   agent_persona,
 		CensorRating:   censor_rating,
 		DbFile:         db_file,
+		Prompt:         user_prompt,
 		PromptHistory:  prompt_history,
 	}
+
+	return &e, nil
 
 }

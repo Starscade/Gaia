@@ -10,7 +10,6 @@ import (
 	"github.com/Starscade/Gaia/internal/env"
 	"github.com/Starscade/Gaia/internal/sql"
 	"github.com/Starscade/Gaia/internal/text"
-	"github.com/Starscade/Gaia/internal/utils"
 )
 
 type Agent struct {
@@ -71,14 +70,16 @@ func Ask(ctx context.Context, environment env.Environment, agent Agent) {
 	fmt.Println() // Ensure terminal returns on a new line.
 }
 
-func Init(environment env.Environment) Agent {
+func Init(environment env.Environment) (*Agent, error) {
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, &genai.ClientConfig{
 		Backend: genai.BackendGeminiAPI,
 		APIKey:  environment.ApiKey,
 	})
 
-	utils.ExitOnErr(err)
+	if err != nil {
+		return nil, err
+	}
 
 	config := &genai.GenerateContentConfig{
 		SafetySettings: []*genai.SafetySetting{
@@ -116,9 +117,11 @@ func Init(environment env.Environment) Agent {
 		},
 	}
 
-	return Agent{
+	a := Agent{
 		Client: client,
 		Config: config,
 	}
+
+	return &a, nil
 
 }
