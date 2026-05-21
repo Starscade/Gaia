@@ -1,6 +1,7 @@
 package env
 
 import (
+	db "database/sql"
 	"flag"
 	"fmt"
 	"os"
@@ -22,7 +23,7 @@ type Environment struct {
 	CensorRating   string
 	Client         *genai.Client
 	Config         *genai.GenerateContentConfig
-	DbFile         string
+	Db             *db.DB
 	EnvFile        string
 	Prompt         string
 	PromptHistory  []*genai.Content
@@ -67,10 +68,14 @@ func Init() (*Environment, error) {
 
 	db_file := utils.GetEnv(text.ENV_DB_PATH, text.DEFAULT_DB_PATH)
 
-	sql.Init(db_file)
+	database_pointer, err := sql.Init(db_file)
+
+	if err != nil {
+		return nil, err
+	}
 
 	if *flag_forget {
-		sql.TruncateTranscript(db_file)
+		sql.TruncateTranscript(database_pointer)
 		os.Exit(0)
 	}
 
@@ -80,7 +85,7 @@ func Init() (*Environment, error) {
 	}
 
 	if *flag_print_last_response {
-		last_response, err := sql.GetLastBody(db_file)
+		last_response, err := sql.GetLastBody(database_pointer)
 		if err == nil {
 			fmt.Println(last_response)
 		}
@@ -120,12 +125,16 @@ func Init() (*Environment, error) {
 	is_topic := false
 	if *flag_preserve_context || *flag_preserve_context_long {
 		is_topic = true
-		sql.SelectMessage(db_file, &prompt_history)
+		sql.SelectMessage(database_pointer, &prompt_history)
 	}
 
 	prompt_history = append(prompt_history, genai.NewContentFromText(user_prompt, genai.RoleUser))
 
-	sql.InsertMessage(db_file, user_prompt, false, is_topic)
+	err = sql.InsertMessage(database_pointer, user_prompt, false, is_topic)
+
+	if err != nil {
+		return nil, err
+	}
 
 	api_key := os.Getenv(text.ENV_API_KEY)
 
@@ -135,7 +144,7 @@ func Init() (*Environment, error) {
 		AgentModel:     agent_model,
 		AgentPersona:   agent_persona,
 		CensorRating:   censor_rating,
-		DbFile:         db_file,
+		Db:             database_pointer,
 		Prompt:         user_prompt,
 		PromptHistory:  prompt_history,
 	}

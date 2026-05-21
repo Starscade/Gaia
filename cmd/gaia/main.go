@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -13,23 +14,34 @@ import (
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+}
+
+func run() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
 	environment, err := env.Init()
-
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	defer environment.Db.Close()
 
 	if environment.ApiKey == "" {
-		log.Fatal(text.ERR_NO_API_KEY) // No key? Why continue?
+		return fmt.Errorf("%s", text.ERR_NO_API_KEY)
 	}
 
 	if environment.Prompt == "" {
-		os.Exit(1)
+		return nil
 	}
 
-	agent, _ := ai.Init(*environment)
-	ai.Ask(ctx, *environment, *agent)
+	agent, err := ai.Init(*environment)
+	if err != nil {
+		return err
+	}
+
+	return ai.Ask(ctx, *environment, *agent)
 }

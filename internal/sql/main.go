@@ -11,15 +11,9 @@ import (
 	"github.com/Starscade/Gaia/internal/text"
 )
 
-func GetLastBody(db_file string) (string, error) {
-	db, err := sql.Open("sqlite", db_file)
-	if err != nil {
-		return "", err
-	}
-	defer db.Close()
-
+func GetLastBody(database_pointer *sql.DB) (string, error) {
 	var body string
-	err = db.QueryRow(text.SQL_GET_LAST_RESPONSE).Scan(&body)
+	err := database_pointer.QueryRow(text.SQL_GET_LAST_RESPONSE).Scan(&body)
 	return body, err
 }
 
@@ -28,7 +22,7 @@ func Init(db_file string) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+
 	_, err = db.Exec(text.SQL_CREATE_TABLE)
 	if err != nil {
 		return nil, err
@@ -36,42 +30,33 @@ func Init(db_file string) (*sql.DB, error) {
 	return db, nil
 }
 
-func InsertMessage(db_file, body string, is_agent, is_topic bool) error {
-	db, err := sql.Open("sqlite", db_file)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
+func InsertMessage(database_pointer *sql.DB, body string, is_agent, is_topic bool) error {
 	ts_now := time.Now().Format(time.RFC3339Nano)
 	topic_id := uuid.New()
 
 	if is_topic {
-		err = db.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
+		err := database_pointer.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
+		if err != nil {
+			return err
+		}
 	}
 
-	_, err = db.Exec(text.SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
+	_, err := database_pointer.Exec(text.SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func SelectMessage(db_file string, chat_history *[]*genai.Content) ([]*genai.Content, error) {
-	db, err := sql.Open("sqlite", db_file)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
+func SelectMessage(database_pointer *sql.DB, chat_history *[]*genai.Content) ([]*genai.Content, error) {
 	var topic_id string
-	err = db.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
+	err := database_pointer.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
 	if err != nil {
 		return nil, err
 	}
 
 	var rows *sql.Rows
-	rows, err = db.Query(text.SQL_GET_CONVERSATION, topic_id)
+	rows, err = database_pointer.Query(text.SQL_GET_CONVERSATION, topic_id)
 	if err != nil {
 		return nil, err
 	}
@@ -96,15 +81,10 @@ func SelectMessage(db_file string, chat_history *[]*genai.Content) ([]*genai.Con
 	return *chat_history, nil
 }
 
-func TruncateTranscript(db_file string) error {
-	db, err := sql.Open("sqlite", db_file)
+func TruncateTranscript(database_pointer *sql.DB) error {
+	_, err := database_pointer.Exec(text.SQL_TRUNCATE_TRANSCRIPT)
 	if err != nil {
 		return err
-	}
-	defer db.Close()
-	_, err2 := db.Exec(text.SQL_TRUNCATE_TRANSCRIPT)
-	if err2 != nil {
-		return err2
 	}
 	return nil
 }

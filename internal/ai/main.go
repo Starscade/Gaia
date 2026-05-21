@@ -17,7 +17,7 @@ type Agent struct {
 	Config *genai.GenerateContentConfig
 }
 
-func Ask(ctx context.Context, environment env.Environment, agent Agent) {
+func Ask(ctx context.Context, environment env.Environment, agent Agent) error {
 	stream := agent.Client.Models.GenerateContentStream(
 		ctx,
 		environment.AgentModel,
@@ -31,7 +31,10 @@ func Ask(ctx context.Context, environment env.Environment, agent Agent) {
 
 	for chunk, err := range stream {
 		if err != nil {
-			sql.InsertMessage(environment.DbFile, response_buffer.String(), true, true)
+			err = sql.InsertMessage(environment.Db, response_buffer.String(), true, true)
+			if err != nil {
+				return err
+			}
 			break
 		}
 
@@ -65,9 +68,14 @@ func Ask(ctx context.Context, environment env.Environment, agent Agent) {
 		}
 	}
 
-	sql.InsertMessage(environment.DbFile, response_buffer.String(), true, true)
+	err := sql.InsertMessage(environment.Db, response_buffer.String(), true, true)
 
-	fmt.Println() // Ensure terminal returns on a new line.
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 func Init(environment env.Environment) (*Agent, error) {
