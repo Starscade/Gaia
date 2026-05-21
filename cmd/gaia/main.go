@@ -16,7 +16,11 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	environment, _ := env.Init()
+	environment, err := env.Init()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if environment.ApiKey == "" {
 		log.Fatal(text.ERR_NO_API_KEY) // No key? Why continue?
