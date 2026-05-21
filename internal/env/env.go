@@ -37,10 +37,11 @@ func Init() (*Environment, error) {
 	flag_help := flag.Bool(text.FLAG_HELP_OPTION_SHORT, false, text.FLAG_HELP_HELP)
 	flag_help_long := flag.Bool(text.FLAG_HELP_OPTION_LONG, false, text.FLAG_HELP_HELP)
 	flag_nsfw := flag.Bool(text.FLAG_NSFW_OPTION_LONG, false, text.FLAG_NSFW_HELP)
-	flag_print_last_response := flag.Bool(text.FLAG_PRINT_LAST_RESPONSE_OPTION_LONG, false, text.FLAG_PRINT_LAST_RESPONSE_HELP)
 	flag_preserve_context := flag.Bool(text.FLAG_PRESERVE_CONTEXT_OPTION_SHORT, false, text.FLAG_PRESERVE_CONTEXT_HELP)
 	flag_preserve_context_long := flag.Bool(text.FLAG_PRESERVE_CONTEXT_OPTION_LONG, false, text.FLAG_PRESERVE_CONTEXT_HELP)
 	flag_print_env := flag.Bool(text.FLAG_PRINT_ENV_OPTION_LONG, false, text.FLAG_PRINT_ENV_HELP)
+	flag_print_last_response := flag.Bool(text.FLAG_PRINT_LAST_RESPONSE_OPTION_LONG, false, text.FLAG_PRINT_LAST_RESPONSE_HELP)
+	flag_print_version := flag.Bool(text.FLAG_PRINT_VERSION_OPTION_LONG, false, text.FLAG_PRINT_VERSION_HELP)
 
 	flag.Parse()
 
@@ -63,6 +64,11 @@ func Init() (*Environment, error) {
 
 	if *flag_help_long || *flag_help {
 		utils.PrintHelp()
+		os.Exit(0)
+	}
+
+	if *flag_print_version {
+		fmt.Println(text.PRINT_VERSION)
 		os.Exit(0)
 	}
 

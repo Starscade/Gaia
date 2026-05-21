@@ -39,6 +39,8 @@ const (
 	FLAG_PRINT_ENV_OPTION_LONG           = "print-env"
 	FLAG_PRINT_LAST_RESPONSE_HELP        = "Print the last response verbatim."
 	FLAG_PRINT_LAST_RESPONSE_OPTION_LONG = "echo"
+	FLAG_PRINT_VERSION_HELP              = "Print the current release tag."
+	FLAG_PRINT_VERSION_OPTION_LONG       = "version"
 
 	PRINT_CENSORED         = " \033[1;31;40m CENSORED \033[0m "
 	PRINT_COPYRIGHTED      = " \033[1;31;40m COPYRIGHT \033[0m "
@@ -46,6 +48,7 @@ const (
 	PRINT_GAIA             = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n\n"
 	PRINT_HELP_USAGE       = "\n \033[1mUsage\033[0m: `gaia \"What's my IP address?\" | sh`\n\n\n"
 	PRINT_TOKENS_EXHAUSTED = " \033[1;31;40m TOKENS EXHAUSTED \033[0m "
+	PRINT_VERSION          = "v0.3.0 (dev)"
 
 	SQL_CREATE_TABLE        = "CREATE TABLE IF NOT EXISTS transcript (id TEXT, ts TEXT, is_agent INT, body TEXT)"
 	SQL_INSERT_ROW          = "INSERT INTO transcript (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
