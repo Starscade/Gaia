@@ -48,7 +48,7 @@ const (
 	PRINT_GAIA             = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n\n"
 	PRINT_HELP_USAGE       = "\n \033[1mUsage\033[0m: `gaia \"What's my IP address?\" | sh`\n\n\n"
 	PRINT_TOKENS_EXHAUSTED = " \033[1;31;40m TOKENS EXHAUSTED \033[0m "
-	PRINT_VERSION          = "v0.3.6 (main)"
+	PRINT_VERSION          = "v0.3.7 (main)"
 
 	SQL_CREATE_TABLE        = "CREATE TABLE IF NOT EXISTS transcript (id TEXT, ts TEXT, is_agent INT, body TEXT)"
 	SQL_INSERT_ROW          = "INSERT INTO transcript (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
