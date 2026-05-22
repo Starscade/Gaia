@@ -8,6 +8,7 @@ all:
 	@\
 		go mod tidy \
 		&& make fmt \
+		&& ./scripts/auto-version.sh \
 		&& CGO_ENABLED=0 \
 		go build -ldflags="-s -w" -v -x \
 		-o ~/.local/bin/gaia ./cmd/gaia \
