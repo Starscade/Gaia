@@ -52,11 +52,11 @@ func GetStdin() string {
 }
 
 func PrintErr(err string) {
-	log.Fatal(text.PRINT_ERR, err)
+	log.Fatal(text.PrintErr, err)
 }
 
 func PrintHelp() {
-	fmt.Print(text.PRINT_GAIA)
+	fmt.Print(text.PrintGaia)
 	flag.PrintDefaults()
-	fmt.Print(text.PRINT_HELP_USAGE)
+	fmt.Print(text.PrintHelpUsage)
 }

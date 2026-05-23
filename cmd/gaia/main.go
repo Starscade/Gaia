@@ -31,7 +31,7 @@ func run() error {
 	defer environment.Db.Close()
 
 	if environment.ApiKey == "" {
-		return fmt.Errorf("%s", text.ERR_NO_API_KEY)
+		return fmt.Errorf("%s", text.ErrNoApiKey)
 	}
 
 	if environment.Prompt == "" {

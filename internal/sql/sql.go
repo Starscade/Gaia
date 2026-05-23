@@ -13,7 +13,7 @@ import (
 
 func GetLastBody(database_pointer *sql.DB) (string, error) {
 	var body string
-	err := database_pointer.QueryRow(text.SQL_GET_LAST_RESPONSE).Scan(&body)
+	err := database_pointer.QueryRow(text.SqlGetLastResponse).Scan(&body)
 	return body, err
 }
 
@@ -23,7 +23,7 @@ func Init(db_file string) (*sql.DB, error) {
 		return nil, err
 	}
 
-	_, err = db.Exec(text.SQL_CREATE_TABLE)
+	_, err = db.Exec(text.SqlCreateTable)
 	if err != nil {
 		return nil, err
 	}
@@ -35,13 +35,13 @@ func InsertMessage(database_pointer *sql.DB, body string, is_agent, is_topic boo
 	topic_id := uuid.New()
 
 	if is_topic {
-		err := database_pointer.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
+		err := database_pointer.QueryRow(text.SqlGetCurrentId).Scan(&topic_id)
 		if err != nil {
 			return err
 		}
 	}
 
-	_, err := database_pointer.Exec(text.SQL_INSERT_ROW, topic_id, ts_now, is_agent, body)
+	_, err := database_pointer.Exec(text.SqlInsertRow, topic_id, ts_now, is_agent, body)
 	if err != nil {
 		return err
 	}
@@ -50,13 +50,13 @@ func InsertMessage(database_pointer *sql.DB, body string, is_agent, is_topic boo
 
 func SelectMessage(database_pointer *sql.DB, chat_history *[]*genai.Content) ([]*genai.Content, error) {
 	var topic_id string
-	err := database_pointer.QueryRow(text.SQL_GET_CURRENT_ID).Scan(&topic_id)
+	err := database_pointer.QueryRow(text.SqlGetCurrentId).Scan(&topic_id)
 	if err != nil {
 		return nil, err
 	}
 
 	var rows *sql.Rows
-	rows, err = database_pointer.Query(text.SQL_GET_CONVERSATION, topic_id)
+	rows, err = database_pointer.Query(text.SqlGetConversation, topic_id)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func SelectMessage(database_pointer *sql.DB, chat_history *[]*genai.Content) ([]
 }
 
 func TruncateTranscript(database_pointer *sql.DB) error {
-	_, err := database_pointer.Exec(text.SQL_TRUNCATE_TRANSCRIPT)
+	_, err := database_pointer.Exec(text.SqlTruncateTranscript)
 	if err != nil {
 		return err
 	}

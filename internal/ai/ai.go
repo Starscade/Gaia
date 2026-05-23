@@ -44,13 +44,13 @@ func Ask(ctx context.Context, environment env.Environment, agent Agent) error {
 				if candidate.FinishReason != "" && candidate.FinishReason != genai.FinishReasonStop {
 					switch candidate.FinishReason {
 					case genai.FinishReasonMaxTokens:
-						fmt.Print(text.PRINT_TOKENS_EXHAUSTED)
+						fmt.Print(text.PrintTokensExhausted)
 					case genai.FinishReasonRecitation:
-						fmt.Print(text.PRINT_COPYRIGHTED)
+						fmt.Print(text.PrintCopyrighted)
 					case genai.FinishReasonSafety:
-						fmt.Print(text.PRINT_CENSORED)
+						fmt.Print(text.PrintCensored)
 					default:
-						fmt.Print(text.PRINT_ERR)
+						fmt.Print(text.PrintErr)
 					}
 				}
 

@@ -31,21 +31,21 @@ type Environment struct {
 
 func Init() (*Environment, error) {
 
-	flag_attach := flag.String(text.FLAG_ATTACHMENT_OPTION_LONG, "", text.FLAG_ATTACHMENT_HELP)
-	flag_env := flag.String(text.FLAG_ENV_OPTION_LONG, "", text.FLAG_ENV_HELP)
-	flag_forget := flag.Bool(text.FLAG_FORGET_OPTION_LONG, false, text.FLAG_FORGET_HELP)
-	flag_help := flag.Bool(text.FLAG_HELP_OPTION_SHORT, false, text.FLAG_HELP_HELP)
-	flag_help_long := flag.Bool(text.FLAG_HELP_OPTION_LONG, false, text.FLAG_HELP_HELP)
-	flag_nsfw := flag.Bool(text.FLAG_NSFW_OPTION_LONG, false, text.FLAG_NSFW_HELP)
-	flag_preserve_context := flag.Bool(text.FLAG_PRESERVE_CONTEXT_OPTION_SHORT, false, text.FLAG_PRESERVE_CONTEXT_HELP)
-	flag_preserve_context_long := flag.Bool(text.FLAG_PRESERVE_CONTEXT_OPTION_LONG, false, text.FLAG_PRESERVE_CONTEXT_HELP)
-	flag_print_env := flag.Bool(text.FLAG_PRINT_ENV_OPTION_LONG, false, text.FLAG_PRINT_ENV_HELP)
-	flag_print_last_response := flag.Bool(text.FLAG_PRINT_LAST_RESPONSE_OPTION_LONG, false, text.FLAG_PRINT_LAST_RESPONSE_HELP)
-	flag_print_version := flag.Bool(text.FLAG_PRINT_VERSION_OPTION_LONG, false, text.FLAG_PRINT_VERSION_HELP)
+	flag_attach := flag.String(text.FlagAttachmentOptionLong, "", text.FlagAttachmentHelp)
+	flag_env := flag.String(text.FlagEnvOptionLong, "", text.FlagEnvHelp)
+	flag_forget := flag.Bool(text.FlagForgetOptionLong, false, text.FlagForgetHelp)
+	flag_help := flag.Bool(text.FlagHelpOptionShort, false, text.FlagHelpHelp)
+	flag_help_long := flag.Bool(text.FlagHelpOptionLong, false, text.FlagHelpHelp)
+	flag_nsfw := flag.Bool(text.FlagNsfwOptionLong, false, text.FlagNsfwHelp)
+	flag_preserve_context := flag.Bool(text.FlagPreserveContextOptionShort, false, text.FlagPreserveContextHelp)
+	flag_preserve_context_long := flag.Bool(text.FlagPreserveContextOptionLong, false, text.FlagPreserveContextHelp)
+	flag_print_env := flag.Bool(text.FlagPrintEnvOptionLong, false, text.FlagPrintEnvHelp)
+	flag_print_last_response := flag.Bool(text.FlagPrintLastResponseOptionLong, false, text.FlagPrintLastResponseHelp)
+	flag_print_version := flag.Bool(text.FlagPrintVersionOptionLong, false, text.FlagPrintVersionHelp)
 
 	flag.Parse()
 
-	env_file := utils.GetEnv(text.ENV_DOTENV_PATH, text.DEFAULT_ENV_PATH)
+	env_file := utils.GetEnv(text.EnvDotenvPath, text.DefaultEnvPath)
 
 	_, err := os.Stat(env_file)
 	if err == nil {
@@ -68,11 +68,11 @@ func Init() (*Environment, error) {
 	}
 
 	if *flag_print_version {
-		fmt.Println(text.PRINT_VERSION)
+		fmt.Println(text.PrintVersion)
 		os.Exit(0)
 	}
 
-	db_file := utils.GetEnv(text.ENV_DB_PATH, text.DEFAULT_DB_PATH)
+	db_file := utils.GetEnv(text.EnvDbPath, text.DefaultDbPath)
 
 	database_pointer, err := sql.Init(db_file)
 
@@ -85,7 +85,7 @@ func Init() (*Environment, error) {
 		os.Exit(0)
 	}
 
-	censor_rating := utils.GetEnv(text.ENV_CENSOR_RATING, text.DEFAULT_CENSOR_RATING)
+	censor_rating := utils.GetEnv(text.EnvCensorRating, text.DefaultCensorRating)
 	if *flag_nsfw {
 		censor_rating = string(genai.HarmBlockThresholdBlockNone)
 	}
@@ -98,17 +98,17 @@ func Init() (*Environment, error) {
 		os.Exit(0)
 	}
 
-	agent_intellect := utils.GetEnv(text.ENV_AGENT_INTELLECT, text.DEFAULT_AGENT_INTELLECT)
+	agent_intellect := utils.GetEnv(text.EnvAgentIntellect, text.DefaultAgentIntellect)
 
-	agent_model := utils.GetEnv(text.ENV_AGENT_MODEL, text.DEFAULT_AGENT_MODEL)
+	agent_model := utils.GetEnv(text.EnvAgentModel, text.DefaultAgentModel)
 
 	// SET PERSONA
 
-	agent_persona := utils.GetEnv(text.ENV_AGENT_PERSONA, text.DEFAULT_AGENT_PERSONA)
+	agent_persona := utils.GetEnv(text.EnvAgentPersona, text.DefaultAgentPersona)
 
 	if *flag_print_env {
 		for _, env := range os.Environ() {
-			if strings.HasPrefix(env, text.ENV_PREFIX) {
+			if strings.HasPrefix(env, text.EnvPrefix) {
 				fmt.Println(env)
 			}
 		}
@@ -142,7 +142,7 @@ func Init() (*Environment, error) {
 		return nil, err
 	}
 
-	api_key := os.Getenv(text.ENV_API_KEY)
+	api_key := os.Getenv(text.EnvApiKey)
 
 	e := Environment{
 		ApiKey:         api_key,
