@@ -10,7 +10,7 @@ NEW_VERSION="${LATEST_MINOR_VERSION}.${CURRENT_PATCH} (${GIT_BRANCH})"
 
 # If no change, don't auto-increment.
 
-if test -n "$(git status --porcelain)"; then
+if test -z "$(git status --porcelain)"; then
 	sed -i \
 	"s/v[[:digit:]]\.[[:digit:]]\.[[:digit:]] \([^\"]*\)/$NEW_VERSION/" \
 	internal/text/text.go
