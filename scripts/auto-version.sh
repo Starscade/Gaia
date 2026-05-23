@@ -10,7 +10,7 @@ NEW_VERSION="${LATEST_MINOR_VERSION}.${CURRENT_PATCH} (${GIT_BRANCH})"
 
 # If no change, don't auto-increment.
 
-if test "$(git tag | tail -n 1)" != "$NEW_VERSION"; then
+if test ($(git status --porcelain) && "$(git tag | tail -n 1)" != "$NEW_VERSION"); then
 	sed -i \
 		"s/v[[:digit:]]\.[[:digit:]]\.[[:digit:]] \([^\"]*\)/$NEW_VERSION/" \
 		internal/text/text.go
