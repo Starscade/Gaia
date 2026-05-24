@@ -48,7 +48,7 @@ const (
 	PrintGaia            = "\n \033[1mGAIA - Gaia AI Agent\033[0m\n\n"
 	PrintHelpUsage       = "\n \033[1mUsage\033[0m: `gaia \"What's my IP address?\" | sh`\n\n\n"
 	PrintTokensExhausted = " \033[1;31;40m TOKENS EXHAUSTED \033[0m "
-	PrintVersion         = "v0.4.4 (dev)"
+	PrintVersion         = "v0.4.6 (main)"
 
 	SqlCreateTable        = "CREATE TABLE IF NOT EXISTS transcript (id TEXT, ts TEXT, is_agent INT, body TEXT)"
 	SqlInsertRow          = "INSERT INTO transcript (id, ts, is_agent, body) VALUES (?, ?, ?, ?)"
