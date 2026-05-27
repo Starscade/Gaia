@@ -26,6 +26,9 @@ Set `export GAIA_AGENT_KEY="your-gemini-key"` or use a `.env`.
 ###### FILE ANALYSIS
 `gaia --read README.md "Summarize this..."`
 
+###### MULTI-FILE / FOLDER ANALYSIS
+`gaia --read ./{foo,bar}/*.md "Give me a project overview."`
+
 ###### UNIX PIPELINES
 `cat foo.js bar.js baz.js | gaia "Rewrite these in Go." > main.go && go run .`
 
@@ -36,9 +39,9 @@ Set `export GAIA_AGENT_KEY="your-gemini-key"` or use a `.env`.
 > Gaia does *not* preserve context between query/response pairs. To continue a conversation, use the `--related` flag:
 
 ```
-gaia "My favorite flavor is vanilla."
-gaia --related "What's my favorite flavor?"
+gaia "I like root beer."
+gaia --related "Do I like root beer?"
 ```
 
 > [!TIP]
-> If you prefer using Gaia this way, an alias is convient: `alias ai='gaia --related'`.
+> If you prefer using Gaia this way, set an alias: `alias ai='gaia --related'`.
