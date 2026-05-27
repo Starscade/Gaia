@@ -26,7 +26,7 @@ const (
 	FlagEnvHelp                     = "Path to dotenv file."
 	FlagEnvOptionLong               = "env"
 	FlagForgetAllHelp               = "Wipe entire transcript."
-	FlagForgetAllOptionLong         = "forget-all"
+	FlagForgetAllOptionLong         = "amnesia"
 	FlagForgetTopicHelp             = "Forget the current topic."
 	FlagForgetTopicOptionLong       = "forget"
 	FlagHelpHelp                    = "Show this message."
