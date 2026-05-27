@@ -20,7 +20,7 @@ all:
 
 clean:
 
-	go mod tidy \
+	@go mod tidy \
 	&& go clean -cache -x
 
 
