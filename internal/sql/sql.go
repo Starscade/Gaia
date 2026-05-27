@@ -81,6 +81,14 @@ func SelectMessage(database_pointer *sql.DB, chat_history *[]*genai.Content) ([]
 	return *chat_history, nil
 }
 
+func TruncateTopic(database_pointer *sql.DB) error {
+	_, err := database_pointer.Exec(text.SqlTruncateTopic)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func TruncateTranscript(database_pointer *sql.DB) error {
 	_, err := database_pointer.Exec(text.SqlTruncateTranscript)
 	if err != nil {

@@ -33,7 +33,8 @@ func Init() (*Environment, error) {
 
 	flag_attach := flag.String(text.FlagAttachmentOptionLong, "", text.FlagAttachmentHelp)
 	flag_env := flag.String(text.FlagEnvOptionLong, "", text.FlagEnvHelp)
-	flag_forget := flag.Bool(text.FlagForgetOptionLong, false, text.FlagForgetHelp)
+	flag_forget_topic := flag.Bool(text.FlagForgetTopicOptionLong, false, text.FlagForgetTopicHelp)
+	flag_forget_all := flag.Bool(text.FlagForgetAllOptionLong, false, text.FlagForgetAllHelp)
 	flag_help := flag.Bool(text.FlagHelpOptionShort, false, text.FlagHelpHelp)
 	flag_help_long := flag.Bool(text.FlagHelpOptionLong, false, text.FlagHelpHelp)
 	flag_nsfw := flag.Bool(text.FlagNsfwOptionLong, false, text.FlagNsfwHelp)
@@ -80,8 +81,13 @@ func Init() (*Environment, error) {
 		return nil, err
 	}
 
-	if *flag_forget {
+	if *flag_forget_all {
 		sql.TruncateTranscript(database_pointer)
+		os.Exit(0)
+	}
+
+	if *flag_forget_topic {
+		sql.TruncateTopic(database_pointer)
 		os.Exit(0)
 	}
 
