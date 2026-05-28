@@ -9,7 +9,7 @@ Gaia is a headless client for Google Gemini.
 3. `make`
 
 > [!NOTE]
-> Gaia installs to `~/.local/bin` by default. You may change this by setting `GAIA_INSTALL_DIR`.
+> Gaia installs to `~/.local/bin` by default. You may change this by setting `GAIA_INSTALL_DIR` before running `make`.
 
 ## Configuration
 
