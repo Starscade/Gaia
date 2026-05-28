@@ -1,6 +1,6 @@
 # Gaia AI Agent
 
-Gaia is a lightweight tool that brings Google Gemini to the command line.
+Gaia is a terminal-based client for Google Gemini.
 
 ## Installation
 
@@ -44,4 +44,4 @@ gaia --related "Do I like root beer?"
 ```
 
 > [!TIP]
-> If you prefer using Gaia this way, set an alias: `alias ai='gaia --related'`.
+> If you prefer using Gaia this way, setting an alias can make the behaviour permenant: `alias ai='gaia --related'`.
