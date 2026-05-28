@@ -1,6 +1,6 @@
 # Gaia AI Agent
 
-Gaia is a terminal-based client for Google Gemini.
+Gaia is a headless client for Google Gemini.
 
 ## Installation
 
@@ -9,7 +9,7 @@ Gaia is a terminal-based client for Google Gemini.
 3. `make`
 
 > [!NOTE]
-> Gaia installs to `~/.local/bin` by default. You may change this in the `Makefile`.
+> Gaia installs to `~/.local/bin` by default. You may change this by setting `GAIA_INSTALL_DIR`.
 
 ## Configuration
 
@@ -44,4 +44,4 @@ gaia --related "Do I like root beer?"
 ```
 
 > [!TIP]
-> If you prefer using Gaia this way, you can make the behaviour permenant with an alias: `alias ai='gaia --related'`.
+> If you prefer using Gaia this way, you can make the behaviour permenant by setting an alias: `alias ai='gaia --related'`.
