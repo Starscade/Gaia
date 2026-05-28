@@ -44,4 +44,4 @@ gaia --related "Do I like root beer?"
 ```
 
 > [!TIP]
-> If you prefer using Gaia this way, setting an alias can make the behaviour permenant: `alias ai='gaia --related'`.
+> If you prefer using Gaia this way, you can make the behaviour permenant with an alias: `alias ai='gaia --related'`.
