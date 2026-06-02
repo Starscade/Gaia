@@ -53,7 +53,7 @@ const (
 	PrintHelpUsage        = "\n \033[1mUsage\033[0m: `gaia \"What's my IP address?\" | sh`\n\n\n"
 	PrintHuh              = "Huh...?"
 	PrintTokensExhausted  = " \033[1;31;40m TOKENS EXHAUSTED \033[0m "
-	PrintVersion          = "v0.4.26 (main)"
+	PrintVersion          = "v0.5.0 (main)"
 	PrintYesOrNo          = " [y/N] "
 
 	SqlCreateTable        = "CREATE TABLE IF NOT EXISTS transcript (id TEXT, ts TEXT, is_agent INT, body TEXT)"
