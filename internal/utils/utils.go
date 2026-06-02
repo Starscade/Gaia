@@ -1,10 +1,10 @@
 package utils
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -52,7 +52,8 @@ func GetStdin() string {
 }
 
 func PrintErr(err string) {
-	log.Fatal(text.PrintErr, err)
+	fmt.Println(text.PrintErr, err)
+	os.Exit(1)
 }
 
 func PrintHelp() {
