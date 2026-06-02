@@ -82,13 +82,19 @@ func Init() (*Environment, error) {
 	}
 
 	if *flag_forget_all {
-		sql.TruncateTranscript(database_pointer)
-		os.Exit(0)
+		if utils.Confirm(text.PrintForgetEverything) {
+			fmt.Println(text.PrintHuh)
+			sql.TruncateTranscript(database_pointer)
+			os.Exit(0)
+		}
 	}
 
 	if *flag_forget_topic {
-		sql.TruncateTopic(database_pointer)
-		os.Exit(0)
+		if utils.Confirm(text.PrintForgetTopic) {
+			fmt.Println(text.PrintHuh)
+			sql.TruncateTopic(database_pointer)
+			os.Exit(0)
+		}
 	}
 
 	censor_rating := utils.GetEnv(text.EnvCensorRating, text.DefaultCensorRating)

@@ -12,6 +12,27 @@ import (
 	"github.com/Starscade/Gaia/internal/text"
 )
 
+func Confirm(message string) bool {
+	fmt.Print(message + text.PrintYesOrNo)
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return false
+		}
+
+		input = strings.ToLower(strings.TrimSpace(input))
+
+		switch input {
+		case "y", "yes":
+			return true
+		default:
+			return false
+		}
+	}
+
+}
+
 func GetEnv(env_var_name string, default_value string) string {
 	env_var := os.Getenv(env_var_name)
 
