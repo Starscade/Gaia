@@ -1,6 +1,9 @@
 #!/bin/sh
 
 INSTALL_DIR="${GAIA_INSTALL_DIR:-$HOME/.local/bin}"
+INSTALL_NAME=gaia
+
+test -n "$1" && INSTALL_NAME="$1"
 
 print_status() {
 	COLOR=2
@@ -18,7 +21,7 @@ print_status() {
 		go build \
 		-ldflags="-s -w" \
 		-v -x -o \
-		"${INSTALL_DIR}/gaia" ./cmd/gaia \
+		"${INSTALL_DIR}/${INSTALL_NAME}" "./cmd/${INSTALL_NAME}" \
 	&& ./scripts/auto-version.sh \
 	&& print_status
 ) || print_status 1
