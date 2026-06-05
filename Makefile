@@ -22,3 +22,8 @@ test:
 	@go test -v -x ./...
 
 
+vibe:
+
+	@./scripts/install.sh _gaia-vibe
+
+
