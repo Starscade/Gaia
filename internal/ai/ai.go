@@ -86,7 +86,7 @@ func Init(environment env.Environment) (*Agent, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("AI: %w", err)
 	}
 
 	config := &genai.GenerateContentConfig{
