@@ -5,4 +5,4 @@ find "$(pwd)/cmd/gaia" \
      -type f \
      -name "*" \
      -exec cat {} + \
-| gaia "$@"
+| ~/.local/bin/gaia "$@"
