@@ -1,0 +1,19 @@
+{
+	"fmt": {
+		"lineWidth": 80,
+		"semiColons": false,
+		"singleQuote": true,
+		"useTabs": true
+	},
+	"imports": {
+		"@dotenv": "jsr:@std/dotenv",
+		"@gaia": "./gaia.js",
+		"@parse-args": "jsr:@std/cli/parse-args"
+	},
+	"lock": false,
+	"tasks": {
+		"format": "deno fmt",
+		"lint": "deno task format && deno lint && deno check",
+		"make": "deno task lint && deno compile --allow-env --allow-net --allow-read --allow-write --no-check --output _gaia main.ts"
+	}
+}

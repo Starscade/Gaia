@@ -15,13 +15,9 @@ print_status() {
 	printf "\n \033[1;3${COLOR}m${STATUS}\033[0m\n\n"
 }
 
-( go mod tidy \
-	&& go fmt ./... \
-	&& CGO_ENABLED=0 \
-		go build \
-		-ldflags="-s -w" \
-		-v -x -o \
-		"${INSTALL_DIR}/${INSTALL_NAME}" "./cmd/${INSTALL_NAME}" \
+( deno task make \
 	&& ./scripts/auto-version.sh \
+	&& install -m 755 _gaia "${INSTALL_DIR}/${INSTALL_NAME}" \
+	&& rm -v _gaia \
 	&& print_status
 ) || print_status 1

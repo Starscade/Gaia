@@ -6,24 +6,13 @@ all:
 	@./scripts/install.sh
 
 
-clean:
+check:
 
-	@go mod tidy
-	@go clean -cache -x
-
-
-fmt:
-
-	@go fmt ./...
+	@deno task lint
 
 
-test:
+format:
 
-	@go test -v -x ./...
-
-
-vibe:
-
-	@./scripts/install.sh _gaia-vibe
+	@deno task format
 
 
