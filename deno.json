@@ -7,13 +7,13 @@
 	},
 	"imports": {
 		"@dotenv": "jsr:@std/dotenv",
-		"@gaia": "./gaia.js",
+		"@gaia": "./src/gaia.js",
 		"@parse-args": "jsr:@std/cli/parse-args"
 	},
 	"lock": false,
 	"tasks": {
 		"format": "deno fmt",
 		"lint": "deno task format && deno lint && deno check",
-		"make": "deno task lint && deno compile --allow-env --allow-net --allow-read --allow-write --no-check --output _gaia main.ts"
+		"make": "deno task lint && deno compile --allow-env --allow-net --allow-read --allow-write --no-check --output _gaia ./src/main.ts"
 	}
 }

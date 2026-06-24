@@ -12,5 +12,5 @@ CURRENT_VERSION="$(gaia --version)"
 if test "$CURRENT_VERSION" != "$NEW_VERSION"; then
 	sed -i \
 	"s/v[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+ ([^\']*)/$NEW_VERSION/" \
-	./main.ts
+	./src/main.ts
 fi
