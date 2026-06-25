@@ -16,3 +16,8 @@ format:
 	@deno task format
 
 
+www:
+
+	@deno task serve
+
+
