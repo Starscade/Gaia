@@ -15,8 +15,8 @@ print_status() {
 	printf "\n \033[1;3${COLOR}m${STATUS}\033[0m\n\n"
 }
 
-( ./scripts/auto-version.sh \
-	&& deno task make \
+( deno task make \
+	&& ./scripts/auto-version.sh \
 	&& install -m 755 _gaia "${INSTALL_DIR}/${INSTALL_NAME}" \
 	&& rm -v _gaia \
 	&& print_status
