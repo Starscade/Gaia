@@ -2,7 +2,8 @@ import Gaia from '@gaia'
 import { load } from '@dotenv'
 import { parseArgs } from '@parse-args'
 
-const LOCAL_STORAGE_DIR = '/tmp/localStorage'
+const LOCAL_STORAGE_DIR = Deno.env.get('GAIA_STORAGE_DIR') ??
+	'/tmp/localStorage'
 
 try {
 	Deno.mkdirSync(LOCAL_STORAGE_DIR)
@@ -81,7 +82,7 @@ const INTELLECT = Deno.env.get('GAIA_INTELLECT')
 const MODEL = Deno.env.get('GAIA_MODEL')
 const NSFW = Deno.env.get('GAIA_CENSOR_POLICY')
 const PERSONA = Deno.env.get('GAIA_PERSONA')
-const VERSION = 'v0.6.5 (main)'
+const VERSION = 'v0.6.6 (main)'
 
 const AI = new Gaia({
 	api_key: API_KEY,
