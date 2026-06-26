@@ -37,7 +37,7 @@ Set `export GAIA_API_KEY="your-gemini-key"` or use a `.env`.
 > `gaia --echo | sh` to execute the most recent response verbatim.
 
 > [!IMPORTANT]
-> Gaia does _not_ preserve context between query/response pairs. To continue a
+> Gaia does _not_ preserve context between prompts and responses. To continue a
 > conversation, use the `--related` flag:
 
 ```
