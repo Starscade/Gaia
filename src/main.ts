@@ -65,11 +65,14 @@ const FLAGS = parseArgs(Deno.args, {
 		'version',
 	],
 	string: [
-		'ask',
 		'env',
 		'read',
 	],
 })
+
+const USER_PROMPT = FLAGS._.length > 0
+	? String(FLAGS._[FLAGS._.length - 1])
+	: ''
 
 await load({
 	envPath: FLAGS.env,
@@ -82,7 +85,7 @@ const INTELLECT = Deno.env.get('GAIA_INTELLECT')
 const MODEL = Deno.env.get('GAIA_MODEL')
 const NSFW = Deno.env.get('GAIA_CENSOR_POLICY')
 const PERSONA = Deno.env.get('GAIA_PERSONA')
-const VERSION = 'v0.6.14 (main)'
+const VERSION = 'v0.6.15 (main)'
 
 const AI = new Gaia({
 	api_key: API_KEY,
@@ -159,7 +162,7 @@ if (!API_KEY) {
 const ask_obj: Ask = {
 	attachments: ATTACHMENTS,
 	preserve_context: FLAGS.related,
-	user_prompt: String(FLAGS.ask),
+	user_prompt: USER_PROMPT,
 }
 
 const result = await AI.ask({
