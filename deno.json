@@ -15,6 +15,6 @@
 		"format": "deno fmt",
 		"lint": "deno task format && deno lint && deno check",
 		"make": "deno task lint && deno compile --allow-env --allow-net --allow-read --allow-write --no-check --output _gaia ./src/main.ts",
-		"serve": "deno run --allow-net --allow-read jsr:@std/http/file-server ./test"
+		"serve": "deno run --allow-net --allow-read jsr:@std/http/file-server ./src"
 	}
 }
