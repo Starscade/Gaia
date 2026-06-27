@@ -26,11 +26,13 @@ export default class {
 		user_prompt = '',
 	} = {}) {
 		if (!user_prompt) {
-			const err_msg = 'No prompt provided!'
-			console.error('ERR:', err_msg)
-			return {
-				data: null,
-				err: err_msg,
+			if (attachments.length === 0) {
+				const err_msg = 'No prompt provided!'
+				console.error('ERR:', err_msg)
+				return {
+					data: null,
+					err: err_msg,
+				}
 			}
 		}
 

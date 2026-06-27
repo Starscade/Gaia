@@ -82,7 +82,7 @@ const INTELLECT = Deno.env.get('GAIA_INTELLECT')
 const MODEL = Deno.env.get('GAIA_MODEL')
 const NSFW = Deno.env.get('GAIA_CENSOR_POLICY')
 const PERSONA = Deno.env.get('GAIA_PERSONA')
-const VERSION = 'v0.6.13 (main)'
+const VERSION = 'v0.6.14 (main)'
 
 const AI = new Gaia({
 	api_key: API_KEY,
