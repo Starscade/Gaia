@@ -46,11 +46,9 @@
 			article {
 				overflow-y: auto;
 			}
-			article, footer {
-				padding: var(--pad);
-			}
 			body {
 				margin: 0;
+				padding: var(--pad);
 			}
 			button, input {
 				background: inherit;
@@ -60,20 +58,19 @@
 				font-size: inherit;
 			}
 			button {
-				border: var(--bord);
 				cursor: pointer;
-				padding: 0 1rem;
+				transition: scale .3s;
+			}
+			button:active {
+				transform: translateY(2px);
 			}
 			button:focus, button:hover {
-				background: var(--fg);
-				border-color: var(--fg);
-				color: var(--bg);
+				transform: scale(1.2, 1.2);
 			}
 			form {
 				box-sizing: border-box;
 			}
 			input {
-				border-bottom: var(--bord);
 				min-width: 0;
 				padding: 0.5rem;
 			}
@@ -83,14 +80,14 @@
 				max-width: 80ch;
 			}
 			section {
-				background: var(--fg);
-				color: var(--bg);
-				padding: var(--pad);
+				padding-bottom: .5rem;
 			}
-			.dark {
-				background: var(--bg);
-				border: var(--bord);
-				color: var(--fg);
+			section::before {
+				content: 'Gaia: ';
+				opacity: .5;
+			}
+			section.dark::before {
+				content: 'Me: ';
 			}
 			.flex {
 				display: flex;
@@ -177,18 +174,33 @@
 
 			chat_form.addEventListener('submit', async (e) => {
 				e.preventDefault()
-				const _prompt = chat_input.value.trim()
-				chat_input.value = ''
-				addBubble(_prompt, true)
-				addBubble()
-				const result = await ai.ask({
-					preserve_context: !query_params.has('goldfish'),
-					user_prompt: _prompt,
-				})
-				if (result.err) {
-					console.error(result.err)
+				if (e.submitter.id === 'uiSay') {
+					const _prompt = chat_input.value.trim()
+					chat_input.value = ''
+					addBubble(_prompt, true)
+					addBubble()
+					const result = await ai.ask({
+						preserve_context: !query_params.has('goldfish'),
+						user_prompt: _prompt,
+					})
+					if (result.err) {
+						console.error(result.err)
+					}
 				}
 			})
+
+			ui_goldfish.onclick = () => {
+				if (query_params.has('goldfish')) {
+					location.href = './'
+				} else {
+					location.href = './?goldfish'
+				}
+			}
+
+			if (query_params.has('goldfish')) {
+				const icon = ui_goldfish.getElementsByTagName('span')[0]
+				icon.textContent = 'visibility_off'
+			}
 
 			function addBubble(text_content, dark = false) {
 				const new_bubble = document.createElement('section')
