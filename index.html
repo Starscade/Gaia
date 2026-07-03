@@ -135,26 +135,35 @@
 					<input
 						autofocus
 						class="flex-fill"
-						placeholder="Chat..."
+						placeholder="Say..."
 					>
-					<button>OK</button>
+					<button id="uiAttach" type="button">
+						<span class="material-symbols-rounded">attach_file</span>
+					</button>
+					<button id="uiTogglePrivate" type="button">
+						<span class="material-symbols-rounded">visibility</span>
+					</button>
+					<button id="uiSay" type="submit">
+						<span class="material-symbols-rounded">send</span>
+					</button>
 				</form>
 			</footer>
 		</main>
 		<script type="module">
-			import Gaia from './src/gaia.js'
+			import Gaia from './gaia.js'
 
 			const query_params = new URLSearchParams(window.location.search)
 
 			const transcript = document.getElementById('transcript')
 			const chat_form = document.getElementsByTagName('form')[0]
 			const chat_input = document.getElementsByTagName('input')[0]
-			const okgo = document.getElementsByTagName('button')[0]
+			const okgo = document.getElementById('uiSay')
+			const ui_goldfish = document.getElementById('uiTogglePrivate')
 
 			const ai = new Gaia({
 				api_key: getApikey(),
 				persona:
-					'You are a chat agent named Gaia. Respond exclusively in plaintext.',
+					'You are a chat agent named Gaia. Respond exclusively in plaintext and emoji. Keep responses short enough to fit in a typical SMS.',
 				print_function: (text) => {
 					const last_bubble = transcript.lastElementChild
 					last_bubble.textContent += text
