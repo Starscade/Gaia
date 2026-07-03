@@ -135,8 +135,7 @@
 		<script type="module">
 			import Gaia from './src/gaia.js'
 
-			const current_url = new URL(location.href)
-			const url_params = new URLSearchParams(current_url.search)
+			const query_params = new URLSearchParams(window.location.search)
 
 			const transcript = document.getElementById('transcript')
 			const chat_form = document.getElementsByTagName('form')[0]
@@ -144,7 +143,7 @@
 			const okgo = document.getElementsByTagName('button')[0]
 
 			const ai = new Gaia({
-				api_key: url_params.get('api_key'),
+				api_key: getApikey(),
 				persona:
 					'You are a chat agent named Gaia. Respond exclusively in plaintext.',
 				print_function: (text) => {
@@ -165,7 +164,7 @@
 				addBubble(_prompt, true)
 				addBubble()
 				const result = await ai.ask({
-					preserve_context: !url_params.has('goldfish'),
+					preserve_context: !query_params.has('goldfish'),
 					user_prompt: _prompt,
 				})
 				if (result.err) {
@@ -181,6 +180,22 @@
 				}
 				transcript.appendChild(new_bubble)
 			}
+
+			function getApikey() {
+				const api_key = query_params.get('api_key')
+				if (api_key) {
+					localStorage.setItem('GAIA_API_KEY', api_key)
+				}
+				let gaia_api_key = localStorage.getItem('GAIA_API_KEY')
+				if (!gaia_api_key) {
+					const yes = prompt('Gaia API Key')
+					if (!yes) this.getApikey()
+					localStorage.setItem('GAIA_API_KEY', yes)
+					gaia_api_key = yes
+				}
+				return gaia_api_key
+			}
+
 		</script>
 	</body>
 </html>
