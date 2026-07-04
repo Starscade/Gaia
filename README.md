@@ -33,8 +33,8 @@ Set `export GAIA_API_KEY="your-gemini-key"` or use a `.env`.
 
 > [!CAUTION]
 > A safer way to execute responses directly is to verify their output before
-> piping (e.g. `gaia "What's my IP address?"`), then use
-> `gaia --echo | sh` to execute the most recent response verbatim.
+> piping (e.g. `gaia "What's my IP address?"`), then use `gaia --echo | sh` to
+> execute the most recent response verbatim.
 
 > [!IMPORTANT]
 > Gaia does _not_ preserve context between prompts and responses. To continue a
