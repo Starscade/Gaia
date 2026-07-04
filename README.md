@@ -25,15 +25,15 @@ Set `export GAIA_API_KEY="your-gemini-key"` or use a `.env`.
 
 ###### DIRECT EXECUTION
 
-`gaia --ask "What's my IP address?" | sh`
+`gaia "What's my IP address?" | sh`
 
 ###### FILE ANALYSIS
 
-`gaia --read README.md --ask "Summarize this..."`
+`gaia --read README.md "Summarize this..."`
 
 > [!CAUTION]
 > A safer way to execute responses directly is to verify their output before
-> piping (e.g. `gaia --ask "What's my IP address?"`), then use
+> piping (e.g. `gaia "What's my IP address?"`), then use
 > `gaia --echo | sh` to execute the most recent response verbatim.
 
 > [!IMPORTANT]
@@ -41,10 +41,24 @@ Set `export GAIA_API_KEY="your-gemini-key"` or use a `.env`.
 > conversation, use the `--related` flag:
 
 ```
-gaia --ask "I like root beer."
-gaia --related --ask "Do I like root beer?"
+gaia "I like root beer."
+gaia --related "Do I like root beer?"
 ```
 
 > [!TIP]
 > If you prefer using Gaia this way, you can make the behaviour permenant by
 > setting an alias: `alias ai='gaia --related'`.
+
+###### IN THE BROWSER
+
+```
+import Gaia from 'https://esm.sh/gh/Starscade/Gaia/gaia.js'
+
+const ai = new Gaia({
+	api_key: '<your_api_key>'
+})
+
+await ai.ask({
+	user_prompt: 'Ahoy!'
+})
+```
