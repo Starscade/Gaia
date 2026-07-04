@@ -64,15 +64,15 @@
 				font-family: inherit;
 				font-size: inherit;
 			}
-			button {
+			button:not(:disabled) {
 				cursor: pointer;
 				transition: scale .3s;
 			}
 			button:active {
 				transform: translateY(2px);
 			}
-			button:focus, button:hover {
-				transform: scale(1.2, 1.2);
+			button:disabled {
+				opacity: .5;
 			}
 			form {
 				box-sizing: border-box;
@@ -136,16 +136,19 @@
 			</article>
 			<footer>
 				<form class="flex flex-row flex-gap">
+					<button id="uiPersona" type="button">
+						<span class="material-symbols-rounded">theater_comedy</span>
+					</button>
 					<input
 						autofocus
 						class="flex-fill"
 						placeholder="Say..."
 					>
-					<button id="uiAttach" type="button">
-						<span class="material-symbols-rounded">attach_file</span>
+					<button disabled id="uiAttach" type="button">
+						<span class="material-symbols-rounded">attachment</span>
 					</button>
 					<button id="uiTogglePrivate" type="button">
-						<span class="material-symbols-rounded">visibility</span>
+						<span class="material-symbols-rounded">backspace</span>
 					</button>
 					<button id="uiSay" type="submit">
 						<span class="material-symbols-rounded">send</span>
@@ -163,11 +166,18 @@
 			const chat_input = document.getElementsByTagName('input')[0]
 			const okgo = document.getElementById('uiSay')
 			const ui_goldfish = document.getElementById('uiTogglePrivate')
+			const ui_persona = document.getElementById('uiPersona')
+
+			if (!localStorage.getItem('GAIA_PERSONA')) {
+				localStorage.setItem(
+					'GAIA_PERSONA',
+					'You are a chat agent named Gaia. Respond exclusively in plaintext and emoji. Keep responses short enough to fit in a typical SMS.'
+				)
+			}
 
 			const ai = new Gaia({
 				api_key: getApikey(),
-				persona:
-					'You are a chat agent named Gaia. Respond exclusively in plaintext and emoji. Keep responses short enough to fit in a typical SMS.',
+				persona: localStorage.getItem('GAIA_PERSONA'),
 				print_function: (text) => {
 					const last_bubble = transcript.lastElementChild
 					last_bubble.textContent += text
@@ -197,16 +207,20 @@
 			})
 
 			ui_goldfish.onclick = () => {
-				if (query_params.has('goldfish')) {
-					location.href = './'
-				} else {
-					location.href = './?goldfish'
+				const ok = confirm('Discard chat?')
+				if (ok) {
+					localStorage.setItem('GAIA_PERSONA', '')
+					localStorage.setItem('GAIA_TRANSCRIPT', '')
+					location.reload()
 				}
 			}
 
-			if (query_params.has('goldfish')) {
-				const icon = ui_goldfish.getElementsByTagName('span')[0]
-				icon.textContent = 'visibility_off'
+			ui_persona.onclick = () => {
+				const ok = prompt("Describe Gaia's persona...", localStorage.getItem('GAIA_PERSONA'))
+				if (ok) {
+					localStorage.setItem('GAIA_PERSONA', ok)
+					ai.PERSONA = localStorage.getItem('GAIA_PERSONA')
+				}
 			}
 
 			function addBubble(text_content, dark = false) {

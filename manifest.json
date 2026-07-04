@@ -1,0 +1,21 @@
+{
+	"short_name": "Gaia",
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "black",
+	"background_color": "black",
+	"icons": [
+		{
+			"src": "./icon-192-any.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "./icon-512-mask.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	]
+}
