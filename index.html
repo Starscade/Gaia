@@ -6,7 +6,11 @@
 			rel="icon"
 		>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=attach_file,send,visibility,visibility_off"
+			href="manifest.json"
+			rel="manifest"
+		>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=attachment,backspace,send,theater_comedy"
 			rel="stylesheet"
 		>
 		<meta charset="UTF-8">
@@ -45,9 +49,12 @@
 			}
 			article {
 				overflow-y: auto;
+				overscroll-behavior-y: none;
 			}
 			body {
+				box-sizing: border-box;
 				margin: 0;
+				overscroll-behavior-y: none;
 				padding: var(--pad);
 			}
 			button, input {
@@ -180,7 +187,7 @@
 					addBubble(_prompt, true)
 					addBubble()
 					const result = await ai.ask({
-						preserve_context: !query_params.has('goldfish'),
+						preserve_context: true,
 						user_prompt: _prompt,
 					})
 					if (result.err) {
@@ -218,13 +225,15 @@
 				}
 				let gaia_api_key = localStorage.getItem('GAIA_API_KEY')
 				if (!gaia_api_key) {
-					const yes = prompt('Gaia API Key')
-					if (!yes) this.getApikey()
-					localStorage.setItem('GAIA_API_KEY', yes)
-					gaia_api_key = yes
+					const ok = prompt('Gaia API Key')
+					if (!ok) this.getApikey()
+					localStorage.setItem('GAIA_API_KEY', ok)
+					gaia_api_key = ok
 				}
 				return gaia_api_key
 			}
+
+			navigator.serviceWorker.register('nil.js')
 
 		</script>
 	</body>
