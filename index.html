@@ -68,7 +68,7 @@
 				cursor: pointer;
 				transition: scale .3s;
 			}
-			button:active {
+			button:not(:active) {
 				transform: translateY(2px);
 			}
 			button:disabled {
@@ -121,6 +121,9 @@
 			}
 			.material-symbols-rounded {
 				display: flex;
+			}
+			#uiTogglePrivate {
+				display: none;
 			}
 		</style>
 	</head>
@@ -206,7 +209,7 @@
 				}
 			})
 
-			ui_goldfish.onclick = () => {
+			okgo.oncontextmenu = () => {
 				const ok = confirm('Discard chat?')
 				if (ok) {
 					localStorage.setItem('GAIA_PERSONA', '')
