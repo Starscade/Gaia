@@ -199,6 +199,8 @@
 				if (e.submitter.id === 'uiSay') {
 					const _prompt = chat_input.value.trim()
 					chat_input.value = ''
+					if (!_prompt) return
+					chat_input.value = ''
 					addBubble(_prompt, true)
 					addBubble()
 					const result = await ai.ask({
