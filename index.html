@@ -42,14 +42,16 @@
 				color: var(--fg);
 				font-family: 'Outfit', monospace;
 				font-size: var(--pt);
+				height: 100dvh;
+				height: var(--visual-viewport-height);
 				user-select: none;
-			}
-			:root, article, body, main {
-				height: 100%;
 			}
 			article {
 				overflow-y: auto;
 				overscroll-behavior-y: none;
+			}
+			article, body, main {
+				height: 100%;
 			}
 			body {
 				box-sizing: border-box;
@@ -250,8 +252,21 @@
 				return gaia_api_key
 			}
 
-			navigator.serviceWorker.register('nil.js')
+			function setViewportHeight() {
+				const height = window.visualViewport.height
+				document.documentElement.style.setProperty(
+					'--visual-viewport-height',
+					`${height}px`
+				)
+			}
 
+			window.visualViewport.addEventListener('resize', () => {
+				setViewportHeight()
+			})
+
+			setViewportHeight()
+
+			navigator.serviceWorker.register('nil.js')
 		</script>
 	</body>
 </html>
