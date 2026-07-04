@@ -68,13 +68,13 @@
 			}
 			button:not(:disabled) {
 				cursor: pointer;
-				transition: scale .3s;
+				transition: scale 0.3s;
 			}
 			button:not(:active) {
 				transform: translateY(2px);
 			}
 			button:disabled {
-				opacity: .5;
+				opacity: 0.5;
 			}
 			form {
 				box-sizing: border-box;
@@ -89,11 +89,11 @@
 				max-width: 80ch;
 			}
 			section {
-				padding-bottom: .5rem;
+				padding-bottom: 0.5rem;
 			}
 			section::before {
 				content: 'Gaia: ';
-				opacity: .5;
+				opacity: 0.5;
 			}
 			section.dark::before {
 				content: 'Me: ';
@@ -176,7 +176,7 @@
 			if (!localStorage.getItem('GAIA_PERSONA')) {
 				localStorage.setItem(
 					'GAIA_PERSONA',
-					'You are a chat agent named Gaia. Respond exclusively in plaintext and emoji. Keep responses short enough to fit in a typical SMS.'
+					'You are a chat agent named Gaia. Respond exclusively in plaintext and emoji. Keep responses short enough to fit in a typical SMS.',
 				)
 			}
 
@@ -221,7 +221,10 @@
 			}
 
 			ui_persona.onclick = () => {
-				const ok = prompt("Describe Gaia's persona...", localStorage.getItem('GAIA_PERSONA'))
+				const ok = prompt(
+					"Describe Gaia's persona...",
+					localStorage.getItem('GAIA_PERSONA'),
+				)
 				if (ok) {
 					localStorage.setItem('GAIA_PERSONA', ok)
 					ai.PERSONA = localStorage.getItem('GAIA_PERSONA')
