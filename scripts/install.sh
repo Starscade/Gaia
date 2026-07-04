@@ -16,7 +16,7 @@ print_status() {
 }
 
 ( deno task make \
-	&& mkdir -p "${INSTALL_DIR}/${INSTALL_NAME}" \
+	&& mkdir -p "$INSTALL_DIR" \
 	&& install -m 755 _gaia "${INSTALL_DIR}/${INSTALL_NAME}" \
 	&& rm -v _gaia \
 	&& print_status
