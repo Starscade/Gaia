@@ -2,6 +2,11 @@
 	"short_name": "Gaia",
 	"start_url": ".",
 	"display": "standalone",
+	"display_override": [
+		"window-controls-overlay",
+		"fullscreen",
+		"minimal-ui"
+	],
 	"theme_color": "black",
 	"background_color": "black",
 	"icons": [
