@@ -1,6 +1,6 @@
 #!/bin/sh
 
-INSTALL_DIR="${GAIA_INSTALL_DIR:-$HOME/.local/bin}"
+INSTALL_DIR="${GAIA_INSTALL_DIR:-${HOME}/.local/bin}"
 INSTALL_NAME=gaia
 
 test -n "$1" && INSTALL_NAME="$1"
@@ -16,6 +16,7 @@ print_status() {
 }
 
 ( deno task make \
+	&& mkdir -p "${INSTALL_DIR}/${INSTALL_NAME}" \
 	&& install -m 755 _gaia "${INSTALL_DIR}/${INSTALL_NAME}" \
 	&& rm -v _gaia \
 	&& print_status
