@@ -3,6 +3,18 @@
 INSTALL_DIR="${GAIA_INSTALL_DIR:-${HOME}/.local/bin}"
 INSTALL_NAME=gaia
 
+check_command() {
+	CMD_NAME="$1"
+	command -v "$CMD_NAME" > /dev/null 2>&1 \
+		|| {
+			printf " \033[1m${CMD_NAME}\033[0m not found. Is it installed?\n" \
+			&& exit
+		}
+}
+
+check_command deno
+check_command make
+
 test -n "$1" && INSTALL_NAME="$1"
 
 print_status() {
