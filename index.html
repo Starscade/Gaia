@@ -190,7 +190,8 @@
 
 			const ai = new Gaia({
 				api_key: getApikey(),
-				persona: localStorage.getItem('GAIA_PERSONA') + ' Respond exclusively in plaintext and/or emoji. Always keep your responses brief enough to fit in a standard SMS.',
+				persona: localStorage.getItem('GAIA_PERSONA') +
+					' Respond exclusively in plaintext and/or emoji. Always keep your responses brief enough to fit in a standard SMS.',
 				print_function: (text) => {
 					const last_bubble = transcript.lastElementChild
 					last_bubble.textContent += text
@@ -281,7 +282,7 @@
 				const file = input.files[0]
 				console.log(file)
 				if (!file) return null
-				return new Promise( (resolve) => {
+				return new Promise((resolve) => {
 					const reader = new FileReader()
 					reader.onload = (event) => {
 						const base64Data = event.target.result.split(',')[1]
