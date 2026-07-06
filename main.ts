@@ -174,3 +174,5 @@ const result = await AI.ask({
 if (result.err) {
 	Deno.exit(1)
 }
+
+AI.STDOUT('\n')
