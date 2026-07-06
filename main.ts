@@ -111,12 +111,13 @@ if (PERSONA) {
 }
 
 if (FLAGS.version) {
-	AI.STDOUT(VERSION)
+	AI.STDOUT(`${VERSION}\n`)
 	Deno.exit()
 }
 
 if (FLAGS['print-env']) {
 	AI.printEnv()
+	AI.STDOUT('\n')
 	Deno.exit()
 }
 
@@ -127,6 +128,7 @@ if (FLAGS.echo) {
 
 if (FLAGS.transcript) {
 	AI.printTranscript()
+	AI.STDOUT('\n')
 	Deno.exit()
 }
 
