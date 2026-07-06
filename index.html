@@ -124,6 +124,9 @@
 			.material-symbols-rounded {
 				display: flex;
 			}
+			#hiddenElements {
+				display: none;
+			}
 			#uiTogglePrivate {
 				display: none;
 			}
@@ -149,7 +152,7 @@
 						class="flex-fill"
 						placeholder="Prompt…"
 					>
-					<button disabled id="uiAttach" type="button">
+					<button id="uiAttach" type="button">
 						<span class="material-symbols-rounded">attachment</span>
 					</button>
 					<button id="uiTogglePrivate" type="button">
@@ -161,28 +164,33 @@
 				</form>
 			</footer>
 		</main>
+		<div id="hiddenElements">
+			<input id="fileInput" type="file">
+		</div>
 		<script type="module">
 			import Gaia from './gaia.js'
 
 			const query_params = new URLSearchParams(window.location.search)
 
+			const input = document.getElementById('fileInput')
 			const transcript = document.getElementById('transcript')
 			const chat_form = document.getElementsByTagName('form')[0]
 			const chat_input = document.getElementsByTagName('input')[0]
 			const okgo = document.getElementById('uiSay')
+			const ui_attach = document.getElementById('uiAttach')
 			const ui_goldfish = document.getElementById('uiTogglePrivate')
 			const ui_persona = document.getElementById('uiPersona')
 
 			if (!localStorage.getItem('GAIA_PERSONA')) {
 				localStorage.setItem(
 					'GAIA_PERSONA',
-					'You are a chat agent named Gaia. Respond exclusively in plaintext. If it truly enhances response, sprinkle in the occasional emoji. Never use markdown. If you need to emphasize something, use CAPITALS. Keep responses short enough to fit in a typical SMS.',
+					'Your name is Gaia.',
 				)
 			}
 
 			const ai = new Gaia({
 				api_key: getApikey(),
-				persona: localStorage.getItem('GAIA_PERSONA'),
+				persona: localStorage.getItem('GAIA_PERSONA') + ' Respond exclusively in plaintext and/or emoji. Always keep your responses brief enough to fit in a standard SMS.',
 				print_function: (text) => {
 					const last_bubble = transcript.lastElementChild
 					last_bubble.textContent += text
@@ -203,10 +211,18 @@
 					chat_input.value = ''
 					addBubble(_prompt, true)
 					addBubble()
-					const result = await ai.ask({
+
+					const ask_obj = {
 						preserve_context: true,
 						user_prompt: _prompt,
-					})
+					}
+
+					const f = await getAttachment()
+					if (f) ask_obj.attachments = [f]
+
+					console.log(ask_obj)
+
+					const result = await ai.ask(ask_obj)
 					if (result.err) {
 						console.error(result.err)
 					}
@@ -220,6 +236,10 @@
 					localStorage.setItem('GAIA_TRANSCRIPT', '')
 					location.reload()
 				}
+			}
+
+			ui_attach.onclick = () => {
+				input.click()
 			}
 
 			ui_persona.onclick = () => {
@@ -255,6 +275,25 @@
 					gaia_api_key = ok
 				}
 				return gaia_api_key
+			}
+
+			async function getAttachment() {
+				const file = input.files[0]
+				console.log(file)
+				if (!file) return null
+				return new Promise( (resolve) => {
+					const reader = new FileReader()
+					reader.onload = (event) => {
+						const base64Data = event.target.result.split(',')[1]
+						const return_obj = {
+							data: base64Data,
+							mime_type: file.type,
+						}
+						console.log(return_obj)
+						resolve(return_obj)
+					}
+					reader.readAsDataURL(file)
+				})
 			}
 
 			function setViewportHeight() {
