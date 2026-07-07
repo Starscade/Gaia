@@ -92,11 +92,11 @@
 				padding-bottom: 0.5rem;
 			}
 			section::before {
-				content: 'Gaia: ';
+				content: 'Me: ';
 				opacity: 0.5;
 			}
-			section.dark::before {
-				content: 'Me: ';
+			section.is_agent::before {
+				content: 'Gaia: ';
 			}
 			.flex {
 				display: flex;
@@ -191,10 +191,14 @@
 			const ai = new Gaia({
 				api_key: getApikey(),
 				persona: localStorage.getItem('GAIA_PERSONA') +
-					' Respond exclusively in plaintext and/or emoji. Always keep your responses brief enough to fit in a standard SMS.',
+					' Respond exclusively in plaintext. No markdown. You may use the occasional emoji no more than two or three times per ten responses. Always keep your responses brief enough to fit in a standard SMS.',
 				print_function: (text) => {
 					const last_bubble = transcript.lastElementChild
-					last_bubble.textContent += text
+					if (last_bubble.classList.contains('is_agent')) {
+						last_bubble.textContent += text
+					} else {
+						addBubble(text, true)
+					}
 					transcript.parentElement.scrollBy(0, 1000)
 				},
 			})
@@ -210,8 +214,7 @@
 					chat_input.value = ''
 					if (!_prompt) return
 					chat_input.value = ''
-					addBubble(_prompt, true)
-					addBubble()
+					addBubble(_prompt)
 
 					const ask_obj = {
 						preserve_context: true,
@@ -254,11 +257,11 @@
 				}
 			}
 
-			function addBubble(text_content, dark = false) {
+			function addBubble(text_content, is_agent = false) {
 				const new_bubble = document.createElement('section')
 				new_bubble.textContent = text_content
-				if (dark) {
-					new_bubble.classList.add('dark')
+				if (is_agent) {
+					new_bubble.classList.add('is_agent')
 				}
 				transcript.appendChild(new_bubble)
 			}
