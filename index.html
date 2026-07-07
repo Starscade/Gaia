@@ -281,7 +281,7 @@
 				let gaia_api_key = localStorage.getItem('GAIA_API_KEY')
 				if (!gaia_api_key) {
 					const ok = prompt('Gaia API Key')
-					if (!ok) this.getApikey()
+					if (!ok) getApikey()
 					localStorage.setItem('GAIA_API_KEY', ok)
 					gaia_api_key = ok
 				}
