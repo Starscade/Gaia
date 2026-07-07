@@ -3,7 +3,7 @@
 
 all:
 
-	@./scripts/install.sh
+	@./install.sh
 
 
 check:
