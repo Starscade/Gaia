@@ -10,7 +10,7 @@
 			rel="manifest"
 		>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=attachment,note_stack_add,send,theater_comedy"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=attachment,close,note_stack_add,send,theater_comedy"
 			rel="stylesheet"
 		>
 		<meta charset="UTF-8">
@@ -133,6 +133,19 @@
 			#hiddenElements {
 				display: none;
 			}
+			#attachment-bubble {
+				align-items: center;
+				background: #222;
+				border-radius: 0.5rem;
+				padding: 0.5rem;
+				padding-left: 1rem;
+			}
+			#attachment-container {
+				display: none;
+				margin-bottom: 1rem;
+				margin-left: auto;
+				width: fit-content;
+			}
 		</style>
 	</head>
 	<body>
@@ -151,6 +164,12 @@
 				</div>
 			</article>
 			<footer>
+				<div id="attachment-container" class="flex flex-row">
+					<div id="attachment-bubble" class="flex flex-row">
+						<span id="attachment-name"></span>
+						<button id="uiUnattach" type="button"><span class="material-symbols-rounded">close</span></button>
+					</div>
+				</div>
 				<form class="flex flex-row flex-gap">
 					<button id="uiPersona" type="button">
 						<span class="material-symbols-rounded">theater_comedy</span>
@@ -185,6 +204,9 @@
 			const ui_attach = document.getElementById('uiAttach')
 			const ui_goldfish = document.getElementById('uiTogglePrivate')
 			const ui_persona = document.getElementById('uiPersona')
+			const attachment_container = document.getElementById('attachment-container')
+			const attachment_name = document.getElementById('attachment-name')
+			const ui_unattach = document.getElementById('uiUnattach')
 
 			if (!localStorage.getItem('GAIA_PERSONA')) {
 				localStorage.setItem(
@@ -199,7 +221,7 @@
 					' Respond exclusively in plaintext. No markdown. You may use the occasional emoji no more than two or three times per ten responses. Always keep your responses brief enough to fit in a standard SMS.',
 				print_function: (text) => {
 					const last_bubble = transcript.lastElementChild
-					if (last_bubble.classList.contains('is_agent')) {
+					if (last_bubble && last_bubble.classList.contains('is_agent')) {
 						last_bubble.textContent += text
 					} else {
 						addBubble(text, true)
@@ -212,14 +234,25 @@
 				chat_input.focus()
 			}
 
+			input.onchange = () => {
+				if (input.files.length > 0) {
+					attachment_name.textContent = input.files[0].name
+					attachment_container.style.display = 'block'
+				}
+			}
+
+			ui_unattach.onclick = () => {
+				input.value = ''
+				attachment_container.style.display = 'none'
+			}
+
 			chat_form.addEventListener('submit', async (e) => {
 				e.preventDefault()
 				if (e.submitter.id === 'uiSay') {
 					const _prompt = chat_input.value.trim()
+					if (!_prompt && input.files.length === 0) return
 					chat_input.value = ''
-					if (!_prompt) return
-					chat_input.value = ''
-					addBubble(_prompt)
+					addBubble(_prompt || '[Attachment]')
 
 					const ask_obj = {
 						preserve_context: true,
@@ -227,9 +260,10 @@
 					}
 
 					const f = await getAttachment()
-					if (f) ask_obj.attachments = [f]
-
-					console.log(ask_obj)
+					if (f) {
+						ask_obj.attachments = [f]
+						ui_unattach.click()
+					}
 
 					const result = await ai.ask(ask_obj)
 					if (result.err) {
@@ -295,7 +329,6 @@
 
 			async function getAttachment() {
 				const file = input.files[0]
-				console.log(file)
 				if (!file) return null
 				return new Promise((resolve) => {
 					const reader = new FileReader()
@@ -305,7 +338,6 @@
 							data: base64Data,
 							mime_type: file.type,
 						}
-						console.log(return_obj)
 						resolve(return_obj)
 					}
 					reader.readAsDataURL(file)
