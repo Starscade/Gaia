@@ -252,7 +252,7 @@
 					const _prompt = chat_input.value.trim()
 					if (!_prompt && input.files.length === 0) return
 					chat_input.value = ''
-					addBubble(_prompt || '[Attachment]')
+					addBubble(_prompt || `[${input.files[0].name}]`)
 
 					const ask_obj = {
 						preserve_context: true,
@@ -268,7 +268,7 @@
 					const result = await ai.ask(ask_obj)
 					if (result.err) {
 						console.error(result.err)
-						addBubble(result.err, true, true)
+						addBubble(result.err[0].error.message, true, true)
 					}
 				}
 			})
