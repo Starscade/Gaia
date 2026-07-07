@@ -89,6 +89,9 @@
 				margin: auto;
 				max-width: 80ch;
 			}
+			section {
+				user-select: text;
+			}
 			section::before {
 				content: 'Me: ';
 				opacity: 0.5;
@@ -204,10 +207,6 @@
 					}
 					transcript.parentElement.scrollBy(0, 1000)
 				},
-			})
-
-			document.body.addEventListener('click', () => {
-				chat_input.focus()
 			})
 
 			chat_form.addEventListener('submit', async (e) => {
