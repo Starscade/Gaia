@@ -265,6 +265,9 @@
 
 			function addBubble(text_content, is_agent = false, is_err = false) {
 				const new_bubble = document.createElement('section')
+				new_bubble.onclick = (e) => {
+					navigator.clipboard.writeText(e.target.textContent)
+				}
 				new_bubble.textContent = text_content
 				if (is_agent) {
 					new_bubble.classList.add('is_agent')
