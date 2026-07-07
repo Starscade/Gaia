@@ -118,7 +118,7 @@ export default class {
 
 		if (!response.ok) {
 			const json_response = await response.json()
-			console.error('ERR:', json_response)
+			console.error(json_response)
 			return {
 				data: null,
 				err: json_response,
