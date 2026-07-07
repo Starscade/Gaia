@@ -65,7 +65,15 @@ export default class {
 		// console.info('CONTENTS:', contents)
 
 		contents.push({ role: 'user', parts: user_parts })
-		localStorage.setItem(this.TRANSCRIPT_STORAGE_KEY, JSON.stringify(contents))
+		try {
+			localStorage.setItem(this.TRANSCRIPT_STORAGE_KEY, JSON.stringify(contents))
+		} catch (err) {
+			console.error('ERR:', err)
+			return {
+				data: null,
+				err: err,
+			}
+		}
 
 		const json_body = {
 			contents: contents,

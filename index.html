@@ -33,6 +33,7 @@
 			:root {
 				--bg: Black;
 				--bord: 2px solid currentColor;
+				--err: Firebrick;
 				--fg: Whitesmoke;
 				--font: monospace;
 				--pad: 1rem;
@@ -88,15 +89,17 @@
 				margin: auto;
 				max-width: 80ch;
 			}
-			section {
-				padding-bottom: 0.5rem;
-			}
 			section::before {
 				content: 'Me: ';
 				opacity: 0.5;
 			}
 			section.is_agent::before {
 				content: 'Gaia: ';
+			}
+			section.is_err::before {
+				color: var(--err);
+				content: 'Error: ';
+				opacity: 1;
 			}
 			.flex {
 				display: flex;
@@ -229,6 +232,7 @@
 					const result = await ai.ask(ask_obj)
 					if (result.err) {
 						console.error(result.err)
+						addBubble(result.err, true, true)
 					}
 				}
 			})
@@ -257,11 +261,14 @@
 				}
 			}
 
-			function addBubble(text_content, is_agent = false) {
+			function addBubble(text_content, is_agent = false, is_err = false) {
 				const new_bubble = document.createElement('section')
 				new_bubble.textContent = text_content
 				if (is_agent) {
 					new_bubble.classList.add('is_agent')
+				}
+				if (is_err) {
+					new_bubble.classList.add('is_err')
 				}
 				transcript.appendChild(new_bubble)
 			}
