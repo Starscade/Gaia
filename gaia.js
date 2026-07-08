@@ -4,8 +4,7 @@ export default class {
 		censor_policy = 'BLOCK_ONLY_HIGH',
 		intellect = 'MINIMAL',
 		model = 'gemini-flash-lite-latest',
-		persona =
-			`Your name is Gaia. You are a CLI tool. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-compliant sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Always use the newest syntax if dealing with other languages. Never use node.js: use Deno instead. Prefer tab indentation to spaces. Never introduce yourself.`,
+		persona = 'Your name is Gaia. Respond in short, plaintext SMS.',
 		print_function = (text) => {
 			console.log(text)
 		},
@@ -66,7 +65,10 @@ export default class {
 
 		contents.push({ role: 'user', parts: user_parts })
 		try {
-			localStorage.setItem(this.TRANSCRIPT_STORAGE_KEY, JSON.stringify(contents))
+			localStorage.setItem(
+				this.TRANSCRIPT_STORAGE_KEY,
+				JSON.stringify(contents),
+			)
 		} catch (err) {
 			console.error('ERR:', err)
 			return {
