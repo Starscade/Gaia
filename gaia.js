@@ -1,18 +1,18 @@
 export default class {
 	constructor({
 		api_key = '',
-		censor_policy = 'BLOCK_ONLY_HIGH',
 		intellect = 'MINIMAL',
 		model = 'gemini-flash-lite-latest',
+		nsfw = false,
 		persona = 'Your name is Gaia. Respond in short, plaintext SMS.',
 		print_function = (text) => {
 			console.log(text)
 		},
 	} = {}) {
 		this.API_KEY = api_key
-		this.CENSOR_POLICY = censor_policy
 		this.INTELLECT = intellect
 		this.MODEL = model
+		this.NSFW = nsfw
 		this.PERSONA = persona
 		this.STDOUT = print_function
 		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TRANSCRIPT'
@@ -85,19 +85,19 @@ export default class {
 			safetySettings: [
 				{
 					category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-					threshold: this.CENSOR_POLICY,
+					threshold: this.#getCensorPolicy(),
 				},
 				{
 					category: 'HARM_CATEGORY_HARASSMENT',
-					threshold: this.CENSOR_POLICY,
+					threshold: this.#getCensorPolicy(),
 				},
 				{
 					category: 'HARM_CATEGORY_HATE_SPEECH',
-					threshold: this.CENSOR_POLICY,
+					threshold: this.#getCensorPolicy(),
 				},
 				{
 					category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-					threshold: this.CENSOR_POLICY,
+					threshold: this.#getCensorPolicy(),
 				},
 			],
 			system_instruction: { parts: [{ text: this.PERSONA }] },
@@ -176,12 +176,16 @@ export default class {
 		}
 	}
 
+	#getCensorPolicy() {
+		return this.NSFW ? 'OFF' : 'BLOCK_ONLY_HIGH'
+	}
+
 	printEnv() {
 		const json_env = {
 			GAIA_API_KEY: this.API_KEY,
-			GAIA_CENSOR_POLICY: this.CENSOR_POLICY,
 			GAIA_INTELLECT: this.INTELLECT,
 			GAIA_MODEL: this.MODEL,
+			GAIA_NSFW: this.NSFW,
 			GAIA_PERSONA: this.PERSONA,
 		}
 		const current_environment = Object.entries(json_env).map(([key, value]) =>

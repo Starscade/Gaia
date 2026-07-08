@@ -83,7 +83,7 @@ const API_KEY = Deno.env.get('GAIA_API_KEY')
 const ATTACHMENTS: Attachment[] = []
 const INTELLECT = Deno.env.get('GAIA_INTELLECT')
 const MODEL = Deno.env.get('GAIA_MODEL')
-const NSFW = Deno.env.get('GAIA_CENSOR_POLICY')
+const NSFW = Deno.env.get('GAIA_NSFW')
 const PERSONA = Deno.env.get('GAIA_PERSONA') ??
 	'Your name is Gaia. You are a CLI tool. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-compliant sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Always use the newest syntax if dealing with other languages. Never use node.js: use Deno instead. Prefer tab indentation to spaces. Never introduce yourself.'
 const VERSION = 'v0.7.14 (main)'
@@ -103,9 +103,14 @@ if (MODEL) {
 	AI.MODEL = MODEL
 }
 
-if (NSFW) {
-	AI.CENSOR_POLICY = NSFW
-}
+AI.NSFW = FLAGS.nsfw || [
+	'true',
+	'1',
+	'yes',
+	'on',
+].includes(
+	NSFW?.toLowerCase().trim() ?? '',
+)
 
 if (PERSONA) {
 	AI.PERSONA = PERSONA
@@ -131,10 +136,6 @@ if (FLAGS.transcript) {
 	AI.printTranscript()
 	AI.STDOUT('\n')
 	Deno.exit()
-}
-
-if (FLAGS.nsfw) {
-	AI.CENSOR_POLICY = 'OFF'
 }
 
 if (FLAGS.read) {
