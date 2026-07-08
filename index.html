@@ -50,6 +50,7 @@
 			article {
 				overflow-y: auto;
 				overscroll-behavior-y: none;
+				padding: 4rem 1rem 4rem 1rem;
 			}
 			article, body, main {
 				height: 100%;
@@ -58,7 +59,6 @@
 				box-sizing: border-box;
 				margin: 0;
 				overscroll-behavior-y: none;
-				padding: var(--pad);
 			}
 			button, input {
 				background: inherit;
@@ -77,11 +77,31 @@
 			button:disabled {
 				opacity: 0.5;
 			}
+			footer {
+				background-image: linear-gradient(
+					to top,
+					var(--bg) 80%,
+					transparent
+				);
+				bottom: 0;
+				left: 0;
+				padding: 1rem;
+				right: 0;
+			}
+			footer, header {
+				position: fixed;
+			}
 			form {
 				box-sizing: border-box;
 			}
-			footer {
-				margin-bottom: 1rem;
+			header {
+				background-image: linear-gradient(
+					var(--bg) 80%,
+					transparent
+				);
+				left: 0;
+				padding: 1rem 1rem 2rem 1rem;
+				right: 0;
 			}
 			input {
 				min-width: 0;
@@ -150,12 +170,6 @@
 	</head>
 	<body>
 		<main class="flex flex-gap">
-			<header class="flex flex-row">
-				<span class="flex-fill"></span>
-				<button id="uiTogglePrivate" title="Discard chat..." type="button">
-					<span class="material-symbols-rounded">note_stack_add</span>
-				</button>
-			</header>
 			<article class="flex flex-fill">
 				<div
 					class="flex flex-fill flex-gap flex-end"
@@ -163,6 +177,11 @@
 				>
 				</div>
 			</article>
+			<header class="flex flex-row">
+				<button id="uiTogglePrivate" title="Discard chat..." type="button">
+					<span class="material-symbols-rounded">note_stack_add</span>
+				</button>
+			</header>
 			<footer>
 				<div id="attachment-container" class="flex flex-row">
 					<div id="attachment-bubble" class="flex flex-row">
