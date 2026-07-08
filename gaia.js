@@ -42,8 +42,6 @@ export default class {
 			}
 		}
 
-		// console.info('TRANSCRIPT:', transcript)
-
 		const user_parts = [{ text: user_prompt }]
 		for (const file of attachments) {
 			user_parts.push({
@@ -60,8 +58,6 @@ export default class {
 				parts: msg.parts || [{ text: msg.text }],
 			})),
 		]
-
-		// console.info('CONTENTS:', contents)
 
 		contents.push({ role: 'user', parts: user_parts })
 		try {
