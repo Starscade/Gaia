@@ -234,8 +234,11 @@
 				)
 			}
 
+			const nsfw = query_params.has('nsfw') ? 'OFF' : 'BLOCK_ONLY_HIGH'
+
 			const ai = new Gaia({
 				api_key: getApikey(),
+				censor_policy: nsfw,
 				persona: localStorage.getItem('GAIA_PERSONA') +
 					' Respond exclusively in plaintext. No markdown. You may use the occasional emoji no more than two or three times per ten responses. Always keep your responses brief enough to fit in a standard SMS.',
 				print_function: (text) => {
