@@ -70,9 +70,27 @@ const FLAGS = parseArgs(Deno.args, {
 	],
 })
 
-const USER_PROMPT = FLAGS._.length > 0
-	? String(FLAGS._[FLAGS._.length - 1])
-	: ''
+const PROMPT_ARG = FLAGS._.length > 0 ? String(FLAGS._[FLAGS._.length - 1]) : ''
+let PROMPT_PAD = ''
+let PROMPT_STDIN = ''
+
+if (!Deno.stdin.isTerminal()) {
+	const raw = await new Response(Deno.stdin.readable).arrayBuffer()
+	const STDIN = new TextDecoder().decode(raw).trim()
+
+	if (STDIN.length > 0) {
+		PROMPT_STDIN = STDIN
+	}
+}
+
+if (PROMPT_ARG || PROMPT_STDIN) {
+	PROMPT_PAD = '\n\n'
+}
+
+const USER_PROMPT = [
+	PROMPT_ARG,
+	PROMPT_STDIN,
+].join(PROMPT_PAD).trim()
 
 await load({
 	envPath: FLAGS.env,
@@ -86,7 +104,7 @@ const MODEL = Deno.env.get('GAIA_MODEL')
 const NSFW = Deno.env.get('GAIA_NSFW')
 const PERSONA = Deno.env.get('GAIA_PERSONA') ??
 	'Your name is Gaia. You are a CLI tool. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-compliant sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Always use the newest syntax if dealing with other languages. Never use node.js: use Deno instead. Prefer tab indentation to spaces. Never introduce yourself.'
-const VERSION = 'v0.7.37 (main)'
+const VERSION = 'v0.7.38 (dev)'
 
 const AI = new Gaia({
 	api_key: API_KEY,
