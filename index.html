@@ -16,7 +16,7 @@
 		<meta charset="UTF-8">
 		<meta name="theme-color" content="Black">
 		<meta
-			content="initial-scale=1,maximum-scale=1,user-scalable=no,width=device-width"
+			content="initial-scale=1,interactive-widget=resizes-content,maximum-scale=1,user-scalable=no,width=device-width"
 			name="viewport"
 		>
 		<title>&zwj;</title>
@@ -43,7 +43,6 @@
 				color: var(--fg);
 				font-family: 'Outfit', monospace;
 				font-size: var(--pt);
-				height: 100dvh;
 				user-select: none;
 			}
 			article {
@@ -57,11 +56,9 @@
 				overflow-y: auto;
 				overscroll-behavior-y: none;
 			}
-			article, body, main {
-				height: 100%;
-			}
 			body {
 				box-sizing: border-box;
+				height: 100dvh;
 				margin: 0;
 				overscroll-behavior-y: none;
 				padding-top: env(titlebar-area-height, 0);
@@ -95,6 +92,7 @@
 			}
 			main {
 				box-sizing: border-box;
+				height: 100%;
 				margin: auto;
 				max-width: 6.5in;
 			}
@@ -382,17 +380,6 @@
 					reader.readAsDataURL(file)
 				})
 			}
-
-			function setViewportHeight() {
-				const height = window.visualViewport.height
-				document.documentElement.style.height = `${height}px`
-			}
-
-			window.visualViewport.addEventListener('resize', () => {
-				setViewportHeight()
-			})
-
-			setViewportHeight()
 
 			navigator.serviceWorker.register('nil.js')
 		</script>
