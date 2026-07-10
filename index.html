@@ -313,7 +313,6 @@
 			ui_goldfish.onclick = () => {
 				const ok = confirm('Discard chat?')
 				if (ok) {
-					localStorage.removeItem('GAIA_PERSONA')
 					localStorage.removeItem('GAIA_TRANSCRIPT')
 					location.reload()
 				}
@@ -331,6 +330,14 @@
 				if (ok) {
 					localStorage.setItem('GAIA_PERSONA', ok)
 					ai.PERSONA = localStorage.getItem('GAIA_PERSONA')
+				}
+			}
+
+			ui_persona.oncontextmenu = () => {
+				const ok = confirm('Forget persona?')
+				if (ok) {
+					localStorage.removeItem('GAIA_PERSONA')
+					ai.PERSONA = ''
 				}
 			}
 
