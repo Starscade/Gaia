@@ -31,14 +31,14 @@
 				outline: none;
 			}
 			:root {
-				--bg: Black;
+				--bg: WhiteSmoke;
 				--bord: 2px solid currentColor;
 				--err: Firebrick;
-				--fg: Whitesmoke;
+				--fg: Black;
 				--font: monospace;
 				--pad: 1rem;
 				--pt: 14pt;
-				-webkit-tap-highlight: transparent;
+				-webkit-tap-highlight-color: transparent;
 				background: var(--bg);
 				color: var(--fg);
 				font-family: 'Outfit', monospace;
@@ -162,6 +162,12 @@
 				margin-bottom: 1rem;
 				margin-left: auto;
 				width: fit-content;
+			}
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--bg: Black;
+					--fg: WhiteSmoke;
+				}
 			}
 		</style>
 	</head>
