@@ -258,7 +258,14 @@
 				},
 			})
 
-			ai.forgetTranscript()
+			const prior_transcript = ai.getTranscript()
+			if (prior_transcript) {
+				prior_transcript.forEach((saying) => {
+					let role = true
+					if (saying.role === 'user') role = false
+					addBubble(saying.parts[0].text, role)
+				})
+			}
 
 			document.body.onclick = () => {
 				chat_input.focus()
