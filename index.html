@@ -338,7 +338,7 @@
 				const ok = confirm('Forget persona?')
 				if (ok) {
 					localStorage.removeItem('GAIA_PERSONA')
-					ai.PERSONA = ''
+					location.reload()
 				}
 			}
 
