@@ -149,8 +149,7 @@ if (FLAGS['print-env']) {
 }
 
 if (FLAGS.forget) {
-	const result = AI.forgetTranscript()
-	AI.STDOUT(result)
+	AI.forgetTranscript()
 	Deno.exit()
 }
 

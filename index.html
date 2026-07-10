@@ -306,8 +306,8 @@
 			ui_goldfish.onclick = () => {
 				const ok = confirm('Discard chat?')
 				if (ok) {
-					localStorage.setItem('GAIA_PERSONA', '')
-					localStorage.setItem('GAIA_TRANSCRIPT', '')
+					localStorage.removeItem('GAIA_PERSONA')
+					localStorage.removeItem('GAIA_TRANSCRIPT')
 					location.reload()
 				}
 			}
