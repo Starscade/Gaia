@@ -163,7 +163,7 @@ export default class {
 
 	echo() {
 		const raw_transcript = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
-		const transcript = JSON.parse(raw_transcript)
+		const transcript = raw_transcript ? JSON.parse(raw_transcript) : []
 		const final_thought = transcript[transcript.length - 1]?.parts[0]?.text
 		this.STDOUT(final_thought)
 		return {
@@ -174,6 +174,10 @@ export default class {
 
 	#getCensorPolicy() {
 		return this.NSFW ? 'OFF' : 'BLOCK_ONLY_HIGH'
+	}
+
+	forgetTranscript() {
+		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
 	}
 
 	printEnv() {

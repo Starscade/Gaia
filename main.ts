@@ -30,7 +30,9 @@ const localStorageMock = {
 	setItem: (key: string, value: string) => {
 		return Deno.writeTextFileSync(`${LOCAL_STORAGE_DIR}/${key}.json`, value)
 	},
-	removeItem: (_key: string) => {},
+	removeItem: (key: string) => {
+		return Deno.remove(`${LOCAL_STORAGE_DIR}/${key}.json`)
+	},
 	clear: () => {},
 	key: (_index: number) => null,
 	length: 0,
@@ -58,6 +60,7 @@ interface Attachment {
 const FLAGS = parseArgs(Deno.args, {
 	boolean: [
 		'echo',
+		'forget',
 		'nsfw',
 		'print-env',
 		'related',
@@ -104,7 +107,7 @@ const MODEL = Deno.env.get('GAIA_MODEL')
 const NSFW = Deno.env.get('GAIA_NSFW')
 const PERSONA = Deno.env.get('GAIA_PERSONA') ??
 	'Your name is Gaia. You are a CLI tool. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-compliant sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Always use the newest syntax if dealing with other languages. Never use node.js: use Deno instead. Prefer tab indentation to spaces. Never introduce yourself.'
-const VERSION = 'v0.7.38 (main)'
+const VERSION = 'v0.7.40 (main)'
 
 const AI = new Gaia({
 	api_key: API_KEY,
@@ -142,6 +145,12 @@ if (FLAGS.version) {
 if (FLAGS['print-env']) {
 	AI.printEnv()
 	AI.STDOUT('\n')
+	Deno.exit()
+}
+
+if (FLAGS.forget) {
+	const result = AI.forgetTranscript()
+	AI.STDOUT(result)
 	Deno.exit()
 }
 
