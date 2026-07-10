@@ -62,7 +62,7 @@ const FLAGS = parseArgs(Deno.args, {
 		'echo',
 		'forget',
 		'nsfw',
-		'print-env',
+		'environment',
 		'related',
 		'transcript',
 		'version',
@@ -138,13 +138,16 @@ if (PERSONA) {
 }
 
 if (FLAGS.version) {
-	AI.STDOUT(`${VERSION}\n`)
+	console.info(VERSION)
 	Deno.exit()
 }
 
-if (FLAGS['print-env']) {
-	AI.printEnv()
-	AI.STDOUT('\n')
+if (FLAGS.environment) {
+	const json_env = AI.getEnv()
+	const current_environment = Object.entries(json_env).map(([key, value]) =>
+		`${key.toUpperCase()}=${JSON.stringify(value)}`
+	).join('\n')
+	console.info(current_environment)
 	Deno.exit()
 }
 
@@ -154,13 +157,14 @@ if (FLAGS.forget) {
 }
 
 if (FLAGS.echo) {
-	AI.echo()
+	const final_thought = AI.echo()
+	console.info(final_thought)
 	Deno.exit()
 }
 
 if (FLAGS.transcript) {
-	AI.printTranscript()
-	AI.STDOUT('\n')
+	const transcript = AI.getTranscript()
+	console.info(JSON.stringify(transcript))
 	Deno.exit()
 }
 
@@ -205,4 +209,4 @@ if (result.err) {
 	Deno.exit(1)
 }
 
-AI.STDOUT('\n')
+console.log()

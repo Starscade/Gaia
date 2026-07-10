@@ -165,45 +165,28 @@ export default class {
 		const raw_transcript = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
 		const transcript = raw_transcript ? JSON.parse(raw_transcript) : []
 		const final_thought = transcript[transcript.length - 1]?.parts[0]?.text
-		this.STDOUT(final_thought)
-		return {
-			data: final_thought,
-			err: null,
-		}
+		return final_thought
 	}
 
 	#getCensorPolicy() {
 		return this.NSFW ? 'OFF' : 'BLOCK_ONLY_HIGH'
 	}
 
-	forgetTranscript() {
-		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
-	}
-
-	printEnv() {
-		const json_env = {
+	getEnv() {
+		return {
 			GAIA_API_KEY: this.API_KEY,
 			GAIA_INTELLECT: this.INTELLECT,
 			GAIA_MODEL: this.MODEL,
 			GAIA_NSFW: this.NSFW,
 			GAIA_PERSONA: this.PERSONA,
 		}
-		const current_environment = Object.entries(json_env).map(([key, value]) =>
-			`${key.toUpperCase()}=${JSON.stringify(value)}`
-		).join('\n')
-		this.STDOUT(current_environment)
-		return {
-			data: json_env,
-			err: null,
-		}
 	}
 
-	printTranscript() {
-		const transcript = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
-		this.STDOUT(transcript)
-		return {
-			data: transcript,
-			err: null,
-		}
+	getTranscript() {
+		return JSON.parse(localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY))
+	}
+
+	forgetTranscript() {
+		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
 	}
 }
