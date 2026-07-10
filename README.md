@@ -19,7 +19,7 @@ Set `export GAIA_API_KEY="your-gemini-key"` or use a `.env`.
 
 > [!TIP]
 > You can create a template of your current settings with:
-> `gaia --print-env > .env`. (This includes internal defaults.)
+> `gaia --environment > .env`. (This includes internal defaults.)
 
 ## Usage
 
@@ -49,6 +49,12 @@ gaia --related "Do I like root beer?"
 > If you prefer using Gaia this way, you can make the behaviour permenant by
 > setting an alias: `alias ai='gaia --related'`.
 
+###### UNIX PIPES
+
+```
+cat ./*.js | gaia "Rewrite these in TypeScript."
+```
+
 ###### IN THE BROWSER
 
 ```
@@ -58,7 +64,9 @@ const ai = new Gaia({
 	api_key: '<your_api_key>'
 })
 
-await ai.ask({
+const result = await ai.ask({
 	user_prompt: 'Ahoy!'
 })
+
+if (result.err) console.error(result.err)
 ```
