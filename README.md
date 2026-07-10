@@ -52,7 +52,7 @@ gaia --related "Do I like root beer?"
 ###### UNIX PIPES
 
 ```
-cat ./*.js | gaia "Rewrite these in TypeScript."
+cat *.js | gaia "Rewrite these as a monolithic TypeScript module ." > mod.ts
 ```
 
 ###### IN THE BROWSER
