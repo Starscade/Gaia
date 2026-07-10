@@ -254,7 +254,6 @@
 					} else {
 						addBubble(text, true)
 					}
-					transcript.parentElement.scrollBy(0, 1000)
 				},
 			})
 
@@ -363,6 +362,7 @@
 					new_bubble.classList.add('is_err')
 				}
 				transcript.appendChild(new_bubble)
+				transcript.parentElement.scrollBy(0, 1000)
 			}
 
 			function getApikey() {
