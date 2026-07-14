@@ -103,7 +103,15 @@ export default class {
 			})
 		}
 
-		const interaction = await this.AI.interactions.create(interaction_obj)
+		let interaction
+
+		try {
+			interaction = await this.AI.interactions.create(interaction_obj)
+		} catch (err) {
+			return {
+				err: err.error.error.message,
+			}
+		}
 
 		if (this.DEBUG) {
 			console.debug({

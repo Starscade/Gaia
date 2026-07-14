@@ -193,6 +193,7 @@ const result = await AI.ask({
 })
 
 if (result.err) {
+	console.error(result.err)
 	Deno.exit(1)
 }
 
