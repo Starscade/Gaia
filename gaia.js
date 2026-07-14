@@ -8,8 +8,8 @@ export default class {
 		model = 'gemini-flash-lite-latest',
 		persona =
 			'Your name is Gaia. Respond in short, plaintext SMS with the occasional emoji.',
-		print_function = (text) => {
-			console.log(text)
+		print_function = (model_output) => {
+			console.log(model_output.data)
 		},
 	} = {}) {
 		this.API_KEY = api_key
@@ -139,11 +139,17 @@ export default class {
 				case 'step.delta':
 					switch (event.delta.type) {
 						case 'text':
-							this.STDOUT(event.delta.text)
+							this.STDOUT({
+								data: event.delta.text,
+								type: event.delta.type,
+							})
 							break
 						default:
 							if (event.delta.data) {
-								this.STDOUT(event.delta.data)
+								this.STDOUT({
+									data: event.delta.data,
+									type: event.delta.type,
+								})
 							}
 							break
 					}

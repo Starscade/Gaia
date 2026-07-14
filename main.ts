@@ -123,8 +123,8 @@ const VERSION = 'v0.8.22 (dev)'
 const AI = new Gaia({
 	api_key: API_KEY,
 	debug: FLAGS.debug,
-	print_function: (text) => {
-		Deno.stdout.writeSync(new TextEncoder().encode(text))
+	print_function: (incoming) => {
+		Deno.stdout.writeSync(new TextEncoder().encode(incoming.data))
 	},
 })
 
