@@ -270,7 +270,9 @@
 		if (prior_transcript) {
 			console.debug(prior_transcript)
 			if (prior_transcript.type === 'image') {
-				addBubble('<img src="data:image/jpeg;base64,' + prior_transcript.data + '">')
+				addBubble(
+					'<img src="data:image/jpeg;base64,' + prior_transcript.data + '">',
+				)
 			} else {
 				addBubble(prior_transcript.data, true)
 			}
