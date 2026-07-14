@@ -130,8 +130,9 @@ export default class {
 
 			switch (event.event_type) {
 				case 'error':
-					this.STDOUT(event.error.message)
-					break
+					return {
+						err: event.error.message,
+					}
 				case 'interaction.created':
 					localStorage.setItem('GAIA_TOPIC_ID', event.interaction.id)
 					break
