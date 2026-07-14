@@ -18,10 +18,15 @@ const localStorageMock = {
 	getItem: (key: string) => {
 		let local_storage = ''
 		try {
-			local_storage = Deno.readTextFileSync(`${LOCAL_STORAGE_DIR}/${key}.${STORAGE_ITEM_EXTENSION}`)
+			local_storage = Deno.readTextFileSync(
+				`${LOCAL_STORAGE_DIR}/${key}.${STORAGE_ITEM_EXTENSION}`,
+			)
 		} catch (err) {
 			if (err instanceof Deno.errors.NotFound) {
-				Deno.writeTextFileSync(`${LOCAL_STORAGE_DIR}/${key}.${STORAGE_ITEM_EXTENSION}`, '')
+				Deno.writeTextFileSync(
+					`${LOCAL_STORAGE_DIR}/${key}.${STORAGE_ITEM_EXTENSION}`,
+					'',
+				)
 			} else {
 				throw err
 			}
@@ -29,7 +34,10 @@ const localStorageMock = {
 		return local_storage
 	},
 	setItem: (key: string, value: string) => {
-		return Deno.writeTextFileSync(`${LOCAL_STORAGE_DIR}/${key}.${STORAGE_ITEM_EXTENSION}`, value)
+		return Deno.writeTextFileSync(
+			`${LOCAL_STORAGE_DIR}/${key}.${STORAGE_ITEM_EXTENSION}`,
+			value,
+		)
 	},
 	removeItem: (key: string) => {
 		return Deno.remove(`${LOCAL_STORAGE_DIR}/${key}.${STORAGE_ITEM_EXTENSION}`)
