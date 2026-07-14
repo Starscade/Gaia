@@ -57,6 +57,10 @@ interface Attachment {
 	mime_type: string
 }
 
+function printErr (err_text: test = '') {
+	console.error('ERR: ' + err_text)
+}
+
 const FLAGS = parseArgs(Deno.args, {
 	boolean: [
 		'debug',
@@ -165,13 +169,13 @@ if (FLAGS.read) {
 			data: b64,
 		})
 	} catch (err) {
-		console.error(`ERR: ${(err as Error).message}`)
+		printErr((err as Error).message)
 		Deno.exit(1)
 	}
 }
 
 if (!API_KEY) {
-	console.error('ERR: GAIA_API_KEY is missing!')
+	printErr('GAIA_API_KEY is missing!')
 	Deno.exit(1)
 }
 
@@ -193,7 +197,7 @@ const result = await AI.ask({
 })
 
 if (result.err) {
-	console.error(result.err)
+	printErr(result.err)
 	Deno.exit(1)
 }
 
