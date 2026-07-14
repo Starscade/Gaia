@@ -162,7 +162,10 @@ export default class {
 
 	async getEcho() {
 		const transcript = await this.getTranscript()
-		return transcript?.output_image?.data ?? transcript.output_text
+		if (transcript) {
+			return transcript?.output_image?.data ?? transcript.output_text
+		}
+		return ''
 	}
 
 	getEnv() {
@@ -174,7 +177,10 @@ export default class {
 
 	async getTranscript() {
 		const topic_id = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
-		const prior_interaction = await this.AI.interactions.get(topic_id)
-		return prior_interaction
+		if (topic_id) {
+			const prior_interaction = await this.AI.interactions.get(topic_id)
+			return prior_interaction
+		}
+		return ''
 	}
 }
