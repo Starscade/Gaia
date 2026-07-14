@@ -59,6 +59,7 @@ interface Attachment {
 
 const FLAGS = parseArgs(Deno.args, {
 	boolean: [
+		'debug',
 		'draw',
 		'echo',
 		'forget',
@@ -104,10 +105,11 @@ const API_KEY = Deno.env.get('GAIA_API_KEY')
 const ATTACHMENTS: Attachment[] = []
 const PERSONA = Deno.env.get('GAIA_PERSONA') ??
 	'Your name is Gaia. You are a CLI tool. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-compliant sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Always use the newest syntax if dealing with other languages. Never use node.js: use Deno instead. Prefer tab indentation to spaces. Never introduce yourself.'
-const VERSION = 'v0.8.12 (dev)'
+const VERSION = 'v0.8.14 (dev)'
 
 const AI = new Gaia({
 	api_key: API_KEY,
+	debug: FLAGS.debug,
 	print_function: (text) => {
 		Deno.stdout.writeSync(new TextEncoder().encode(text))
 	},

@@ -3,6 +3,7 @@ import { GoogleGenAI } from '@gemini'
 export default class {
 	constructor({
 		api_key = '',
+		debug = false,
 		intellect = 'low',
 		model = 'gemini-flash-lite-latest',
 		persona =
@@ -12,6 +13,7 @@ export default class {
 		},
 	} = {}) {
 		this.API_KEY = api_key
+		this.DEBUG = debug
 		this.INTELLECT = intellect
 		this.MODEL = model
 		this.PERSONA = persona
@@ -94,14 +96,30 @@ export default class {
 			})
 		}
 
-		// console.debug(interaction_obj)
+		if (this.DEBUG) {
+			console.debug({
+				debug: interaction_obj,
+				name: 'INTERACTION_OBJECT',
+			})
+		}
 
 		const interaction = await this.AI.interactions.create(interaction_obj)
 
-		// console.debug(interaction)
+		if (this.DEBUG) {
+			console.debug({
+				debug: interaction,
+				name: 'INTERACTION',
+			})
+		}
 
 		for await (const event of interaction) {
-			// console.debug(event)
+			if (this.DEBUG) {
+				console.debug({
+					debug: event,
+					name: 'EVENT',
+				})
+			}
+
 			switch (event.event_type) {
 				case 'error':
 					this.STDOUT(event.error.message)
@@ -123,6 +141,7 @@ export default class {
 					break
 			}
 		}
+
 		return {
 			err: null,
 		}
