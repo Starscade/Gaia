@@ -161,7 +161,11 @@ if (FLAGS.echo) {
 
 if (FLAGS.transcript) {
 	const transcript = await AI.getTranscript()
-	console.info(JSON.stringify(transcript))
+	if (transcript) {
+		console.info(
+			JSON.stringify(transcript)
+		)
+	}
 	Deno.exit()
 }
 
