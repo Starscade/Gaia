@@ -163,7 +163,7 @@ if (FLAGS.transcript) {
 	const transcript = await AI.getTranscript()
 	if (transcript) {
 		console.info(
-			JSON.stringify(transcript)
+			JSON.stringify(transcript),
 		)
 	}
 	Deno.exit()
