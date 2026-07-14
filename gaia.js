@@ -28,10 +28,10 @@ export default class {
 	async ask({
 		attachments = [],
 		cmd = '',
-		preserve_context = false,
 		modalities = [
 			'text',
 		],
+		preserve_context = false,
 		user_prompt = '',
 	} = {}) {
 		if (cmd) {
