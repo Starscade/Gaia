@@ -88,6 +88,9 @@
 		form {
 			box-sizing: border-box;
 		}
+		img {
+			width: 100%;
+		}
 		input {
 			min-width: 0;
 			padding: 0.5rem;
@@ -249,10 +252,15 @@
 			persona: getPersona(),
 			print_function: (model_out) => {
 				const last_bubble = transcript.lastElementChild
+				console.log(model_out)
 				if (last_bubble && last_bubble.classList.contains('is_agent')) {
 					last_bubble.children[0].textContent += model_out.data
 				} else {
-					addBubble(model_out.data, true)
+					if (model_out.type === 'image') {
+						addBubble('<img src="data:image/jpeg;base64,' + model_out.data + '">')
+					} else {
+						addBubble(model_out.data, true)
+					}
 				}
 				transcript.parentElement.scrollBy(0, 1000)
 			},
@@ -260,9 +268,13 @@
 
 		const prior_transcript = await ai.getEcho()
 		if (prior_transcript) {
-			addBubble(prior_transcript, true)
-			transcript.parentElement.scrollBy(0, 1000)
 			console.debug(prior_transcript)
+			if (prior_transcript.type === 'image') {
+				addBubble('<img src="data:image/jpeg;base64,' + prior_transcript.data + '">')
+			} else {
+				addBubble(prior_transcript.data, true)
+			}
+			transcript.parentElement.scrollBy(0, 1000)
 		}
 
 		document.body.onclick = () => {
@@ -290,6 +302,10 @@
 				addBubble(_prompt || `[${input.files[0].name}]`)
 
 				const ask_obj = {
+					modalities: [
+						'image',
+						'text',
+					],
 					preserve_context: true,
 					user_prompt: _prompt,
 				}
@@ -340,9 +356,9 @@
 		}
 
 		function addBubble(text_content, is_agent = false, is_err = false) {
+			const copy_text = document.createElement('span')
 			const new_bubble = document.createElement('section')
 			const txt_content = document.createElement('span')
-			const copy_text = document.createElement('span')
 			new_bubble.classList.add('flex')
 			new_bubble.classList.add('flex-row')
 			new_bubble.classList.add('flex-gap')
@@ -353,7 +369,7 @@
 			new_bubble.onclick = (e) => {
 				navigator.clipboard.writeText(e.target.textContent)
 			}
-			new_bubble.children[0].textContent = text_content
+			new_bubble.children[0].innerHTML = text_content
 			if (is_agent) {
 				new_bubble.classList.add('is_agent')
 			}

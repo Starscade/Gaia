@@ -170,7 +170,11 @@ export default class {
 	async getEcho() {
 		const transcript = await this.getTranscript()
 		if (transcript) {
-			return transcript?.output_image?.data ?? transcript.output_text
+			const data_type = transcript.output_image ? 'image' : (transcript.output_text ? 'text' : null)
+			return {
+				data: transcript?.output_image?.data ?? transcript.output_text,
+				type: data_type,
+			}
 		}
 		return ''
 	}
