@@ -405,10 +405,7 @@
 
 			const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 			const persona = localStorage.getItem('GAIA_PERSONA') + [
-				' Respond exclusively in plaintext.',
-				'No markdown.',
-				'You may use the occasional emoji no more than two or three times per ten responses.',
-				'Always keep your responses brief enough to fit in a standard SMS.',
+				'You are an SMS chat bot.',
 				`The user's timezone is ${timezone}.`,
 			].join(' ')
 
