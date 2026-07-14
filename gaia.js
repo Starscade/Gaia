@@ -1,10 +1,12 @@
+import { GoogleGenAI } from '@gemini'
+
 export default class {
 	constructor({
 		api_key = '',
-		intellect = 'MINIMAL',
+		intellect = 'low',
 		model = 'gemini-flash-lite-latest',
-		nsfw = false,
-		persona = 'Your name is Gaia. Respond in short, plaintext SMS.',
+		persona =
+			'Your name is Gaia. Respond in short, plaintext SMS with the occasional emoji.',
 		print_function = (text) => {
 			console.log(text)
 		},
@@ -12,181 +14,133 @@ export default class {
 		this.API_KEY = api_key
 		this.INTELLECT = intellect
 		this.MODEL = model
-		this.NSFW = nsfw
 		this.PERSONA = persona
 		this.STDOUT = print_function
-		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TRANSCRIPT'
+		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TOPIC_ID'
+
+		this.AI = new GoogleGenAI({
+			apiKey: this.API_KEY,
+		})
 	}
 
 	async ask({
 		attachments = [],
+		cmd = '',
 		preserve_context = false,
-		transcript = [],
+		modalities = [
+			'text',
+		],
 		user_prompt = '',
 	} = {}) {
-		if (!user_prompt) {
-			if (attachments.length === 0) {
-				const err_msg = 'No prompt provided!'
-				console.error('ERR:', err_msg)
-				return {
-					data: null,
-					err: err_msg,
-				}
+		if (cmd) {
+			switch (cmd.trim().toUpperCase()) {
+				case 'ECHO':
+					this.STDOUT(await this.getEcho())
+					break
 			}
+		}
+
+		if (!user_prompt && attachments.length === 0) {
+			return {
+				err: 'No prompt!',
+			}
+		}
+
+		const interaction_obj = {
+			input: [
+				{
+					text: user_prompt,
+					type: 'text',
+				},
+			],
+			generation_config: {
+				image_config: {
+					image_size: '1K',
+				},
+				thinking_level: this.INTELLECT,
+			},
+			model: this.MODEL,
+			response_modalities: modalities,
+			stream: true,
+			system_instruction: this.PERSONA,
+		}
+
+		if (modalities.includes('image')) {
+			interaction_obj.model = 'gemini-3.1-flash-lite-image'
 		}
 
 		if (preserve_context) {
-			const saved = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
-			if (saved) {
-				transcript = JSON.parse(saved)
+			const topic_id = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
+			if (topic_id) {
+				interaction_obj.previous_interaction_id = topic_id
 			}
 		}
 
-		const user_parts = [{ text: user_prompt }]
-		for (const file of attachments) {
-			user_parts.push({
-				inlineData: {
-					mimeType: file.mime_type,
-					data: file.data,
-				},
+		if (attachments.length > 0) {
+			attachments.forEach((attachment) => {
+				interaction_obj.input.push({
+					data: attachment.data,
+					mime_type: attachment.mime_type,
+					resolution: this.INTELLECT,
+					type: attachment.mime_type.split('/')[0],
+				})
 			})
 		}
 
-		const contents = [
-			...transcript.map((msg) => ({
-				role: msg.role === 'model' ? 'model' : 'user',
-				parts: msg.parts || [{ text: msg.text }],
-			})),
-		]
+		// console.debug(interaction_obj)
 
-		contents.push({ role: 'user', parts: user_parts })
-		try {
-			localStorage.setItem(
-				this.TRANSCRIPT_STORAGE_KEY,
-				JSON.stringify(contents),
-			)
-		} catch (err) {
-			console.error('ERR:', err)
-			return {
-				data: null,
-				err: err,
-			}
-		}
+		const interaction = await this.AI.interactions.create(interaction_obj)
 
-		const json_body = {
-			contents: contents,
-			generationConfig: {
-				thinkingConfig: { thinkingLevel: this.INTELLECT },
-			},
-			safetySettings: [
-				{
-					category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-					threshold: this.#getCensorPolicy(),
-				},
-				{
-					category: 'HARM_CATEGORY_HARASSMENT',
-					threshold: this.#getCensorPolicy(),
-				},
-				{
-					category: 'HARM_CATEGORY_HATE_SPEECH',
-					threshold: this.#getCensorPolicy(),
-				},
-				{
-					category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-					threshold: this.#getCensorPolicy(),
-				},
-			],
-			system_instruction: { parts: [{ text: this.PERSONA }] },
-			tools: [{
-				google_search: {},
-			}],
-		}
+		// console.debug(interaction)
 
-		const response = await fetch(
-			`https://generativelanguage.googleapis.com/v1beta/models/${this.MODEL}:streamGenerateContent`,
-			{
-				body: JSON.stringify(json_body),
-				headers: {
-					'Content-Type': 'application/json',
-					'x-goog-api-key': this.API_KEY,
-				},
-				method: 'POST',
-			},
-		)
-
-		if (!response.ok) {
-			const json_response = await response.json()
-			console.error(json_response)
-			return {
-				data: null,
-				err: json_response,
-			}
-		}
-
-		const reader = response.body.getReader()
-		const decoder = new TextDecoder()
-		let buffer = ''
-		let lastIndex = 0
-		let fullText = ''
-
-		while (true) {
-			const { done, value } = await reader.read()
-			if (done) break
-
-			buffer += decoder.decode(value, { stream: true })
-
-			const attempt = buffer.trim().endsWith(']') ? buffer : buffer + ']'
-
-			try {
-				const data = JSON.parse(attempt)
-				for (let i = lastIndex; i < data.length; i++) {
-					const text = data[i].candidates?.[0].content?.parts?.[0].text
-					if (text) {
-						fullText += text
-						this.STDOUT(text)
+		for await (const event of interaction) {
+			// console.debug(event)
+			switch (event.event_type) {
+				case 'error':
+					this.STDOUT(event.error.message)
+					break
+				case 'interaction.created':
+					localStorage.setItem('GAIA_TOPIC_ID', event.interaction.id)
+					break
+				case 'step.delta':
+					switch (event.delta.type) {
+						case 'text':
+							this.STDOUT(event.delta.text)
+							break
+						default:
+							if (event.delta.data) {
+								this.STDOUT(event.delta.data)
+							}
+							break
 					}
-				}
-				lastIndex = data.length
-			} catch (_err) {
-				// Silently ignore partial chunks until stream is complete.
+					break
 			}
 		}
-
-		contents.push({ role: 'model', parts: [{ text: fullText }] })
-		localStorage.setItem(this.TRANSCRIPT_STORAGE_KEY, JSON.stringify(contents))
-
 		return {
-			data: contents,
 			err: null,
 		}
 	}
 
-	echo() {
-		const raw_transcript = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
-		const transcript = raw_transcript ? JSON.parse(raw_transcript) : []
-		const final_thought = transcript[transcript.length - 1]?.parts[0]?.text
-		return final_thought
+	forgetTranscript() {
+		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
+		return null
 	}
 
-	#getCensorPolicy() {
-		return this.NSFW ? 'OFF' : 'BLOCK_ONLY_HIGH'
+	async getEcho() {
+		const transcript = await this.getTranscript()
+		return transcript?.output_image?.data ?? transcript.output_text
 	}
 
 	getEnv() {
 		return {
 			GAIA_API_KEY: this.API_KEY,
-			GAIA_INTELLECT: this.INTELLECT,
-			GAIA_MODEL: this.MODEL,
-			GAIA_NSFW: this.NSFW,
 			GAIA_PERSONA: this.PERSONA,
 		}
 	}
 
-	getTranscript() {
-		return JSON.parse(localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY))
-	}
-
-	forgetTranscript() {
-		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
+	async getTranscript() {
+		const topic_id = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
+		const prior_interaction = await this.AI.interactions.get(topic_id)
+		return prior_interaction
 	}
 }
