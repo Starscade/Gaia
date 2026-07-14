@@ -57,7 +57,7 @@ interface Attachment {
 	mime_type: string
 }
 
-function printErr (err_text: test = '') {
+function printErr(err_text: string = '') {
 	console.error('ERR: ' + err_text)
 }
 
