@@ -159,7 +159,7 @@ if (FLAGS.read) {
 			? 'image/jpeg'
 			: 'text/plain'
 		ATTACHMENTS.push({
-			mime_type,
+			mime_type: mime_type,
 			data: b64,
 		})
 	} catch (err) {

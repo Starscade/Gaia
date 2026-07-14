@@ -78,12 +78,19 @@ export default class {
 
 		if (attachments.length > 0) {
 			attachments.forEach((attachment) => {
-				interaction_obj.input.push({
-					data: attachment.data,
-					mime_type: attachment.mime_type,
-					resolution: this.INTELLECT,
+				const template_attachment = {
 					type: attachment.mime_type.split('/')[0],
-				})
+				}
+
+				if (attachment.mime_type === 'text/plain') {
+					template_attachment.text = attachment.data
+				} else {
+					template_attachment.data = attachment.data
+					template_attachment.mime_type = attachment.mime_type
+					template_attachment.resolution = this.INTELLECT
+				}
+
+				interaction_obj.input.push(template_attachment)
 			})
 		}
 
