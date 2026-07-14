@@ -1,410 +1,421 @@
 <!DOCTYPE html>
 <html lang="en" oncontextmenu="return false">
-	<head>
-		<link
-			href="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-			rel="icon"
-		>
-		<link
-			href="manifest.json"
-			rel="manifest"
-		>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=attachment,close,content_copy,note_stack_add,send,theater_comedy"
-			rel="stylesheet"
-		>
-		<meta charset="UTF-8">
-		<meta name="theme-color" content="Black">
-		<meta
-			content="initial-scale=1,interactive-widget=resizes-content,maximum-scale=1,user-scalable=no,width=device-width"
-			name="viewport"
-		>
-		<title>&zwj;</title>
-		<style>
-			@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400&display=swap');
+<head>
+	<link
+		href="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+		rel="icon"
+	>
+	<link
+		href="manifest.json"
+		rel="manifest"
+	>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&icon_names=attachment,close,content_copy,note_stack_add,send,theater_comedy"
+		rel="stylesheet"
+	>
+	<meta charset="UTF-8">
+	<meta name="theme-color" content="Black">
+	<meta
+		content="initial-scale=1,interactive-widget=resizes-content,maximum-scale=1,user-scalable=no,width=device-width"
+		name="viewport"
+	>
+	<title>&zwj;</title>
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400&display=swap');
 
-			::selection {
-				background: var(--fg);
-				color: var(--bg);
-			}
-			:focus {
-				outline: none;
-			}
-			:root {
-				--bg: Black;
-				--bord: 2px solid currentColor;
-				--err: Firebrick;
-				--fg: WhiteSmoke;
-				--font: monospace;
-				--pad: 1rem;
-				--pt: 14pt;
-				-webkit-tap-highlight-color: transparent;
-				background: var(--bg);
-				color: var(--fg);
-				font-family: 'Outfit', monospace;
-				font-size: var(--pt);
-				user-select: none;
-			}
-			article {
-				mask-image: linear-gradient(
-					to bottom,
-					transparent 0,
-					var(--bg) var(--pad),
-					var(--bg) calc(100% - var(--pad)),
-					transparent 100%
-				);
-				overflow-y: auto;
-				overscroll-behavior-y: none;
-			}
-			body {
-				box-sizing: border-box;
-				height: 100dvh;
-				margin: 0;
-				overscroll-behavior-y: none;
-				padding-top: env(titlebar-area-height, 0);
-			}
-			button, input {
-				background: inherit;
-				border: none;
-				color: inherit;
-				font-family: inherit;
-				font-size: inherit;
-			}
-			button:not(:disabled) {
-				cursor: pointer;
-				transition: scale 0.3s;
-			}
-			button:not(:active) {
-				transform: translateY(2px);
-			}
-			button:disabled {
-				opacity: 0.5;
-			}
-			footer, header {
-				padding: var(--pad);
-			}
-			form {
-				box-sizing: border-box;
-			}
-			input {
-				min-width: 0;
-				padding: 0.5rem;
-			}
-			main {
-				box-sizing: border-box;
-				height: 100%;
-				margin: auto;
-				max-width: 6.5in;
-			}
-			section {
-				border-radius: var(--pad);
-				cursor: pointer;
-				padding: var(--pad);
-			}
-			section:active {
-				background: var(--fg);
-				color: var(--bg);
-			}
-			section::before {
-				content: 'Me: ';
-				opacity: 0.5;
-			}
-			section.is_agent::before {
-				content: 'Gaia: ';
-			}
-			section.is_err::before {
-				color: var(--err);
-				content: 'Error: ';
-				opacity: 1;
-			}
-			section > span:last-of-type {
-				font-size: 80%;
-				opacity: 0.5;
-			}
-			.flex {
-				display: flex;
-				flex-direction: column;
-			}
-			.flex-center {
-				align-items: center;
-				justify-content: center;
-			}
-			.flex-end {
-				justify-content: flex-end;
-			}
-			.flex-fill {
-				flex: 1;
-			}
-			.flex-gap {
-				gap: var(--pad);
-			}
-			.flex-reverse {
-				flex-direction: column-reverse;
-			}
-			.flex-row {
-				flex-direction: row;
-			}
-			.material-symbols-rounded {
-				display: flex;
-			}
-			#hiddenElements {
-				display: none;
-			}
-			#attachment-bubble {
-				align-items: center;
-				background: #222;
-				border-radius: 0.5rem;
-				padding: 0.5rem;
-				padding-left: 1rem;
-			}
-			#attachment-container {
-				display: none;
-				margin-bottom: 1rem;
-				margin-left: auto;
-				width: fit-content;
-			}
-			@media (prefers-color-scheme: light) {
-				:root {
-					--bg: WhiteSmoke;
-					--fg: Black;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<main class="flex">
-			<header class="flex flex-row">
-				<span class="flex-fill"></span>
-				<button id="uiTogglePrivate" title="Discard chat..." type="button">
-					<span class="material-symbols-rounded">note_stack_add</span>
+	::selection {
+		background: var(--fg);
+		color: var(--bg);
+	}
+	:focus {
+		outline: none;
+	}
+	:root {
+		--bg: Black;
+		--bord: 2px solid currentColor;
+		--err: Firebrick;
+		--fg: WhiteSmoke;
+		--font: monospace;
+		--pad: 1rem;
+		--pt: 14pt;
+		-webkit-tap-highlight-color: transparent;
+		background: var(--bg);
+		color: var(--fg);
+		font-family: 'Outfit', monospace;
+		font-size: var(--pt);
+		user-select: none;
+	}
+	article {
+		mask-image: linear-gradient(
+			to bottom,
+			transparent 0,
+			var(--bg) var(--pad),
+			var(--bg) calc(100% - var(--pad)),
+			transparent 100%
+		);
+		overflow-y: auto;
+		overscroll-behavior-y: none;
+	}
+	body {
+		box-sizing: border-box;
+		height: 100dvh;
+		margin: 0;
+		overscroll-behavior-y: none;
+		padding-top: env(titlebar-area-height, 0);
+	}
+	button,
+	input {
+		background: inherit;
+		border: none;
+		color: inherit;
+		font-family: inherit;
+		font-size: inherit;
+	}
+	button:not(:disabled) {
+		cursor: pointer;
+		transition: scale 0.3s;
+	}
+	button:not(:active) {
+		transform: translateY(2px);
+	}
+	button:disabled {
+		opacity: 0.5;
+	}
+	footer,
+	header {
+		padding: var(--pad);
+	}
+	form {
+		box-sizing: border-box;
+	}
+	input {
+		min-width: 0;
+		padding: 0.5rem;
+	}
+	main {
+		box-sizing: border-box;
+		height: 100%;
+		margin: auto;
+		max-width: 6.5in;
+	}
+	section {
+		border-radius: var(--pad);
+		cursor: pointer;
+		padding: var(--pad);
+	}
+	section:active {
+		background: var(--fg);
+		color: var(--bg);
+	}
+	section::before {
+		content: 'Me: ';
+		opacity: 0.5;
+	}
+	section.is_agent::before {
+		content: 'Gaia: ';
+	}
+	section.is_err::before {
+		color: var(--err);
+		content: 'Error: ';
+		opacity: 1;
+	}
+	section > span:last-of-type {
+		font-size: 80%;
+		opacity: 0.5;
+	}
+	.flex {
+		display: flex;
+		flex-direction: column;
+	}
+	.flex-center {
+		align-items: center;
+		justify-content: center;
+	}
+	.flex-end {
+		justify-content: flex-end;
+	}
+	.flex-fill {
+		flex: 1;
+	}
+	.flex-gap {
+		gap: var(--pad);
+	}
+	.flex-reverse {
+		flex-direction: column-reverse;
+	}
+	.flex-row {
+		flex-direction: row;
+	}
+	.material-symbols-rounded {
+		display: flex;
+	}
+	#hiddenElements {
+		display: none;
+	}
+	#attachment-bubble {
+		align-items: center;
+		background: #222;
+		border-radius: 0.5rem;
+		padding: 0.5rem;
+		padding-left: 1rem;
+	}
+	#attachment-container {
+		display: none;
+		margin-bottom: 1rem;
+		margin-left: auto;
+		width: fit-content;
+	}
+	@media (prefers-color-scheme: light) {
+		:root {
+			--bg: WhiteSmoke;
+			--fg: Black;
+		}
+	}
+	</style>
+</head>
+<body>
+	<main class="flex">
+		<header class="flex flex-row">
+			<span class="flex-fill"></span>
+			<button id="uiTogglePrivate" title="Discard chat..." type="button">
+				<span class="material-symbols-rounded">note_stack_add</span>
+			</button>
+		</header>
+		<article class="flex flex-fill">
+			<div
+				class="flex flex-fill flex-end"
+				id="transcript"
+			></div>
+		</article>
+		<footer>
+			<div id="attachment-container" class="flex flex-row">
+				<div id="attachment-bubble" class="flex flex-row">
+					<span id="attachment-name"></span>
+					<button id="uiUnattach" type="button">
+						<span class="material-symbols-rounded">close</span>
+					</button>
+				</div>
+			</div>
+			<form class="flex flex-row flex-gap">
+				<button id="uiPersona" title="Configure persona..." type="button">
+					<span class="material-symbols-rounded">theater_comedy</span>
 				</button>
-			</header>
-			<article class="flex flex-fill">
-				<div
-					class="flex flex-fill flex-end"
-					id="transcript"
+				<input
+					autofocus
+					class="flex-fill"
+					placeholder="Prompt…"
 				>
-				</div>
-			</article>
-			<footer>
-				<div id="attachment-container" class="flex flex-row">
-					<div id="attachment-bubble" class="flex flex-row">
-						<span id="attachment-name"></span>
-						<button id="uiUnattach" type="button">
-							<span class="material-symbols-rounded">close</span>
-						</button>
-					</div>
-				</div>
-				<form class="flex flex-row flex-gap">
-					<button id="uiPersona" title="Configure persona..." type="button">
-						<span class="material-symbols-rounded">theater_comedy</span>
-					</button>
-					<input
-						autofocus
-						class="flex-fill"
-						placeholder="Prompt…"
-					>
-					<button id="uiAttach" title="Attach file..." type="button">
-						<span class="material-symbols-rounded">attachment</span>
-					</button>
-					<button id="uiSay" title="Send prompt..." type="submit">
-						<span class="material-symbols-rounded">send</span>
-					</button>
-				</form>
-			</footer>
-		</main>
-		<div id="hiddenElements">
-			<input id="fileInput" type="file">
-		</div>
-		<script type="module">
-			import Gaia from './gaia.js'
+				<button id="uiAttach" title="Attach file..." type="button">
+					<span class="material-symbols-rounded">attachment</span>
+				</button>
+				<button id="uiSay" title="Send prompt..." type="submit">
+					<span class="material-symbols-rounded">send</span>
+				</button>
+			</form>
+		</footer>
+	</main>
+	<div id="hiddenElements">
+		<input id="fileInput" type="file">
+	</div>
+	<script type="importmap">
+	{
+		"imports": {
+			"@gaia": "./gaia.js",
+			"@gemini": "https://esm.sh/@google/genai"
+		}
+	}
+	</script>
+	<script type="module">
+	import Gaia from '@gaia'
 
-			const query_params = new URLSearchParams(window.location.search)
+	const query_params = new URLSearchParams(window.location.search)
 
-			const input = document.getElementById('fileInput')
-			const transcript = document.getElementById('transcript')
-			const chat_form = document.getElementsByTagName('form')[0]
-			const chat_input = document.getElementsByTagName('input')[0]
-			const okgo = document.getElementById('uiSay')
-			const ui_attach = document.getElementById('uiAttach')
-			const ui_goldfish = document.getElementById('uiTogglePrivate')
-			const ui_persona = document.getElementById('uiPersona')
-			const attachment_container = document.getElementById(
-				'attachment-container',
+	const input = document.getElementById('fileInput')
+	const transcript = document.getElementById('transcript')
+	const chat_form = document.getElementsByTagName('form')[0]
+	const chat_input = document.getElementsByTagName('input')[0]
+	const okgo = document.getElementById('uiSay')
+	const ui_attach = document.getElementById('uiAttach')
+	const ui_goldfish = document.getElementById('uiTogglePrivate')
+	const ui_persona = document.getElementById('uiPersona')
+	const attachment_container = document.getElementById(
+		'attachment-container',
+	)
+	const attachment_name = document.getElementById('attachment-name')
+	const ui_unattach = document.getElementById('uiUnattach')
+
+	const ai = new Gaia({
+		api_key: getApikey(),
+		persona: getPersona(),
+		print_function: (text) => {
+			const last_bubble = transcript.lastElementChild
+			if (last_bubble && last_bubble.classList.contains('is_agent')) {
+				last_bubble.children[0].textContent += text
+			} else {
+				addBubble(text, true)
+			}
+			transcript.parentElement.scrollBy(0, 1000)
+		},
+	})
+
+	const prior_transcript = await ai.getEcho()
+	if (prior_transcript) {
+		addBubble(prior_transcript, true)
+		transcript.parentElement.scrollBy(0, 1000)
+		console.debug(prior_transcript)
+	}
+
+	document.body.onclick = () => {
+		chat_input.focus()
+	}
+
+	input.onchange = () => {
+		if (input.files.length > 0) {
+			attachment_name.textContent = input.files[0].name
+			attachment_container.style.display = 'block'
+		}
+	}
+
+	ui_unattach.onclick = () => {
+		input.value = ''
+		attachment_container.style.display = 'none'
+	}
+
+	chat_form.addEventListener('submit', async (e) => {
+		e.preventDefault()
+		if (e.submitter.id === 'uiSay') {
+			const _prompt = chat_input.value.trim()
+			if (!_prompt && input.files.length === 0) return
+			chat_input.value = ''
+			addBubble(_prompt || `[${input.files[0].name}]`)
+
+			const ask_obj = {
+				preserve_context: true,
+				user_prompt: _prompt,
+			}
+
+			const f = await getAttachment()
+			if (f) {
+				ask_obj.attachments = [f]
+				ui_unattach.click()
+			}
+
+			const result = await ai.ask(ask_obj)
+			if (result?.err) {
+				console.error(result.err)
+				addBubble(result.err[0].error.message, true, true)
+			}
+		}
+	})
+
+	ui_goldfish.onclick = () => {
+		const ok = confirm('Discard chat?')
+		if (ok) {
+			localStorage.removeItem('GAIA_TOPIC_ID')
+			location.reload()
+		}
+	}
+
+	ui_attach.onclick = () => {
+		input.click()
+	}
+
+	ui_persona.onclick = () => {
+		const ok = prompt(
+			"Describe Gaia's persona...",
+			localStorage.getItem('GAIA_PERSONA'),
+		)
+		if (ok) {
+			localStorage.setItem('GAIA_PERSONA', ok)
+			ai.PERSONA = localStorage.getItem('GAIA_PERSONA')
+		}
+	}
+
+	ui_persona.oncontextmenu = () => {
+		const ok = confirm('Forget persona?')
+		if (ok) {
+			localStorage.removeItem('GAIA_PERSONA')
+			location.reload()
+		}
+	}
+
+	function addBubble(text_content, is_agent = false, is_err = false) {
+		const new_bubble = document.createElement('section')
+		const txt_content = document.createElement('span')
+		const copy_text = document.createElement('span')
+		new_bubble.classList.add('flex')
+		new_bubble.classList.add('flex-row')
+		new_bubble.classList.add('flex-gap')
+		copy_text.classList.add('material-symbols-rounded')
+		copy_text.textContent = 'content_copy'
+		new_bubble.appendChild(txt_content)
+		new_bubble.appendChild(copy_text)
+		new_bubble.onclick = (e) => {
+			navigator.clipboard.writeText(e.target.textContent)
+		}
+		new_bubble.children[0].textContent = text_content
+		if (is_agent) {
+			new_bubble.classList.add('is_agent')
+		}
+		if (is_err) {
+			new_bubble.classList.add('is_err')
+		}
+		transcript.appendChild(new_bubble)
+	}
+
+	function getApikey() {
+		const api_key = query_params.get('api_key')
+		if (api_key) {
+			localStorage.setItem('GAIA_API_KEY', api_key)
+		}
+		let gaia_api_key = localStorage.getItem('GAIA_API_KEY')
+		if (!gaia_api_key) {
+			const ok = prompt('Gaia API Key')
+			if (!ok) getApikey()
+			localStorage.setItem('GAIA_API_KEY', ok)
+			gaia_api_key = ok
+		}
+		return gaia_api_key
+	}
+
+	async function getAttachment() {
+		const file = input.files[0]
+		if (!file) return null
+		return new Promise((resolve) => {
+			const reader = new FileReader()
+			reader.onload = (event) => {
+				const base64Data = event.target.result.split(',')[1]
+				const return_obj = {
+					data: base64Data,
+					mime_type: file.type,
+				}
+				resolve(return_obj)
+			}
+			reader.readAsDataURL(file)
+		})
+	}
+
+	function getPersona() {
+		if (!localStorage.getItem('GAIA_PERSONA')) {
+			localStorage.setItem(
+				'GAIA_PERSONA',
+				'Your name is Gaia.',
 			)
-			const attachment_name = document.getElementById('attachment-name')
-			const ui_unattach = document.getElementById('uiUnattach')
+		}
 
-			if (!localStorage.getItem('GAIA_PERSONA')) {
-				localStorage.setItem(
-					'GAIA_PERSONA',
-					'Your name is Gaia.',
-				)
-			}
+		const persona = localStorage.getItem('GAIA_PERSONA') + [
+			' Respond exclusively in plaintext.',
+			'No markdown.',
+			'You may use the occasional emoji no more than two or three times per ten responses.',
+			'Always keep your responses brief enough to fit in a standard SMS.',
+		].join(' ')
 
-			const nsfw = query_params.has('nsfw') ? true : false
+		console.debug(persona)
 
-			const ai = new Gaia({
-				api_key: getApikey(),
-				censor_policy: nsfw,
-				persona: localStorage.getItem('GAIA_PERSONA') + [
-					' Respond exclusively in plaintext.',
-					'No markdown.',
-					'You may use the occasional emoji no more than two or three times per ten responses.',
-					'Always keep your responses brief enough to fit in a standard SMS.',
-				].join(' '),
-				print_function: (text) => {
-					const last_bubble = transcript.lastElementChild
-					if (last_bubble && last_bubble.classList.contains('is_agent')) {
-						last_bubble.children[0].textContent += text
-					} else {
-						addBubble(text, true)
-					}
-					transcript.parentElement.scrollBy(0, 1000)
-				},
-			})
+		return persona
+	}
 
-			const prior_transcript = ai.getTranscript()
-			if (prior_transcript) {
-				prior_transcript.forEach((saying) => {
-					let role = true
-					if (saying.role === 'user') role = false
-					addBubble(saying.parts[0].text, role)
-				})
-				transcript.parentElement.scrollBy(0, 1000)
-			}
-
-			document.body.onclick = () => {
-				chat_input.focus()
-			}
-
-			input.onchange = () => {
-				if (input.files.length > 0) {
-					attachment_name.textContent = input.files[0].name
-					attachment_container.style.display = 'block'
-				}
-			}
-
-			ui_unattach.onclick = () => {
-				input.value = ''
-				attachment_container.style.display = 'none'
-			}
-
-			chat_form.addEventListener('submit', async (e) => {
-				e.preventDefault()
-				if (e.submitter.id === 'uiSay') {
-					const _prompt = chat_input.value.trim()
-					if (!_prompt && input.files.length === 0) return
-					chat_input.value = ''
-					addBubble(_prompt || `[${input.files[0].name}]`)
-
-					const ask_obj = {
-						preserve_context: true,
-						user_prompt: _prompt,
-					}
-
-					const f = await getAttachment()
-					if (f) {
-						ask_obj.attachments = [f]
-						ui_unattach.click()
-					}
-
-					const result = await ai.ask(ask_obj)
-					if (result.err) {
-						console.error(result.err)
-						addBubble(result.err[0].error.message, true, true)
-					}
-				}
-			})
-
-			ui_goldfish.onclick = () => {
-				const ok = confirm('Discard chat?')
-				if (ok) {
-					localStorage.removeItem('GAIA_TRANSCRIPT')
-					location.reload()
-				}
-			}
-
-			ui_attach.onclick = () => {
-				input.click()
-			}
-
-			ui_persona.onclick = () => {
-				const ok = prompt(
-					"Describe Gaia's persona...",
-					localStorage.getItem('GAIA_PERSONA'),
-				)
-				if (ok) {
-					localStorage.setItem('GAIA_PERSONA', ok)
-					ai.PERSONA = localStorage.getItem('GAIA_PERSONA')
-				}
-			}
-
-			ui_persona.oncontextmenu = () => {
-				const ok = confirm('Forget persona?')
-				if (ok) {
-					localStorage.removeItem('GAIA_PERSONA')
-					location.reload()
-				}
-			}
-
-			function addBubble(text_content, is_agent = false, is_err = false) {
-				const new_bubble = document.createElement('section')
-				const txt_content = document.createElement('span')
-				const copy_text = document.createElement('span')
-				new_bubble.classList.add('flex')
-				new_bubble.classList.add('flex-row')
-				new_bubble.classList.add('flex-gap')
-				copy_text.classList.add('material-symbols-rounded')
-				copy_text.textContent = 'content_copy'
-				new_bubble.appendChild(txt_content)
-				new_bubble.appendChild(copy_text)
-				new_bubble.onclick = (e) => {
-					navigator.clipboard.writeText(e.target.textContent)
-				}
-				new_bubble.children[0].textContent = text_content
-				if (is_agent) {
-					new_bubble.classList.add('is_agent')
-				}
-				if (is_err) {
-					new_bubble.classList.add('is_err')
-				}
-				transcript.appendChild(new_bubble)
-			}
-
-			function getApikey() {
-				const api_key = query_params.get('api_key')
-				if (api_key) {
-					localStorage.setItem('GAIA_API_KEY', api_key)
-				}
-				let gaia_api_key = localStorage.getItem('GAIA_API_KEY')
-				if (!gaia_api_key) {
-					const ok = prompt('Gaia API Key')
-					if (!ok) getApikey()
-					localStorage.setItem('GAIA_API_KEY', ok)
-					gaia_api_key = ok
-				}
-				return gaia_api_key
-			}
-
-			async function getAttachment() {
-				const file = input.files[0]
-				if (!file) return null
-				return new Promise((resolve) => {
-					const reader = new FileReader()
-					reader.onload = (event) => {
-						const base64Data = event.target.result.split(',')[1]
-						const return_obj = {
-							data: base64Data,
-							mime_type: file.type,
-						}
-						resolve(return_obj)
-					}
-					reader.readAsDataURL(file)
-				})
-			}
-
-			navigator.serviceWorker.register('nil.js')
-		</script>
-	</body>
+	navigator.serviceWorker.register('nil.js')
+	</script>
+</body>
 </html>
