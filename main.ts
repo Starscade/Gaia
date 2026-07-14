@@ -48,7 +48,6 @@ Object.defineProperty(globalThis, 'localStorage', {
 interface Ask {
 	attachments: Attachment[]
 	preserve_context: boolean
-	transcript?: string
 	user_prompt: string
 }
 
@@ -61,7 +60,6 @@ const FLAGS = parseArgs(Deno.args, {
 	boolean: [
 		'echo',
 		'forget',
-		'nsfw',
 		'environment',
 		'related',
 		'transcript',
@@ -102,9 +100,6 @@ await load({
 
 const API_KEY = Deno.env.get('GAIA_API_KEY')
 const ATTACHMENTS: Attachment[] = []
-const INTELLECT = Deno.env.get('GAIA_INTELLECT')
-const MODEL = Deno.env.get('GAIA_MODEL')
-const NSFW = Deno.env.get('GAIA_NSFW')
 const PERSONA = Deno.env.get('GAIA_PERSONA') ??
 	'Your name is Gaia. You are a CLI tool. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-compliant sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Always use the newest syntax if dealing with other languages. Never use node.js: use Deno instead. Prefer tab indentation to spaces. Never introduce yourself.'
 const VERSION = 'v0.8.1 (main)'
@@ -115,23 +110,6 @@ const AI = new Gaia({
 		Deno.stdout.writeSync(new TextEncoder().encode(text))
 	},
 })
-
-if (INTELLECT) {
-	AI.INTELLECT = INTELLECT
-}
-
-if (MODEL) {
-	AI.MODEL = MODEL
-}
-
-AI.NSFW = FLAGS.nsfw || [
-	'true',
-	'1',
-	'yes',
-	'on',
-].includes(
-	NSFW?.toLowerCase().trim() ?? '',
-)
 
 if (PERSONA) {
 	AI.PERSONA = PERSONA
@@ -157,13 +135,13 @@ if (FLAGS.forget) {
 }
 
 if (FLAGS.echo) {
-	const final_thought = AI.echo()
+	const final_thought = await AI.getEcho()
 	console.info(final_thought)
 	Deno.exit()
 }
 
 if (FLAGS.transcript) {
-	const transcript = AI.getTranscript()
+	const transcript = await AI.getTranscript()
 	console.info(JSON.stringify(transcript))
 	Deno.exit()
 }
@@ -202,7 +180,6 @@ const ask_obj: Ask = {
 const result = await AI.ask({
 	...ask_obj,
 	attachments: ask_obj.attachments as unknown as never[],
-	transcript: undefined,
 })
 
 if (result.err) {

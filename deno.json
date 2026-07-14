@@ -7,7 +7,7 @@
 	},
 	"imports": {
 		"@dotenv": "jsr:@std/dotenv",
-		"@gaia": "./gaia.js",
+		"@gaia": "./interactions_api.js",
 		"@parse-args": "jsr:@std/cli/parse-args"
 	},
 	"lock": false,
