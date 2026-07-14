@@ -153,7 +153,9 @@ if (FLAGS.forget) {
 
 if (FLAGS.echo) {
 	const final_thought = await AI.getEcho()
-	console.info(final_thought.data)
+	if (final_thought) {
+		console.info(final_thought.data)
+	}
 	Deno.exit()
 }
 
