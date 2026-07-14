@@ -47,17 +47,19 @@ Object.defineProperty(globalThis, 'localStorage', {
 
 interface Ask {
 	attachments: Attachment[]
+	modalities?: string[]
 	preserve_context: boolean
 	user_prompt: string
 }
 
 interface Attachment {
-	mime_type: string
 	data: string
+	mime_type: string
 }
 
 const FLAGS = parseArgs(Deno.args, {
 	boolean: [
+		'draw',
 		'echo',
 		'forget',
 		'environment',
@@ -102,7 +104,7 @@ const API_KEY = Deno.env.get('GAIA_API_KEY')
 const ATTACHMENTS: Attachment[] = []
 const PERSONA = Deno.env.get('GAIA_PERSONA') ??
 	'Your name is Gaia. You are a CLI tool. You respond exclusively in plaintext code snippets that can be executed (or compiled) as is. Never format your responses using markdown. If no language is specified, write code in POSIX-compliant sh (or PostgreSQL if dealing with SQL). Otherwise, write the code in the language that the user mentions. Always use the most portable shell syntax (e.g. the oldest, most widely supported). Always use the newest syntax if dealing with other languages. Never use node.js: use Deno instead. Prefer tab indentation to spaces. Never introduce yourself.'
-const VERSION = 'v0.8.1 (main)'
+const VERSION = 'v0.8.11 (dev)'
 
 const AI = new Gaia({
 	api_key: API_KEY,
@@ -175,6 +177,12 @@ const ask_obj: Ask = {
 	attachments: ATTACHMENTS,
 	preserve_context: FLAGS.related,
 	user_prompt: USER_PROMPT,
+}
+
+if (FLAGS.draw) {
+	ask_obj.modalities = [
+		'image',
+	]
 }
 
 const result = await AI.ask({

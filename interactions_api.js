@@ -1,19 +1,20 @@
-import { GoogleGenAI } from 'https://esm.sh/@google/genai'
+import { GoogleGenAI } from '@gemini'
 
 export default class {
 	constructor({
-		api_key,
-		intellect,
-		model,
-		persona,
+		api_key = '',
+		intellect = 'low',
+		model = 'gemini-flash-lite-latest',
+		persona =
+			'Your name is Gaia. Respond in short, plaintext SMS with the occasional emoji.',
 		print_function = (text) => {
 			console.log(text)
 		},
 	} = {}) {
-		this.API_KEY = api_key ?? ''
-		this.INTELLECT = intellect ?? 'low'
-		this.MODEL = model ?? 'gemini-flash-lite-latest'
-		this.PERSONA = persona ?? 'Your name is Gaia. Respond in short, plaintext SMS with the occasional emoji.'
+		this.API_KEY = api_key
+		this.INTELLECT = intellect
+		this.MODEL = model
+		this.PERSONA = persona
 		this.STDOUT = print_function
 		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TOPIC_ID'
 
@@ -76,7 +77,7 @@ export default class {
 		}
 
 		if (attachments.length > 0) {
-			attachments.forEach( attachment => {
+			attachments.forEach((attachment) => {
 				interaction_obj.input.push({
 					data: attachment.data,
 					mime_type: attachment.mime_type,
@@ -115,17 +116,19 @@ export default class {
 					break
 			}
 		}
-
+		return {
+			err: null,
+		}
 	}
 
 	forgetTranscript() {
-		const topic_id = localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
+		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
 		return null
 	}
 
 	async getEcho() {
 		const transcript = await this.getTranscript()
-		return transcript?.output_image.data ?? transcript.output_text
+		return transcript?.output_image?.data ?? transcript.output_text
 	}
 
 	getEnv() {
@@ -140,6 +143,4 @@ export default class {
 		const prior_interaction = await this.AI.interactions.get(topic_id)
 		return prior_interaction
 	}
-
 }
-

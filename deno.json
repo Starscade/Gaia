@@ -8,6 +8,7 @@
 	"imports": {
 		"@dotenv": "jsr:@std/dotenv",
 		"@gaia": "./interactions_api.js",
+		"@gemini": "https://esm.sh/@google/genai",
 		"@parse-args": "jsr:@std/cli/parse-args"
 	},
 	"lock": false,
