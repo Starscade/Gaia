@@ -4,7 +4,7 @@ import { parseArgs } from '@parse-args'
 
 const LOCAL_STORAGE_DIR = Deno.env.get('GAIA_STORAGE_DIR') ??
 	'/tmp'
-const STORAGE_ITEM_EXTENSION = '.txt'
+const STORAGE_ITEM_EXTENSION = 'txt'
 
 try {
 	Deno.mkdirSync(LOCAL_STORAGE_DIR)
