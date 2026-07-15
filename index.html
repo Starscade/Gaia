@@ -252,14 +252,22 @@
 			persona: getPersona(),
 			print_function: (model_out) => {
 				const last_bubble = transcript.lastElementChild
-				console.log(model_out)
-				if (last_bubble && last_bubble.classList.contains('is_agent')) {
+				const is_agent = true
+
+				if (
+					last_bubble &&
+					last_bubble.classList.contains('is_agent') &&
+					model_out.type === 'text'
+				) {
 					last_bubble.children[0].textContent += model_out.data
 				} else {
 					if (model_out.type === 'image') {
-						addBubble('<img src="data:image/jpeg;base64,' + model_out.data + '">')
+						addBubble(
+							`<img src="data:image/jpeg;base64,${model_out.data}">`,
+							is_agent,
+						)
 					} else {
-						addBubble(model_out.data, true)
+						addBubble(model_out.data, is_agent)
 					}
 				}
 				transcript.parentElement.scrollBy(0, 1000)
@@ -272,6 +280,7 @@
 			if (prior_transcript.type === 'image') {
 				addBubble(
 					'<img src="data:image/jpeg;base64,' + prior_transcript.data + '">',
+					true,
 				)
 			} else {
 				addBubble(prior_transcript.data, true)
