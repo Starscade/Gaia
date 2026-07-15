@@ -379,7 +379,17 @@
 			new_bubble.appendChild(txt_content)
 			new_bubble.appendChild(copy_text)
 			new_bubble.onclick = (e) => {
-				navigator.clipboard.writeText(e.target.textContent)
+				const img = e.currentTarget.querySelector('img')
+				if (img) {
+					const link = document.createElement('a')
+					link.href = img.src
+					link.download = `gaia_${Date.now()}.jpg`
+					document.body.appendChild(link)
+					link.click()
+					document.body.removeChild(link)
+				} else {
+					navigator.clipboard.writeText(e.currentTarget.children[0].textContent)
+				}
 			}
 			new_bubble.children[0].innerHTML = text_content
 			if (is_agent) {
