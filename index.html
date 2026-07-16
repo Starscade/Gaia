@@ -272,22 +272,23 @@
 						addBubble(model_out.data, is_agent)
 					}
 				}
-				transcript.parentElement.scrollBy(0, 1000)
 			},
 		})
 
 		const prior_transcript = await ai.getEcho()
 		if (prior_transcript) {
-			console.debug(prior_transcript)
-			if (prior_transcript.type === 'image') {
-				addBubble(
-					'<img src="data:image/jpeg;base64,' + prior_transcript.data + '">',
-					true,
-				)
+			if (prior_transcript.err) {
+				addBubble("Couldn't retrieve previous response.", true, true)
 			} else {
-				addBubble(prior_transcript.data, true)
+				if (prior_transcript.type === 'image') {
+					addBubble(
+						'<img src="data:image/jpeg;base64,' + prior_transcript.data + '">',
+						true,
+					)
+				} else {
+					addBubble(prior_transcript.data, true)
+				}
 			}
-			transcript.parentElement.scrollBy(0, 1000)
 		}
 
 		document.body.onclick = () => {
@@ -400,6 +401,9 @@
 				new_bubble.classList.add('is_err')
 			}
 			transcript.appendChild(new_bubble)
+			setTimeout( () => {
+				transcript.lastElementChild.scrollIntoView()
+			}, 100)
 		}
 
 		function getApikey() {
