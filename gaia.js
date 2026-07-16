@@ -96,37 +96,23 @@ export default class {
 			})
 		}
 
-		if (this.DEBUG) {
-			console.debug({
-				debug: interaction_obj,
-				name: 'INTERACTION_OBJECT',
-			})
-		}
+		this.printDebug('INTERACTION_OBJ', interaction_obj)
 
 		let interaction
 
 		try {
 			interaction = await this.AI.interactions.create(interaction_obj)
 		} catch (err) {
+			this.printDebug('INTERACTION_ERR', err)
 			return {
 				err: err.error.error.message,
 			}
 		}
 
-		if (this.DEBUG) {
-			console.debug({
-				debug: interaction,
-				name: 'INTERACTION',
-			})
-		}
+		this.printDebug('INTERACTION', interaction)
 
 		for await (const event of interaction) {
-			if (this.DEBUG) {
-				console.debug({
-					debug: event,
-					name: 'EVENT',
-				})
-			}
+			this.printDebug('EVENT', event)
 
 			switch (event.event_type) {
 				case 'error':
@@ -169,6 +155,11 @@ export default class {
 
 	async getEcho() {
 		const transcript = await this.getTranscript()
+		if (transcript.err) {
+			return {
+				err: transcript.err,
+			}
+		}
 		if (transcript) {
 			const data_type = transcript.output_image
 				? 'image'
@@ -191,9 +182,28 @@ export default class {
 	async getTranscript() {
 		const topic_id = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
 		if (topic_id) {
-			const prior_interaction = await this.AI.interactions.get(topic_id)
+			let prior_interaction
+			try {
+				prior_interaction = await this.AI.interactions.get(topic_id)
+			} catch (err) {
+				this.printDebug('INTERACTION_ERR', err)
+				localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
+				return {
+					err: err,
+				}
+			}
 			return prior_interaction
 		}
 		return ''
+	}
+
+	printDebug(title, debug_obj) {
+		if (this.DEBUG) {
+			console.debug({
+				debug: debug_obj,
+				name: title,
+				time: new Date().toISOString(),
+			})
+		}
 	}
 }

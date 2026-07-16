@@ -250,6 +250,7 @@
 
 		const ai = new Gaia({
 			api_key: getApikey(),
+			debug: true,
 			persona: getPersona(),
 			print_function: (model_out) => {
 				const last_bubble = transcript.lastElementChild
