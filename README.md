@@ -3,7 +3,6 @@
 Gaia is a portable client for Google Gemini that works on both the command line
 as well as the web.
 
-
 ## Installation
 
 1. `git clone https://github.com/Starscade/Gaia.git`
@@ -13,7 +12,6 @@ as well as the web.
 > [!NOTE]
 > Gaia installs to `~/.local/bin` by default. You may change this by setting
 > `GAIA_INSTALL_DIR` before running `make`.
-
 
 ## Configuration
 
@@ -28,7 +26,6 @@ gaia --env .env <arguments>
 > [!TIP]
 > You can create a template of your current settings with:
 > `gaia --environment > .env`. (This includes internal defaults.)
-
 
 ## Usage
 
@@ -51,7 +48,6 @@ gaia --related "Do I like root beer?"
 > If you prefer using Gaia this way, you can make the behaviour permenant by
 > setting an alias: `alias ai='gaia --related'`.
 
-
 ###### DIRECT EXECUTION
 
 `gaia "What's my IP address?" | sh`
@@ -61,11 +57,9 @@ gaia --related "Do I like root beer?"
 > piping (e.g. `gaia "What's my IP address?"`), then use `gaia --echo | sh` to
 > execute the most recent response verbatim.
 
-
 ###### FILE ANALYSIS
 
 `gaia --read README.md "Summarize this..."`
-
 
 ###### UNIX PIPES
 
@@ -73,13 +67,11 @@ gaia --related "Do I like root beer?"
 cat *.js | gaia "Consolidate these into a single TypeScript module." > mod.ts
 ```
 
-
 ###### PICTURES
 
 ```
 gaia --draw "cyberpunk cat" | base64 -d > cyber-cat.jpg
 ```
-
 
 ###### IN THE BROWSER
 
