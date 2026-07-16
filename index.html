@@ -401,8 +401,12 @@
 				new_bubble.classList.add('is_err')
 			}
 			transcript.appendChild(new_bubble)
-			setTimeout(() => {
-				transcript.lastElementChild.scrollIntoView()
+			setTimeout( () => {
+				transcript.lastElementChild.scrollIntoView({
+					behavior: 'smooth',
+					block: 'start',
+					inline: 'start',
+				})
 			}, 100)
 		}
 
