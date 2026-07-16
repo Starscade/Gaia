@@ -105,7 +105,7 @@ export default class {
 		try {
 			interaction = await this.AI.interactions.create(interaction_obj)
 		} catch (err) {
-			this.printDebug('INTERACTION_ERR', err)
+			this.printDebug('INTERACTION_ERR', err, true)
 			return {
 				err: err.error.error.message,
 			}
@@ -190,7 +190,7 @@ export default class {
 			try {
 				prior_interaction = await this.AI.interactions.get(topic_id)
 			} catch (err) {
-				this.printDebug('INTERACTION_ERR', err)
+				this.printDebug('INTERACTION_ERR', err, true)
 				localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
 				return {
 					err: err,
@@ -202,13 +202,18 @@ export default class {
 		return ''
 	}
 
-	printDebug(title, debug_obj) {
+	printDebug(debug_name, debug_payload, is_err = false) {
+		const debug_obj = {
+			debug: debug_payload,
+			name: debug_name,
+			time: new Date().toISOString(),
+		}
 		if (this.DEBUG) {
-			console.debug({
-				debug: debug_obj,
-				name: title,
-				time: new Date().toISOString(),
-			})
+			if (is_err) {
+				console.error(debug_obj)
+			} else {
+				console.debug(debug_obj)
+			}
 		}
 	}
 }
