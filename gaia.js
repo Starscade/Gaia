@@ -107,7 +107,7 @@ export default class {
 		} catch (err) {
 			this.printDebug('INTERACTION_ERR', err, true)
 			return {
-				err: err.error.error.message,
+				err: err?.error?.error?.message ?? err,
 			}
 		}
 
