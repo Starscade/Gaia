@@ -278,7 +278,7 @@
 		const prior_transcript = await ai.getEcho()
 		if (prior_transcript) {
 			if (prior_transcript.err) {
-				addBubble("Couldn't retrieve previous response.", true, true)
+				addBubble("Sorry. I've lost my train of thought.", true, true)
 			} else {
 				if (prior_transcript.type === 'image') {
 					addBubble(
