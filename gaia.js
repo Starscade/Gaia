@@ -23,6 +23,8 @@ export default class {
 		this.AI = new GoogleGenAI({
 			apiKey: this.API_KEY,
 		})
+
+		this.getEnv()
 	}
 
 	async ask({
@@ -173,10 +175,12 @@ export default class {
 	}
 
 	getEnv() {
-		return {
+		const env_obj = {
 			GAIA_API_KEY: this.API_KEY,
 			GAIA_PERSONA: this.PERSONA,
 		}
+		this.printDebug('ENVIRONMENT', env_obj)
+		return env_obj
 	}
 
 	async getTranscript() {
@@ -192,6 +196,7 @@ export default class {
 					err: err,
 				}
 			}
+			this.printDebug('PRIOR_INTERACTION', prior_interaction)
 			return prior_interaction
 		}
 		return ''
