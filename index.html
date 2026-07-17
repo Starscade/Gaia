@@ -248,6 +248,8 @@
 		const attachment_name = document.getElementById('attachment-name')
 		const ui_unattach = document.getElementById('uiUnattach')
 
+		let spinner
+
 		const ai = new Gaia({
 			api_key: getApikey(),
 			debug: true,
@@ -259,6 +261,7 @@
 				if (
 					last_bubble &&
 					last_bubble.classList.contains('is_agent') &&
+					last_bubble.textContent !== '...' &&
 					model_out.type === 'text'
 				) {
 					last_bubble.children[0].textContent += model_out.data
@@ -330,6 +333,10 @@
 					ui_unattach.click()
 				}
 
+				spinner = document.createElement('section')
+				spinner.classList.add('is_agent')
+				spinner.textContent = '...'
+				transcript.appendChild(spinner)
 				const result = await ai.ask(ask_obj)
 				if (result?.err) {
 					console.error(result.err)
@@ -395,6 +402,7 @@
 			}
 			new_bubble.children[0].innerHTML = text_content
 			if (is_agent) {
+				spinner.remove()
 				new_bubble.classList.add('is_agent')
 			}
 			if (is_err) {
