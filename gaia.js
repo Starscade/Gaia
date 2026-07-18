@@ -5,7 +5,6 @@ export default class {
 		api_key = '',
 		debug = false,
 		intellect = 'low',
-		model = 'gemini-flash-lite-latest',
 		persona =
 			'Your name is Gaia. Respond in short, plaintext SMS with the occasional emoji.',
 		print_function = (model_output) => {
@@ -15,7 +14,11 @@ export default class {
 		this.API_KEY = api_key
 		this.DEBUG = debug
 		this.INTELLECT = intellect
-		this.MODEL = model
+		this.MODELS = {
+			audio: 'gemini-3.1-flash-tts-preview',
+			image: 'gemini-3.1-flash-image',
+			text: 'gemini-flash-lite-latest',
+		}
 		this.PERSONA = persona
 		this.STDOUT = print_function
 		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TOPIC_ID'
@@ -30,9 +33,7 @@ export default class {
 	async ask({
 		attachments = [],
 		cmd = '',
-		modalities = [
-			'text',
-		],
+		modality = 'text',
 		preserve_context = false,
 		user_prompt = '',
 	} = {}) {
@@ -61,16 +62,15 @@ export default class {
 				image_config: {
 					image_size: '1K',
 				},
+				speech_config: [
+					{ voice: 'Sulafat' },
+				],
 				thinking_level: this.INTELLECT,
 			},
-			model: this.MODEL,
-			response_modalities: modalities,
+			model: this.MODELS[modality],
+			response_modalities: [modality],
 			stream: true,
 			system_instruction: this.PERSONA,
-		}
-
-		if (modalities.includes('image')) {
-			interaction_obj.model = 'gemini-3.1-flash-lite-image'
 		}
 
 		if (preserve_context) {
@@ -96,6 +96,11 @@ export default class {
 
 				interaction_obj.input.push(template_attachment)
 			})
+		}
+
+		if (modality === 'audio') {
+			delete interaction_obj.generation_config.thinking_level
+			delete interaction_obj.system_instruction
 		}
 
 		this.printDebug('INTERACTION_OBJ', interaction_obj)
@@ -165,9 +170,14 @@ export default class {
 		if (transcript) {
 			const data_type = transcript.output_image
 				? 'image'
-				: (transcript.output_text ? 'text' : null)
+				: (transcript.output_audio
+					? 'audio'
+					: (transcript.output_text ? 'text' : null))
+
 			return {
-				data: transcript?.output_image?.data ?? transcript.output_text,
+				data: transcript?.output_image?.data ??
+					transcript?.output_audio?.data ??
+					transcript?.output_text,
 				type: data_type,
 			}
 		}
