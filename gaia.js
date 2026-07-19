@@ -21,7 +21,8 @@ export default class {
 		}
 		this.PERSONA = persona
 		this.STDOUT = print_function
-		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TOPIC_ID'
+		this.TOPIC_STORAGE_KEY = 'GAIA_TOPIC_ID'
+		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TRANSCRIPT'
 
 		this.AI = new GoogleGenAI({
 			apiKey: this.API_KEY,
@@ -74,7 +75,7 @@ export default class {
 		}
 
 		if (preserve_context) {
-			const topic_id = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
+			const topic_id = localStorage.getItem(this.TOPIC_STORAGE_KEY)
 			if (topic_id) {
 				interaction_obj.previous_interaction_id = topic_id
 			}
@@ -157,7 +158,7 @@ export default class {
 	}
 
 	forgetTranscript() {
-		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
+		localStorage.removeItem(this.TOPIC_STORAGE_KEY)
 		return null
 	}
 
@@ -195,14 +196,14 @@ export default class {
 	}
 
 	async getTranscript() {
-		const topic_id = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
+		const topic_id = localStorage.getItem(this.TOPIC_STORAGE_KEY)
 		if (topic_id) {
 			let prior_interaction
 			try {
 				prior_interaction = await this.AI.interactions.get(topic_id)
 			} catch (err) {
 				this.printDebug('INTERACTION_ERR', err, true)
-				localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
+				localStorage.removeItem(this.TOPIC_STORAGE_KEY)
 				return {
 					err: err,
 				}
