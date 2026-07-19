@@ -449,7 +449,10 @@
 			new_bubble.classList.add('flex-gap')
 			copy_text.classList.add('material-symbols-rounded')
 			copy_text.textContent = 'content_copy'
-			if (text_content.startsWith('<img src="data:image/jpeg;base64,')) {
+			if (text_content.startsWith('<audio')) {
+				copy_text.textContent = ''
+			}
+			if (text_content.startsWith('<img')) {
 				copy_text.textContent = 'download_2'
 			}
 			new_bubble.appendChild(txt_content)
