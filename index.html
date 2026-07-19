@@ -64,7 +64,8 @@
 			padding-top: env(titlebar-area-height, 0);
 		}
 		button,
-		input {
+		input,
+		select {
 			background: inherit;
 			border: none;
 			color: inherit;
@@ -102,6 +103,14 @@
 			margin: auto;
 			max-width: 6.5in;
 		}
+		option {
+			background: var(--bg);
+			color: var(--fg);
+		}
+		option:checked {
+			background: var(--fg);
+			color: var(--bg);
+		}
 		section {
 			border-radius: var(--pad);
 			cursor: pointer;
@@ -126,6 +135,9 @@
 		section > span:last-of-type {
 			font-size: 80%;
 			opacity: 0.5;
+		}
+		select {
+			cursor: pointer;
 		}
 		.flex {
 			display: flex;
@@ -204,6 +216,11 @@
 					<button id="uiPersona" title="Configure persona..." type="button">
 						<span class="material-symbols-rounded">theater_comedy</span>
 					</button>
+					<select id="modality">
+						<option value="text">Chat</text>
+						<option value="image">Draw</text>
+						<option value="audio">Speak</text>
+					</select>
 					<input
 						autofocus
 						class="flex-fill"
@@ -238,6 +255,7 @@
 		const transcript = document.getElementById('transcript')
 		const chat_form = document.getElementsByTagName('form')[0]
 		const chat_input = document.getElementsByTagName('input')[0]
+		const modality = document.getElementById('modality')
 		const okgo = document.getElementById('uiSay')
 		const ui_attach = document.getElementById('uiAttach')
 		const ui_goldfish = document.getElementById('uiTogglePrivate')
@@ -266,13 +284,21 @@
 				) {
 					last_bubble.children[0].textContent += model_out.data
 				} else {
-					if (model_out.type === 'image') {
-						addBubble(
-							`<img src="data:image/jpeg;base64,${model_out.data}">`,
-							is_agent,
-						)
-					} else {
-						addBubble(model_out.data, is_agent)
+					switch (model_out.type.toUpperCase().trim()) {
+						case 'AUDIO':
+							addBubble(
+								`<audio controls><source src="data:audio/l16;base64,${model_out.data}"></audio>`,
+								is_agent,
+							)
+							break
+						case 'IMAGE':
+							addBubble(
+								`<img src="data:image/jpeg;base64,${model_out.data}">`,
+								is_agent,
+							)
+							break
+						default:
+							addBubble(model_out.data, is_agent)
 					}
 				}
 			},
@@ -294,7 +320,7 @@
 			}
 		}
 
-		document.body.onclick = () => {
+		transcript.onclick = () => {
 			chat_input.focus()
 		}
 
@@ -319,13 +345,12 @@
 				addBubble(_prompt || `[${input.files[0].name}]`)
 
 				const ask_obj = {
-					modalities: [
-						'image',
-						'text',
-					],
+					modality: modality.options[modality.selectedIndex].value.trim(),
 					preserve_context: true,
 					user_prompt: _prompt,
 				}
+
+				console.log(modality.options[modality.selectedIndex].value.trim())
 
 				const f = await getAttachment()
 				if (f) {
