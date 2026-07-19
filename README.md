@@ -73,6 +73,16 @@ cat *.js | gaia "Consolidate these into a single TypeScript module." > mod.ts
 gaia --draw "cyberpunk cat" | base64 -d > cyber-cat.jpg
 ```
 
+###### TEXT-TO-SPEECH
+
+```
+gaia --speak "In abject panic, say \"Don't Panic!\"" | base64 -d > hi.raw
+```
+
+> [!IMPORTANT]
+> Gaia outputs audio in raw L16, 24kHz, monophonic base64.
+> To read this data, you will need to transcode it using a tool like ffmpeg.
+
 ###### IN THE BROWSER
 
 ```
