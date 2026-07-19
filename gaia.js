@@ -100,6 +100,7 @@ export default class {
 
 		if (modality === 'audio') {
 			delete interaction_obj.generation_config.thinking_level
+			delete interaction_obj.previous_interaction_id
 			delete interaction_obj.system_instruction
 		}
 
