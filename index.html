@@ -355,6 +355,11 @@
 						'<img src="data:image/jpeg;base64,' + prior_transcript.data + '">',
 						true
 					)
+				} else if (prior_transcript.type === 'audio') {
+					addBubble(
+						`<audio controls><source src="${URL.createObjectURL(rawL16ToWav(prior_transcript.data))}"></audio>`,
+						true
+					)
 				} else {
 					addBubble(prior_transcript.data, true)
 				}
