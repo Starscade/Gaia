@@ -399,7 +399,8 @@
 				const _prompt = chat_input.value.trim()
 				if (!_prompt && input.files.length === 0) return
 				chat_input.value = ''
-				addBubble(_prompt || `[${input.files[0].name}]`)
+				if (_prompt) addBubble(_prompt)
+				if (input.files[0]) addBubble(`[${input.files[0].name}]`)
 
 				const ask_obj = {
 					modality: modality.options[modality.selectedIndex].value.trim(),
