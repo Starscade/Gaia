@@ -81,7 +81,7 @@ gaia --speak "In abject panic, say \"Don't Panic!\"" | base64 -d > hi.raw
 
 > [!IMPORTANT]
 > Gaia outputs audio in raw L16, 24kHz, monophonic base64.
-> To read this data, you will need to transcode it using a tool like ffmpeg.
+> To read this data, you will need to transcode it using a tool like [ffmpeg](https://github.com/FFmpeg/FFmpeg).
 
 ###### IN THE BROWSER
 
