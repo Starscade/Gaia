@@ -269,38 +269,40 @@
 		let audio_buffer = ''
 
 		function rawL16ToWav(base64Data) {
-			const binaryString = atob(base64Data);
-			const bytes = new Uint8Array(binaryString.length);
+			const binaryString = atob(base64Data)
+			const bytes = new Uint8Array(binaryString.length)
 			for (let i = 0; i < binaryString.length; i++) {
-				bytes[i] = binaryString.charCodeAt(i);
+				bytes[i] = binaryString.charCodeAt(i)
 			}
-			const pcmBuffer = bytes.buffer;
-			const sampleRate = 24000;
-			const bitsPerSample = 16;
-			const numChannels = 1;
-			const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
-			const blockAlign = numChannels * (bitsPerSample / 8);
-			const dataSize = pcmBuffer.byteLength;
-			const fileSize = 36 + dataSize;
-			const wavBuffer = new ArrayBuffer(44 + dataSize);
-			const view = new DataView(wavBuffer);
-			const writeString = (v, o, s) => { for(let i=0; i<s.length; i++) v.setUint8(o+i, s.charCodeAt(i)); };
+			const pcmBuffer = bytes.buffer
+			const sampleRate = 24000
+			const bitsPerSample = 16
+			const numChannels = 1
+			const byteRate = sampleRate * numChannels * (bitsPerSample / 8)
+			const blockAlign = numChannels * (bitsPerSample / 8)
+			const dataSize = pcmBuffer.byteLength
+			const fileSize = 36 + dataSize
+			const wavBuffer = new ArrayBuffer(44 + dataSize)
+			const view = new DataView(wavBuffer)
+			const writeString = (v, o, s) => {
+				for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i))
+			}
 
-			writeString(view, 0, 'RIFF');
-			view.setUint32(4, fileSize, true);
-			writeString(view, 8, 'WAVE');
-			writeString(view, 12, 'fmt ');
-			view.setUint32(16, 16, true);
-			view.setUint16(20, 1, true);
-			view.setUint16(22, numChannels, true);
-			view.setUint32(24, sampleRate, true);
-			view.setUint32(28, byteRate, true);
-			view.setUint16(32, blockAlign, true);
-			view.setUint16(34, bitsPerSample, true);
-			writeString(view, 36, 'data');
-			view.setUint32(40, dataSize, true);
-			new Uint8Array(wavBuffer, 44).set(new Uint8Array(pcmBuffer));
-			return new Blob([wavBuffer], { type: 'audio/wav' });
+			writeString(view, 0, 'RIFF')
+			view.setUint32(4, fileSize, true)
+			writeString(view, 8, 'WAVE')
+			writeString(view, 12, 'fmt ')
+			view.setUint32(16, 16, true)
+			view.setUint16(20, 1, true)
+			view.setUint16(22, numChannels, true)
+			view.setUint32(24, sampleRate, true)
+			view.setUint32(28, byteRate, true)
+			view.setUint16(32, blockAlign, true)
+			view.setUint16(34, bitsPerSample, true)
+			writeString(view, 36, 'data')
+			view.setUint32(40, dataSize, true)
+			new Uint8Array(wavBuffer, 44).set(new Uint8Array(pcmBuffer))
+			return new Blob([wavBuffer], { type: 'audio/wav' })
 		}
 
 		const ai = new Gaia({
@@ -308,19 +310,26 @@
 			debug: true,
 			persona: getPersona(),
 			print_function: (model_out) => {
-				const last_bubble = transcript.lastElementChild;
-				const is_agent = true;
+				const last_bubble = transcript.lastElementChild
+				const is_agent = true
 
 				if (model_out.type === 'audio') {
-					if (last_bubble && last_bubble.classList.contains('is_agent') && last_bubble.querySelector('audio')) {
-						audio_buffer += model_out.data;
-						last_bubble.querySelector('audio').src = URL.createObjectURL(rawL16ToWav(audio_buffer));
+					if (
+						last_bubble && last_bubble.classList.contains('is_agent') &&
+						last_bubble.querySelector('audio')
+					) {
+						audio_buffer += model_out.data
+						last_bubble.querySelector('audio').src = URL.createObjectURL(
+							rawL16ToWav(audio_buffer),
+						)
 					} else {
-						audio_buffer = model_out.data;
+						audio_buffer = model_out.data
 						addBubble(
-							`<audio controls><source src="${URL.createObjectURL(rawL16ToWav(audio_buffer))}"></audio>`,
-							is_agent
-						);
+							`<audio controls><source src="${
+								URL.createObjectURL(rawL16ToWav(audio_buffer))
+							}"></audio>`,
+							is_agent,
+						)
 					}
 				} else if (
 					last_bubble &&
@@ -328,22 +337,22 @@
 					last_bubble.textContent !== '...' &&
 					model_out.type === 'text'
 				) {
-					last_bubble.children[0].textContent += model_out.data;
+					last_bubble.children[0].textContent += model_out.data
 				} else {
-					audio_buffer = '';
+					audio_buffer = ''
 					switch (model_out.type.toUpperCase().trim()) {
 						case 'IMAGE':
 							addBubble(
 								`<img src="data:image/jpeg;base64,${model_out.data}">`,
-								is_agent
-							);
-							break;
+								is_agent,
+							)
+							break
 						default:
-							addBubble(model_out.data, is_agent);
+							addBubble(model_out.data, is_agent)
 					}
 				}
 			},
-		});
+		})
 
 		const prior_transcript = await ai.getEcho()
 		if (prior_transcript) {
@@ -353,12 +362,14 @@
 				if (prior_transcript.type === 'image') {
 					addBubble(
 						'<img src="data:image/jpeg;base64,' + prior_transcript.data + '">',
-						true
+						true,
 					)
 				} else if (prior_transcript.type === 'audio') {
 					addBubble(
-						`<audio controls><source src="${URL.createObjectURL(rawL16ToWav(prior_transcript.data))}"></audio>`,
-						true
+						`<audio controls><source src="${
+							URL.createObjectURL(rawL16ToWav(prior_transcript.data))
+						}"></audio>`,
+						true,
 					)
 				} else {
 					addBubble(prior_transcript.data, true)
@@ -542,7 +553,7 @@
 			return persona
 		}
 
-		navigator.serviceWorker.register('nil.js')
+		navigator.serviceWorker.register('work.js')
 		</script>
 	</body>
 </html>
