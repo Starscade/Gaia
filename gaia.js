@@ -88,9 +88,16 @@ export default class {
 				thinking_level: this.INTELLECT,
 			},
 			model: this.MODELS[modality],
-			response_modalities: [modality],
+			response_modalities: [
+				modality,
+			],
 			stream: true,
 			system_instruction: this.PERSONA,
+			tools: [
+				{
+					type: 'google_search',
+				},
+			]
 		}
 
 		const pending_transcript_obj = {
@@ -133,6 +140,7 @@ export default class {
 			delete interaction_obj.generation_config.thinking_level
 			delete interaction_obj.previous_interaction_id
 			delete interaction_obj.system_instruction
+			delete interaction_obj.tools
 		}
 
 		this.printDebug('INTERACTION_OBJ', interaction_obj)
