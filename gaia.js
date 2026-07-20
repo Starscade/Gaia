@@ -93,16 +93,19 @@ export default class {
 			system_instruction: this.PERSONA,
 		}
 
-		this.appendTranscript({
+		const pending_transcript_obj = {
 			data: interaction_obj.input[0].text,
-		})
+		}
 
 		if (preserve_context) {
 			const topic_id = this.getTopic()
 			if (topic_id) {
 				interaction_obj.previous_interaction_id = topic_id
+				pending_transcript_obj.topic_id = topic_id
 			}
 		}
+
+		this.appendTranscript(pending_transcript_obj)
 
 		if (attachments.length > 0) {
 			attachments.forEach((attachment) => {
