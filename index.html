@@ -192,6 +192,11 @@
 	<body>
 		<main class="flex">
 			<header class="flex flex-row">
+				<select id="modality">
+					<option value="text">Chat</option>
+					<option value="image">Draw</option>
+					<option value="audio">Speak</option>
+				</select>
 				<span class="flex-fill"></span>
 				<button id="uiTogglePrivate" title="Discard chat..." type="button">
 					<span class="material-symbols-rounded">note_stack_add</span>
@@ -216,11 +221,6 @@
 					<button id="uiPersona" title="Configure persona..." type="button">
 						<span class="material-symbols-rounded">theater_comedy</span>
 					</button>
-					<select id="modality">
-						<option value="text">Chat</option>
-						<option value="image">Draw</option>
-						<option value="audio">Speak</option>
-					</select>
 					<input
 						autofocus
 						class="flex-fill"
