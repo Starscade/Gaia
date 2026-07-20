@@ -97,6 +97,9 @@ export default class {
 				{
 					type: 'google_search',
 				},
+				{
+					type: 'url_context',
+				},
 			],
 		}
 
@@ -140,6 +143,9 @@ export default class {
 			delete interaction_obj.generation_config.thinking_level
 			delete interaction_obj.previous_interaction_id
 			delete interaction_obj.system_instruction
+		}
+
+		if (modality === 'audio' || modality === 'image') {
 			delete interaction_obj.tools
 		}
 
