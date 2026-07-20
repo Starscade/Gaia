@@ -429,7 +429,7 @@
 		ui_goldfish.onclick = () => {
 			const ok = confirm('Discard chat?')
 			if (ok) {
-				localStorage.removeItem('GAIA_TOPIC_ID')
+				ai.forgetTranscript()
 				location.reload()
 			}
 		}
