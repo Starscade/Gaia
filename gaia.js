@@ -31,6 +31,24 @@ export default class {
 		this.getEnv()
 	}
 
+	appendTranscript({
+		data = '',
+		is_agent = false,
+		topic_id = '',
+		type = 'text',
+	} = {}) {
+		const transcript = this.getTranscript()
+		transcript.data.push({
+			data: data,
+			is_agent: is_agent,
+			time: new Date().toISOString(),
+			topic_id: topic_id,
+			type: type,
+		})
+		this.printDebug('APPEND_TRANSCRIPT', transcript)
+		this.setTranscript(transcript.data)
+	}
+
 	async ask({
 		attachments = [],
 		cmd = '',
@@ -74,6 +92,10 @@ export default class {
 			system_instruction: this.PERSONA,
 		}
 
+		this.appendTranscript({
+			data: interaction_obj.input[0].text,
+		})
+
 		if (preserve_context) {
 			const topic_id = localStorage.getItem(this.TOPIC_STORAGE_KEY)
 			if (topic_id) {
@@ -94,6 +116,10 @@ export default class {
 					template_attachment.mime_type = attachment.mime_type
 					template_attachment.resolution = this.INTELLECT
 				}
+
+				this.appendTranscript({
+					data: template_attachment.data,
+				})
 
 				interaction_obj.input.push(template_attachment)
 			})
@@ -120,6 +146,12 @@ export default class {
 
 		this.printDebug('INTERACTION', interaction)
 
+		const transcript_buffer = {
+			data: '',
+			is_agent: true,
+			type: 'text',
+		}
+
 		for await (const event of interaction) {
 			this.printDebug('EVENT', event)
 
@@ -134,6 +166,7 @@ export default class {
 				case 'step.delta':
 					switch (event.delta.type) {
 						case 'text':
+							transcript_buffer.data += event.delta.text
 							this.STDOUT({
 								data: event.delta.text,
 								type: event.delta.type,
@@ -141,6 +174,8 @@ export default class {
 							break
 						default:
 							if (event.delta.data) {
+								transcript_buffer.data += event.delta.data
+								transcript_buffer.type = event.delta.type
 								this.STDOUT({
 									data: event.delta.data,
 									type: event.delta.type,
@@ -152,6 +187,8 @@ export default class {
 			}
 		}
 
+		this.appendTranscript(transcript_buffer)
+
 		return {
 			err: null,
 		}
@@ -159,28 +196,17 @@ export default class {
 
 	forgetTranscript() {
 		localStorage.removeItem(this.TOPIC_STORAGE_KEY)
+		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
 		return null
 	}
 
 	async getEcho() {
 		const transcript = await this.getTranscript()
-		if (transcript.err) {
+		if (transcript.data && transcript.data.length > 0) {
+			const final_entry = transcript.data[transcript.data.length - 1]
 			return {
-				err: transcript.err,
-			}
-		}
-		if (transcript) {
-			const data_type = transcript.output_image
-				? 'image'
-				: (transcript.output_audio
-					? 'audio'
-					: (transcript.output_text ? 'text' : null))
-
-			return {
-				data: transcript?.output_image?.data ??
-					transcript?.output_audio?.data ??
-					transcript?.output_text,
-				type: data_type,
+				data: final_entry.data,
+				type: final_entry.type,
 			}
 		}
 		return ''
@@ -195,23 +221,22 @@ export default class {
 		return env_obj
 	}
 
-	async getTranscript() {
-		const topic_id = localStorage.getItem(this.TOPIC_STORAGE_KEY)
-		if (topic_id) {
-			let prior_interaction
-			try {
-				prior_interaction = await this.AI.interactions.get(topic_id)
-			} catch (err) {
-				this.printDebug('INTERACTION_ERR', err, true)
-				localStorage.removeItem(this.TOPIC_STORAGE_KEY)
-				return {
-					err: err,
-				}
-			}
-			this.printDebug('PRIOR_INTERACTION', prior_interaction)
-			return prior_interaction
+	getTranscript() {
+		const return_obj = {
+			data: [],
+			err: null,
 		}
-		return ''
+		const raw_transcript = localStorage.getItem(this.TRANSCRIPT_STORAGE_KEY)
+		if (raw_transcript) {
+			try {
+				const transcript = JSON.parse(raw_transcript)
+				return_obj.data = transcript
+			} catch (err) {
+				return_obj.err = err
+			}
+		}
+		this.printDebug('GET_TRANSCRIPT', return_obj)
+		return return_obj
 	}
 
 	printDebug(debug_name, debug_payload, is_err = false) {
@@ -227,5 +252,24 @@ export default class {
 				console.debug(debug_obj)
 			}
 		}
+	}
+
+	setTranscript(transcript = []) {
+		const err_obj = {
+			err: null,
+		}
+		this.printDebug('SET_TRANSCRIPT', transcript)
+		let json_transcript
+		try {
+			json_transcript = JSON.stringify(transcript)
+		} catch (err) {
+			err_obj.err = err
+			return err_obj
+		}
+		localStorage.setItem(
+			this.TRANSCRIPT_STORAGE_KEY,
+			json_transcript,
+		)
+		return err_obj
 	}
 }
