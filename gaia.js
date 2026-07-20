@@ -21,7 +21,6 @@ export default class {
 		}
 		this.PERSONA = persona
 		this.STDOUT = print_function
-		this.TOPIC_STORAGE_KEY = 'GAIA_TOPIC_ID'
 		this.TRANSCRIPT_STORAGE_KEY = 'GAIA_TRANSCRIPT'
 
 		this.AI = new GoogleGenAI({
@@ -99,7 +98,7 @@ export default class {
 		})
 
 		if (preserve_context) {
-			const topic_id = localStorage.getItem(this.TOPIC_STORAGE_KEY)
+			const topic_id = this.getTopic()
 			if (topic_id) {
 				interaction_obj.previous_interaction_id = topic_id
 			}
@@ -151,6 +150,7 @@ export default class {
 		const transcript_buffer = {
 			data: '',
 			is_agent: true,
+			topic_id: '',
 			type: 'text',
 		}
 
@@ -163,7 +163,7 @@ export default class {
 						err: event.error.message,
 					}
 				case 'interaction.created':
-					localStorage.setItem('GAIA_TOPIC_ID', event.interaction.id)
+					transcript_buffer.topic_id = event.interaction.id
 					break
 				case 'step.delta':
 					switch (event.delta.type) {
@@ -197,7 +197,6 @@ export default class {
 	}
 
 	forgetTranscript() {
-		localStorage.removeItem(this.TOPIC_STORAGE_KEY)
 		localStorage.removeItem(this.TRANSCRIPT_STORAGE_KEY)
 		return null
 	}
@@ -221,6 +220,14 @@ export default class {
 		}
 		this.printDebug('ENVIRONMENT', env_obj)
 		return env_obj
+	}
+
+	getTopic() {
+		const transcript = this.getTranscript()
+		if (transcript.data && transcript.data.length > 0) {
+			const final_entry = transcript.data[transcript.data.length - 1]
+			return final_entry.topic_id
+		}
 	}
 
 	getTranscript() {
