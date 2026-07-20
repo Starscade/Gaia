@@ -82,7 +82,9 @@ export default class {
 					image_size: '1K',
 				},
 				speech_config: [
-					{ voice: 'Sulafat' },
+					{
+						voice: 'Sulafat',
+					},
 				],
 				thinking_level: this.INTELLECT,
 			},
