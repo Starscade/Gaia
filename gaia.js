@@ -97,7 +97,7 @@ export default class {
 				{
 					type: 'google_search',
 				},
-			]
+			],
 		}
 
 		const pending_transcript_obj = {
