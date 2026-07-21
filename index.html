@@ -421,7 +421,7 @@
 				const result = await ai.ask(ask_obj)
 				if (result?.err) {
 					console.error(result.err)
-					addBubble(result.err[0].error.message, true, true)
+					addBubble(result.err, true, true)
 				}
 			}
 		})
