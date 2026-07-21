@@ -4,7 +4,6 @@
 	"display": "standalone",
 	"display_override": [
 		"window-controls-overlay",
-		"fullscreen",
 		"minimal-ui"
 	],
 	"theme_color": "black",
