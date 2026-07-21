@@ -1,13 +1,10 @@
 {
-	"short_name": "Gaia",
-	"start_url": ".",
+	"background_color": "black",
 	"display": "standalone",
 	"display_override": [
 		"window-controls-overlay",
 		"minimal-ui"
 	],
-	"theme_color": "black",
-	"background_color": "black",
 	"icons": [
 		{
 			"src": "./icon-192-any.png",
@@ -21,5 +18,21 @@
 			"type": "image/png",
 			"purpose": "maskable"
 		}
-	]
+	],
+	"screenshots": [
+		{
+			"form_factor": "wide",
+			"sizes": "1920x1080",
+			"src": "/screenshot-landscape.png",
+			"type": "image/png"
+		},
+		{
+			"sizes": "400x720",
+			"src": "/screenshot-portrait.png",
+			"type": "image/png"
+		}
+	],
+	"short_name": "Gaia",
+	"start_url": ".",
+	"theme_color": "black"
 }
