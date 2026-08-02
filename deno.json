@@ -6,16 +6,12 @@
 		"useTabs": true
 	},
 	"imports": {
-		"@dotenv": "jsr:@std/dotenv",
 		"@gaia": "./gaia.js",
-		"@gemini": "https://esm.sh/@google/genai",
-		"@parse-args": "jsr:@std/cli/parse-args"
+		"@gemini": "https://esm.sh/@google/genai"
 	},
 	"lock": false,
 	"tasks": {
-		"format": "deno fmt",
-		"lint": "deno task format && deno lint && deno check",
-		"make": "deno task lint && deno compile --allow-env --allow-net --allow-read --allow-write --no-check --output _gaia ./main.ts",
+		"polish": "deno fmt && deno lint && deno check",
 		"serve": "deno run --allow-net --allow-read jsr:@std/http/file-server ./"
 	}
 }
