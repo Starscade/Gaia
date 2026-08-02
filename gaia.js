@@ -128,7 +128,6 @@ export default class {
 				} else {
 					template_attachment.data = attachment.data
 					template_attachment.mime_type = attachment.mime_type
-					template_attachment.resolution = this.INTELLECT
 				}
 
 				this.appendTranscript({
@@ -140,12 +139,12 @@ export default class {
 		}
 
 		if (modality === 'audio') {
-			delete interaction_obj.generation_config.thinking_level
 			delete interaction_obj.previous_interaction_id
 			delete interaction_obj.system_instruction
 		}
 
 		if (modality === 'audio' || modality === 'image') {
+			delete interaction_obj.generation_config.thinking_level
 			delete interaction_obj.tools
 		}
 
